@@ -1,0 +1,1720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CXOSP — Performance Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #08070c;
+    --surface: #111016;
+    --surface-2: #17161d;
+    --surface-3: #1d1c24;
+    --border: #24222c;
+    --border-light: #2e2c38;
+    --gold: #c9a84c;
+    --gold-light: #dfc06a;
+    --gold-dim: rgba(201,168,76,0.07);
+    --gold-glow: rgba(201,168,76,0.12);
+    --gold-20: rgba(201,168,76,0.2);
+    --green: #4adf8b;
+    --green-dim: rgba(74,223,139,0.1);
+    --red: #e05a5a;
+    --red-dim: rgba(224,90,90,0.1);
+    --blue: #5a9fe0;
+    --blue-dim: rgba(90,159,224,0.1);
+    --purple: #9b7ae0;
+    --purple-dim: rgba(155,122,224,0.1);
+    --teal: #4adfc9;
+    --teal-dim: rgba(74,223,201,0.1);
+    --text: #ece8e1;
+    --text-secondary: #a09b93;
+    --text-dim: #6e6a64;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Manrope', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:var(--sans);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+  ::selection{background:var(--gold);color:var(--bg);}
+
+  body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:0.02;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+
+  /* ─── LAYOUT ─── */
+  .dashboard-layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    min-height: 100vh;
+  }
+
+  /* ─── SIDEBAR ─── */
+  .sidebar {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 1.75rem 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 240px;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+  }
+
+  .sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0 1.5rem;
+    margin-bottom: 2.5rem;
+    text-decoration: none;
+  }
+
+  .logo-mark {
+    width: 30px;
+    height: 30px;
+    border: 1.5px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--serif);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--gold);
+  }
+
+  .logo-text {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    color: var(--text);
+    text-transform: uppercase;
+  }
+
+  .logo-text span { color: var(--gold); }
+
+  .sidebar-section {
+    margin-bottom: 2rem;
+  }
+
+  .sidebar-section-label {
+    font-family: var(--mono);
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    padding: 0 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 1.5rem;
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.25s;
+    border-left: 2px solid transparent;
+    font-weight: 400;
+  }
+
+  .sidebar-link:hover {
+    background: var(--surface-2);
+    color: var(--text);
+  }
+
+  .sidebar-link.active {
+    background: var(--gold-dim);
+    color: var(--gold-light);
+    border-left-color: var(--gold);
+    font-weight: 500;
+  }
+
+  .sidebar-link .icon {
+    font-size: 0.9rem;
+    width: 20px;
+    text-align: center;
+  }
+
+  .sidebar-bottom {
+    margin-top: auto;
+    padding: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .sidebar-user {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .user-avatar {
+    width: 32px;
+    height: 32px;
+    background: var(--gold-dim);
+    border: 1px solid var(--gold-20);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--serif);
+    font-size: 0.8rem;
+    color: var(--gold);
+  }
+
+  .user-info .user-name {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .user-info .user-role {
+    font-size: 0.62rem;
+    color: var(--text-dim);
+  }
+
+  /* ─── MAIN CONTENT ─── */
+  .main-content {
+    grid-column: 2;
+    padding: 2rem 2.5rem 4rem;
+    min-width: 0;
+  }
+
+  /* ─── TOP BAR ─── */
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .top-bar-left h1 {
+    font-family: var(--serif);
+    font-size: 1.8rem;
+    font-weight: 400;
+    margin-bottom: 0.25rem;
+  }
+
+  .top-bar-left h1 em { font-style: italic; color: var(--gold); }
+
+  .top-bar-left p {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    font-weight: 300;
+  }
+
+  .top-bar-right {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .period-select {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    padding: 0.5rem 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: all 0.25s;
+    outline: none;
+  }
+
+  .period-select:hover, .period-select.active {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: var(--gold-dim);
+  }
+
+  .export-btn {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    padding: 0.5rem 1.25rem;
+    background: var(--gold);
+    border: none;
+    color: var(--bg);
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    transition: all 0.3s;
+  }
+
+  .export-btn:hover {
+    background: var(--gold-light);
+    box-shadow: 0 0 20px var(--gold-glow);
+  }
+
+  /* ─── SECTOR TABS ─── */
+  .sector-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sector-tab {
+    font-family: var(--sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    padding: 0.85rem 2rem;
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    cursor: pointer;
+    position: relative;
+    transition: color 0.3s;
+  }
+
+  .sector-tab:hover { color: var(--text-secondary); }
+
+  .sector-tab.active {
+    color: var(--gold);
+  }
+
+  .sector-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--gold);
+  }
+
+  .sector-panel {
+    display: none;
+    animation: panelIn 0.4s ease;
+  }
+
+  .sector-panel.active { display: block; }
+
+  @keyframes panelIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── KPI ROW ─── */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin-bottom: 2rem;
+  }
+
+  .kpi-card {
+    background: var(--surface);
+    padding: 1.5rem 1.25rem;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+
+  .kpi-card:hover { background: var(--surface-2); }
+
+  .kpi-label {
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 0.75rem;
+  }
+
+  .kpi-value {
+    font-family: var(--serif);
+    font-size: 2rem;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .kpi-change {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .kpi-change.up { color: var(--green); }
+  .kpi-change.down { color: var(--red); }
+
+  .kpi-sparkline {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    opacity: 0.15;
+  }
+
+  /* ─── CHART PANELS ─── */
+  .chart-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    margin-bottom: 2rem;
+  }
+
+  .chart-grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    margin-bottom: 2rem;
+  }
+
+  .chart-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    margin-bottom: 2rem;
+  }
+
+  .chart-panel {
+    background: var(--surface);
+    padding: 1.75rem;
+  }
+
+  .chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+  }
+
+  .chart-title {
+    font-family: var(--serif);
+    font-size: 1.15rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .chart-subtitle {
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    font-weight: 300;
+  }
+
+  .chart-badge {
+    font-family: var(--mono);
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    padding: 0.3rem 0.6rem;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  .chart-area {
+    width: 100%;
+    position: relative;
+  }
+
+  .chart-area svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* ─── FUNNEL ─── */
+  .funnel-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .funnel-step {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .funnel-bar-wrap {
+    flex: 1;
+    height: 36px;
+    position: relative;
+  }
+
+  .funnel-bar {
+    height: 100%;
+    background: var(--gold-dim);
+    border: 1px solid var(--gold-20);
+    transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+    position: relative;
+  }
+
+  .funnel-bar::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--gold);
+  }
+
+  .funnel-label {
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    width: 130px;
+    flex-shrink: 0;
+    font-weight: 400;
+  }
+
+  .funnel-value {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--gold);
+    width: 50px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .funnel-pct {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--text-dim);
+    width: 45px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* ─── DATA TABLE ─── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .data-table th {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-align: left;
+    padding: 0.75rem 0.5rem;
+    border-bottom: 1px solid var(--border);
+    font-weight: 500;
+  }
+
+  .data-table td {
+    font-size: 0.78rem;
+    padding: 0.7rem 0.5rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-weight: 300;
+  }
+
+  .data-table tr:hover td {
+    background: var(--surface-2);
+    color: var(--text);
+  }
+
+  .data-table .val { font-family: var(--mono); font-size: 0.72rem; }
+  .data-table .highlight { color: var(--gold); font-weight: 500; }
+
+  .status-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+  }
+
+  .status-dot.active { background: var(--green); box-shadow: 0 0 6px var(--green-dim); }
+  .status-dot.pending { background: var(--gold); box-shadow: 0 0 6px var(--gold-dim); }
+  .status-dot.closed { background: var(--text-dim); }
+
+  /* ─── DONUT CHART ─── */
+  .donut-wrap {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .donut-svg {
+    width: 140px;
+    height: 140px;
+    flex-shrink: 0;
+  }
+
+  .donut-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    flex-shrink: 0;
+  }
+
+  .legend-val {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    margin-left: auto;
+    padding-left: 1rem;
+  }
+
+  /* ─── BAR CHART ─── */
+  .bar-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    height: 160px;
+    padding-top: 1rem;
+  }
+
+  .bar-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    justify-content: flex-end;
+  }
+
+  .bar-fill {
+    width: 100%;
+    max-width: 36px;
+    background: var(--gold-dim);
+    border: 1px solid var(--gold-20);
+    border-bottom: 2px solid var(--gold);
+    transition: height 1s cubic-bezier(0.22, 1, 0.36, 1);
+    position: relative;
+  }
+
+  .bar-fill:hover {
+    background: var(--gold-20);
+  }
+
+  .bar-label {
+    font-family: var(--mono);
+    font-size: 0.55rem;
+    color: var(--text-dim);
+    margin-top: 0.5rem;
+    letter-spacing: 0.05em;
+  }
+
+  .bar-val {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--gold);
+    margin-bottom: 0.35rem;
+  }
+
+  /* ─── HEATMAP ─── */
+  .heatmap-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 3px;
+  }
+
+  .heat-cell {
+    aspect-ratio: 1;
+    border: 1px solid transparent;
+    transition: all 0.3s;
+    position: relative;
+  }
+
+  .heat-cell:hover {
+    border-color: var(--gold);
+    z-index: 2;
+    transform: scale(1.15);
+  }
+
+  .heat-cell[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--mono);
+    font-size: 0.55rem;
+    padding: 0.3rem 0.5rem;
+    background: var(--surface-3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    white-space: nowrap;
+    z-index: 10;
+  }
+
+  .heatmap-months {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 3px;
+    margin-top: 0.5rem;
+  }
+
+  .heatmap-months span {
+    font-family: var(--mono);
+    font-size: 0.5rem;
+    color: var(--text-dim);
+    text-align: center;
+    letter-spacing: 0.05em;
+  }
+
+  /* ─── PROGRESS RING ─── */
+  .ring-row {
+    display: flex;
+    gap: 2rem;
+    justify-content: space-around;
+  }
+
+  .ring-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .ring-svg { width: 80px; height: 80px; }
+
+  .ring-label {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    text-align: center;
+    max-width: 90px;
+  }
+
+  .ring-val {
+    font-family: var(--serif);
+    font-size: 1rem;
+    color: var(--text);
+  }
+
+  /* ─── TIMELINE ─── */
+  .timeline-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .timeline-item {
+    display: flex;
+    gap: 1rem;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+
+  .timeline-item:last-child { border-bottom: none; }
+
+  .timeline-dot {
+    width: 8px;
+    height: 8px;
+    border: 1.5px solid var(--gold);
+    margin-top: 0.3rem;
+    flex-shrink: 0;
+  }
+
+  .timeline-text {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    font-weight: 300;
+  }
+
+  .timeline-text strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .timeline-time {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    color: var(--text-dim);
+    margin-left: auto;
+    flex-shrink: 0;
+    letter-spacing: 0.05em;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 1100px) {
+    .kpi-row { grid-template-columns: repeat(3, 1fr); }
+    .chart-grid, .chart-grid-3 { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 900px) {
+    .dashboard-layout { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .main-content { padding: 1.5rem; }
+    .kpi-row { grid-template-columns: 1fr 1fr; }
+    .chart-grid-2 { grid-template-columns: 1fr; }
+    .top-bar { flex-direction: column; align-items: flex-start; gap: 1rem; }
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes countUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-in {
+    animation: countUp 0.6s ease forwards;
+  }
+
+  .delay-1 { animation-delay: 0.1s; opacity: 0; }
+  .delay-2 { animation-delay: 0.2s; opacity: 0; }
+  .delay-3 { animation-delay: 0.3s; opacity: 0; }
+  .delay-4 { animation-delay: 0.4s; opacity: 0; }
+  .delay-5 { animation-delay: 0.5s; opacity: 0; }
+</style>
+</head>
+<body>
+
+<div class="dashboard-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <a href="#" class="sidebar-logo">
+      <div class="logo-mark">C</div>
+      <div class="logo-text"><span>CXO</span>SP</div>
+    </a>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Dashboard</div>
+      <a class="sidebar-link active"><span class="icon">◎</span> Overview</a>
+      <a class="sidebar-link"><span class="icon">◈</span> Placements</a>
+      <a class="sidebar-link"><span class="icon">▤</span> Pipeline</a>
+      <a class="sidebar-link"><span class="icon">⊕</span> Candidates</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Sectors</div>
+      <a class="sidebar-link" onclick="switchTab('life-sciences')"><span class="icon">◇</span> Life Sciences</a>
+      <a class="sidebar-link" onclick="switchTab('technology')"><span class="icon">⟐</span> Technology</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Reports</div>
+      <a class="sidebar-link"><span class="icon">↗</span> Diversity Report</a>
+      <a class="sidebar-link"><span class="icon">⊞</span> Client Report</a>
+      <a class="sidebar-link"><span class="icon">⤓</span> Export Data</a>
+    </div>
+
+    <div class="sidebar-bottom">
+      <div class="sidebar-user">
+        <div class="user-avatar">S</div>
+        <div class="user-info">
+          <div class="user-name">Sarah Mendez</div>
+          <div class="user-role">Managing Partner</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+      <div class="top-bar-left">
+        <h1>Performance <em>Dashboard</em></h1>
+        <p>Real-time metrics across Life Sciences & Technology sectors</p>
+      </div>
+      <div class="top-bar-right">
+        <button class="period-select active">Q1 2026</button>
+        <button class="period-select">FY 2025</button>
+        <button class="period-select">All Time</button>
+        <button class="export-btn">Export PDF</button>
+      </div>
+    </div>
+
+    <!-- SECTOR TABS -->
+    <div class="sector-tabs">
+      <button class="sector-tab active" onclick="switchTab('life-sciences')">Life Sciences</button>
+      <button class="sector-tab" onclick="switchTab('technology')">Technology</button>
+      <button class="sector-tab" onclick="switchTab('combined')">Combined View</button>
+    </div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- LIFE SCIENCES PANEL -->
+    <!-- ═══════════════════════════════════════ -->
+    <div class="sector-panel active" id="panel-life-sciences">
+
+      <!-- KPI ROW -->
+      <div class="kpi-row">
+        <div class="kpi-card animate-in delay-1">
+          <div class="kpi-label">Active Searches</div>
+          <div class="kpi-value">18</div>
+          <div class="kpi-change up">▲ 28% vs last quarter</div>
+        </div>
+        <div class="kpi-card animate-in delay-2">
+          <div class="kpi-label">Placements YTD</div>
+          <div class="kpi-value">47</div>
+          <div class="kpi-change up">▲ 14% vs prior year</div>
+        </div>
+        <div class="kpi-card animate-in delay-3">
+          <div class="kpi-label">Avg Days to Fill</div>
+          <div class="kpi-value">26</div>
+          <div class="kpi-change up">▼ 8 days improved</div>
+        </div>
+        <div class="kpi-card animate-in delay-4">
+          <div class="kpi-label">1-Year Retention</div>
+          <div class="kpi-value">94%</div>
+          <div class="kpi-change up">▲ 3pts vs benchmark</div>
+        </div>
+        <div class="kpi-card animate-in delay-5">
+          <div class="kpi-label">Candidate NPS</div>
+          <div class="kpi-value">78</div>
+          <div class="kpi-change up">▲ 6pts vs Q4</div>
+        </div>
+      </div>
+
+      <!-- PLACEMENT TREND + PIPELINE FUNNEL -->
+      <div class="chart-grid">
+        <div class="chart-panel">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Placement Trend — Life Sciences</div>
+              <div class="chart-subtitle">Monthly placements by sub-sector, trailing 12 months</div>
+            </div>
+            <div class="chart-badge">Monthly</div>
+          </div>
+          <div class="chart-area">
+            <svg viewBox="0 0 700 220" fill="none">
+              <!-- Grid -->
+              <line x1="50" y1="20" x2="50" y2="190" stroke="var(--border)" stroke-width="0.5"/>
+              <line x1="50" y1="190" x2="680" y2="190" stroke="var(--border)" stroke-width="0.5"/>
+              <line x1="50" y1="147" x2="680" y2="147" stroke="var(--border)" stroke-width="0.3" stroke-dasharray="4"/>
+              <line x1="50" y1="105" x2="680" y2="105" stroke="var(--border)" stroke-width="0.3" stroke-dasharray="4"/>
+              <line x1="50" y1="62" x2="680" y2="62" stroke="var(--border)" stroke-width="0.3" stroke-dasharray="4"/>
+              <line x1="50" y1="20" x2="680" y2="20" stroke="var(--border)" stroke-width="0.3" stroke-dasharray="4"/>
+              <!-- Y labels -->
+              <text x="42" y="193" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="8" text-anchor="end">0</text>
+              <text x="42" y="150" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="8" text-anchor="end">3</text>
+              <text x="42" y="108" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="8" text-anchor="end">6</text>
+              <text x="42" y="65" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="8" text-anchor="end">9</text>
+              <text x="42" y="23" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="8" text-anchor="end">12</text>
+              <!-- X labels -->
+              <text x="102" y="207" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="7" text-anchor="middle">APR</text>
+              <text x="154" y="207" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="7" text-anchor="middle">MAY</text>
+              <text x="207" y="207" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="7" text-anchor="middle">JUN</text>
+              <text x="259" y="207" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="7" text-anchor="middle">JUL</text>
+              <text x="311" y="207" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="7" text-anchor="middle">AUG</text>
+              <text x="363" y="207" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="7" text-anchor="middle">SEP</text>
+              <text x="416" y="207" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="7" text-anchor="middle">OCT</text>
+              <text x="468" y="207" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="7" text-anchor="middle">NOV</text>
+              <text x="520" y="207" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="7" text-anchor="middle">DEC</text>
+              <text x="572" y="207" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="7" text-anchor="middle">JAN</text>
+              <text x="625" y="207" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="7" text-anchor="middle">FEB</text>
+              <text x="677" y="207" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="7" text-anchor="middle">MAR</text>
+              <!-- Biotech area -->
+              <path d="M102,147 L154,133 L207,140 L259,119 L311,126 L363,105 L416,112 L468,91 L520,98 L572,76 L625,69 L677,62 L677,190 L102,190 Z" fill="var(--gold)" opacity="0.06"/>
+              <polyline points="102,147 154,133 207,140 259,119 311,126 363,105 416,112 468,91 520,98 572,76 625,69 677,62" stroke="var(--gold)" stroke-width="2" fill="none"/>
+              <!-- Pharma line -->
+              <polyline points="102,161 154,154 207,161 259,147 311,154 363,140 416,147 468,133 520,126 572,119 625,112 677,105" stroke="var(--teal)" stroke-width="1.5" fill="none" stroke-dasharray="6,3"/>
+              <!-- MedTech line -->
+              <polyline points="102,175 154,175 207,168 259,175 311,168 363,161 416,168 468,161 520,154 572,161 625,147 677,140" stroke="var(--purple)" stroke-width="1.5" fill="none" opacity="0.6"/>
+              <!-- Dots on gold line -->
+              <circle cx="677" cy="62" r="4" fill="var(--gold)"/>
+              <circle cx="625" cy="69" r="3" fill="var(--gold)"/>
+              <!-- Legend -->
+              <rect x="80" y="2" width="8" height="3" fill="var(--gold)"/>
+              <text x="93" y="6" fill="var(--text-dim)" font-family="Manrope" font-size="7">Biotech</text>
+              <rect x="140" y="2" width="8" height="3" fill="var(--teal)"/>
+              <text x="153" y="6" fill="var(--text-dim)" font-family="Manrope" font-size="7">Pharma</text>
+              <rect x="195" y="2" width="8" height="3" fill="var(--purple)"/>
+              <text x="208" y="6" fill="var(--text-dim)" font-family="Manrope" font-size="7">MedTech</text>
+            </svg>
+          </div>
+        </div>
+        <div class="chart-panel">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Pipeline Funnel</div>
+              <div class="chart-subtitle">Current active searches</div>
+            </div>
+          </div>
+          <div class="funnel-container">
+            <div class="funnel-step">
+              <div class="funnel-label">Sourced</div>
+              <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:100%"></div></div>
+              <div class="funnel-value">342</div>
+              <div class="funnel-pct">100%</div>
+            </div>
+            <div class="funnel-step">
+              <div class="funnel-label">Screened</div>
+              <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:62%"></div></div>
+              <div class="funnel-value">212</div>
+              <div class="funnel-pct">62%</div>
+            </div>
+            <div class="funnel-step">
+              <div class="funnel-label">Submitted</div>
+              <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:28%"></div></div>
+              <div class="funnel-value">96</div>
+              <div class="funnel-pct">28%</div>
+            </div>
+            <div class="funnel-step">
+              <div class="funnel-label">Client Interview</div>
+              <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:16%"></div></div>
+              <div class="funnel-value">54</div>
+              <div class="funnel-pct">16%</div>
+            </div>
+            <div class="funnel-step">
+              <div class="funnel-label">Final Round</div>
+              <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:8%"></div></div>
+              <div class="funnel-value">28</div>
+              <div class="funnel-pct">8%</div>
+            </div>
+            <div class="funnel-step">
+              <div class="funnel-label">Offer / Placed</div>
+              <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:4%"></div></div>
+              <div class="funnel-value">14</div>
+              <div class="funnel-pct">4%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DIVERSITY + ROLE LEVEL + RECENT ACTIVITY -->
+      <div class="chart-grid-3">
+        <div class="chart-panel">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Diversity Breakdown</div>
+              <div class="chart-subtitle">Placements by demographic, Q1 2026</div>
+            </div>
+          </div>
+          <div class="donut-wrap">
+            <svg class="donut-svg" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="48" fill="none" stroke="var(--border)" stroke-width="14"/>
+              <circle cx="60" cy="60" r="48" fill="none" stroke="var(--gold)" stroke-width="14"
+                stroke-dasharray="120.6 180.9" stroke-dashoffset="0" transform="rotate(-90 60 60)"/>
+              <circle cx="60" cy="60" r="48" fill="none" stroke="var(--teal)" stroke-width="14"
+                stroke-dasharray="75.4 225.2" stroke-dashoffset="-120.6" transform="rotate(-90 60 60)"/>
+              <circle cx="60" cy="60" r="48" fill="none" stroke="var(--purple)" stroke-width="14"
+                stroke-dasharray="54.3 246.3" stroke-dashoffset="-196" transform="rotate(-90 60 60)"/>
+              <circle cx="60" cy="60" r="48" fill="none" stroke="var(--blue)" stroke-width="14"
+                stroke-dasharray="50.9 249.7" stroke-dashoffset="-250.3" transform="rotate(-90 60 60)"/>
+              <text x="60" y="57" text-anchor="middle" fill="var(--text)" font-family="Cormorant Garamond" font-size="18">68%</text>
+              <text x="60" y="70" text-anchor="middle" fill="var(--text-dim)" font-family="Manrope" font-size="7">Diverse</text>
+            </svg>
+            <div class="donut-legend">
+              <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div> Women <span class="legend-val">40%</span></div>
+              <div class="legend-item"><div class="legend-dot" style="background:var(--teal)"></div> BIPOC <span class="legend-val">25%</span></div>
+              <div class="legend-item"><div class="legend-dot" style="background:var(--purple)"></div> LGBTQ+ <span class="legend-val">18%</span></div>
+              <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div> Veterans <span class="legend-val">17%</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-panel">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">By Role Level</div>
+              <div class="chart-subtitle">Life Sciences placements</div>
+            </div>
+          </div>
+          <div class="bar-chart">
+            <div class="bar-col">
+              <div class="bar-val">19</div>
+              <div class="bar-fill" style="height:85%"></div>
+              <div class="bar-label">C-Suite</div>
+            </div>
+            <div class="bar-col">
+              <div class="bar-val">14</div>
+              <div class="bar-fill" style="height:63%"></div>
+              <div class="bar-label">SVP</div>
+            </div>
+            <div class="bar-col">
+              <div class="bar-val">22</div>
+              <div class="bar-fill" style="height:100%"></div>
+              <div class="bar-label">VP</div>
+            </div>
+            <div class="bar-col">
+              <div class="bar-val">11</div>
+              <div class="bar-fill" style="height:50%"></div>
+              <div class="bar-label">Director</div>
+            </div>
+            <div class="bar-col">
+              <div class="bar-val">6</div>
+              <div class="bar-fill" style="height:27%"></div>
+              <div class="bar-label">Sr. Dir</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-panel">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Recent Activity</div>
+              <div class="chart-subtitle">Latest placements & milestones</div>
+            </div>
+          </div>
+          <div class="timeline-list">
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-text"><strong>VP Clinical Ops</strong> placed at Vertex Therapeutics</div>
+              <div class="timeline-time">2d ago</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-text"><strong>CTO</strong> offer accepted — Series B biotech</div>
+              <div class="timeline-time">5d ago</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-text"><strong>CSO</strong> shortlist delivered to Oncology startup</div>
+              <div class="timeline-time">1w ago</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-text"><strong>VP Regulatory</strong> final round — MedTech firm</div>
+              <div class="timeline-time">1w ago</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-text"><strong>CMO</strong> 90-day check-in — retained</div>
+              <div class="timeline-time">2w ago</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTIVE SEARCHES TABLE -->
+      <div class="chart-grid" style="grid-template-columns:1fr">
+        <div class="chart-panel">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Active Searches — Life Sciences</div>
+              <div class="chart-subtitle">Current retained engagements across sub-sectors</div>
+            </div>
+            <div class="chart-badge">18 Active</div>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Status</th>
+                <th>Role</th>
+                <th>Client</th>
+                <th>Sub-Sector</th>
+                <th>Days Open</th>
+                <th>Pipeline</th>
+                <th>Stage</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="status-dot active"></span>Active</td><td class="highlight">Chief Medical Officer</td><td>Meridian Oncology</td><td>Biotech</td><td class="val">12</td><td class="val">34</td><td>Shortlist</td></tr>
+              <tr><td><span class="status-dot active"></span>Active</td><td class="highlight">VP Clinical Operations</td><td>Helix Therapeutics</td><td>Pharma</td><td class="val">18</td><td class="val">28</td><td>Client Interview</td></tr>
+              <tr><td><span class="status-dot active"></span>Active</td><td class="highlight">SVP Regulatory Affairs</td><td>NovaBridge Bio</td><td>Biotech</td><td class="val">24</td><td class="val">19</td><td>Final Round</td></tr>
+              <tr><td><span class="status-dot pending"></span>Pending</td><td class="highlight">Director, Drug Safety</td><td>Celion Pharma</td><td>Pharma</td><td class="val">8</td><td class="val">42</td><td>Screening</td></tr>
+              <tr><td><span class="status-dot active"></span>Active</td><td class="highlight">VP R&D Engineering</td><td>Apex MedTech</td><td>MedTech</td><td class="val">31</td><td class="val">15</td><td>Offer Stage</td></tr>
+              <tr><td><span class="status-dot active"></span>Active</td><td class="highlight">CTO</td><td>GenVault Diagnostics</td><td>MedTech</td><td class="val">6</td><td class="val">51</td><td>Sourcing</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PLACEMENT HEATMAP -->
+      <div class="chart-grid-2">
+        <div class="chart-panel">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Placement Heatmap</div>
+              <div class="chart-subtitle">Monthly placement density, trailing 12 months</div>
+            </div>
+          </div>
+          <div class="heatmap-grid" id="heatmap-ls"></div>
+          <div class="heatmap-months">
+            <span>A</span><span>M</span><span>J</span><span>J</span><span>A</span><span>S</span>
+            <span>O</span><span>N</span><span>D</span><span>J</span><span>F</span><span>M</span>
+          </div>
+        </div>
+        <div class="chart-panel">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Retention Milestones</div>
+              <div class="chart-subtitle">Candidate retention performance</div>
+            </div>
+          </div>
+          <div class="ring-row">
+            <div class="ring-item">
+              <svg class="ring-svg" viewBox="0 0 80 80">
+                <circle cx="40" cy="40" r="32" fill="none" stroke="var(--border)" stroke-width="6"/>
+                <circle cx="40" cy="40" r="32" fill="none" stroke="var(--green)" stroke-width="6"
+                  stroke-dasharray="191" stroke-dashoffset="11.5" transform="rotate(-90 40 40)" stroke-linecap="round"/>
+              </svg>
+              <div class="ring-val">97%</div>
+              <div class="ring-label">90-Day Retention</div>
+            </div>
+            <div class="ring-item">
+              <svg class="ring-svg" viewBox="0 0 80 80">
+                <circle cx="40" cy="40" r="32" fill="none" stroke="var(--border)" stroke-width="6"/>
+                <circle cx="40" cy="40" r="32" fill="none" stroke="var(--gold)" stroke-width="6"
+                  stroke-dasharray="189" stroke-dashoffset="12.6" transform="rotate(-90 40 40)" stroke-linecap="round"/>
+              </svg>
+              <div class="ring-val">94%</div>
+              <div class="ring-label">1-Year Retention</div>
+            </div>
+            <div class="ring-item">
+              <svg class="ring-svg" viewBox="0 0 80 80">
+                <circle cx="40" cy="40" r="32" fill="none" stroke="var(--border)" stroke-width="6"/>
+                <circle cx="40" cy="40" r="32" fill="none" stroke="var(--teal)" stroke-width="6"
+                  stroke-dasharray="172" stroke-dashoffset="29.2" transform="rotate(-90 40 40)" stroke-linecap="round"/>
+              </svg>
+              <div class="ring-val">86%</div>
+              <div class="ring-label">2-Year Retention</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- TECHNOLOGY PANEL -->
+    <!-- ═══════════════════════════════════════ -->
+    <div class="sector-panel" id="panel-technology">
+
+      <div class="kpi-row">
+        <div class="kpi-card animate-in delay-1">
+          <div class="kpi-label">Active Searches</div>
+          <div class="kpi-value">24</div>
+          <div class="kpi-change up">▲ 33% vs last quarter</div>
+        </div>
+        <div class="kpi-card animate-in delay-2">
+          <div class="kpi-label">Placements YTD</div>
+          <div class="kpi-value">61</div>
+          <div class="kpi-change up">▲ 22% vs prior year</div>
+        </div>
+        <div class="kpi-card animate-in delay-3">
+          <div class="kpi-label">Avg Days to Fill</div>
+          <div class="kpi-value">22</div>
+          <div class="kpi-change up">▼ 11 days improved</div>
+        </div>
+        <div class="kpi-card animate-in delay-4">
+          <div class="kpi-label">1-Year Retention</div>
+          <div class="kpi-value">91%</div>
+          <div class="kpi-change up">▲ 5pts vs benchmark</div>
+        </div>
+        <div class="kpi-card animate-in delay-5">
+          <div class="kpi-label">Avg Comp Placed</div>
+          <div class="kpi-value">$420K</div>
+          <div class="kpi-change up">▲ 12% vs market</div>
+        </div>
+      </div>
+
+      <!-- TECH TREND + FUNNEL -->
+      <div class="chart-grid">
+        <div class="chart-panel">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Placement Trend — Technology</div>
+              <div class="chart-subtitle">Monthly placements by sub-sector, trailing 12 months</div>
+            </div>
+            <div class="chart-badge">Monthly</div>
+          </div>
+          <div class="chart-area">
+            <svg viewBox="0 0 700 220" fill="none">
+              <line x1="50" y1="20" x2="50" y2="190" stroke="var(--border)" stroke-width="0.5"/>
+              <line x1="50" y1="190" x2="680" y2="190" stroke="var(--border)" stroke-width="0.5"/>
+              <line x1="50" y1="147" x2="680" y2="147" stroke="var(--border)" stroke-width="0.3" stroke-dasharray="4"/>
+              <line x1="50" y1="105" x2="680" y2="105" stroke="var(--border)" stroke-width="0.3" stroke-dasharray="4"/>
+              <line x1="50" y1="62" x2="680" y2="62" stroke="var(--border)" stroke-width="0.3" stroke-dasharray="4"/>
+              <line x1="50" y1="20" x2="680" y2="20" stroke="var(--border)" stroke-width="0.3" stroke-dasharray="4"/>
+              <text x="42" y="193" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="8" text-anchor="end">0</text>
+              <text x="42" y="150" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="8" text-anchor="end">4</text>
+              <text x="42" y="108" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="8" text-anchor="end">8</text>
+              <text x="42" y="65" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="8" text-anchor="end">12</text>
+              <text x="42" y="23" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="8" text-anchor="end">16</text>
+              <text x="102" y="207" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="7" text-anchor="middle">APR</text>
+              <text x="154" y="207" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="7" text-anchor="middle">MAY</text>
+              <text x="207" y="207" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="7" text-anchor="middle">JUN</text>
+              <text x="259" y="207" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="7" text-anchor="middle">JUL</text>
+              <text x="311" y="207" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="7" text-anchor="middle">AUG</text>
+              <text x="363" y="207" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="7" text-anchor="middle">SEP</text>
+              <text x="416" y="207" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="7" text-anchor="middle">OCT</text>
+              <text x="468" y="207" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="7" text-anchor="middle">NOV</text>
+              <text x="520" y="207" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="7" text-anchor="middle">DEC</text>
+              <text x="572" y="207" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="7" text-anchor="middle">JAN</text>
+              <text x="625" y="207" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="7" text-anchor="middle">FEB</text>
+              <text x="677" y="207" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="7" text-anchor="middle">MAR</text>
+              <!-- SaaS area -->
+              <path d="M102,154 L154,140 L207,147 L259,126 L311,112 L363,119 L416,98 L468,84 L520,91 L572,70 L625,56 L677,42 L677,190 L102,190 Z" fill="var(--blue)" opacity="0.06"/>
+              <polyline points="102,154 154,140 207,147 259,126 311,112 363,119 416,98 468,84 520,91 572,70 625,56 677,42" stroke="var(--blue)" stroke-width="2" fill="none"/>
+              <!-- AI/ML line -->
+              <polyline points="102,175 154,168 207,161 259,154 311,147 363,140 416,126 468,119 520,112 572,98 625,84 677,62" stroke="var(--gold)" stroke-width="1.5" fill="none"/>
+              <!-- Cyber line -->
+              <polyline points="102,175 154,175 207,168 259,168 311,161 363,168 416,161 468,154 520,147 572,140 625,140 677,133" stroke="var(--green)" stroke-width="1.5" fill="none" stroke-dasharray="6,3"/>
+              <circle cx="677" cy="42" r="4" fill="var(--blue)"/>
+              <circle cx="677" cy="62" r="3" fill="var(--gold)"/>
+              <!-- Legend -->
+              <rect x="80" y="2" width="8" height="3" fill="var(--blue)"/>
+              <text x="93" y="6" fill="var(--text-dim)" font-family="Manrope" font-size="7">SaaS</text>
+              <rect x="125" y="2" width="8" height="3" fill="var(--gold)"/>
+              <text x="138" y="6" fill="var(--text-dim)" font-family="Manrope" font-size="7">AI / ML</text>
+              <rect x="175" y="2" width="8" height="3" fill="var(--green)"/>
+              <text x="188" y="6" fill="var(--text-dim)" font-family="Manrope" font-size="7">Cybersecurity</text>
+            </svg>
+          </div>
+        </div>
+        <div class="chart-panel">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Pipeline Funnel</div>
+              <div class="chart-subtitle">Current technology searches</div>
+            </div>
+          </div>
+          <div class="funnel-container">
+            <div class="funnel-step">
+              <div class="funnel-label">Sourced</div>
+              <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:100%"></div></div>
+              <div class="funnel-value">518</div>
+              <div class="funnel-pct">100%</div>
+            </div>
+            <div class="funnel-step">
+              <div class="funnel-label">Screened</div>
+              <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:55%"></div></div>
+              <div class="funnel-value">285</div>
+              <div class="funnel-pct">55%</div>
+            </div>
+            <div class="funnel-step">
+              <div class="funnel-label">Submitted</div>
+              <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:24%"></div></div>
+              <div class="funnel-value">124</div>
+              <div class="funnel-pct">24%</div>
+            </div>
+            <div class="funnel-step">
+              <div class="funnel-label">Client Interview</div>
+              <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:14%"></div></div>
+              <div class="funnel-value">72</div>
+              <div class="funnel-pct">14%</div>
+            </div>
+            <div class="funnel-step">
+              <div class="funnel-label">Final Round</div>
+              <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:7%"></div></div>
+              <div class="funnel-value">36</div>
+              <div class="funnel-pct">7%</div>
+            </div>
+            <div class="funnel-step">
+              <div class="funnel-label">Offer / Placed</div>
+              <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:4%"></div></div>
+              <div class="funnel-value">19</div>
+              <div class="funnel-pct">4%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TECH SKILLS + DEMAND + ACTIVITY -->
+      <div class="chart-grid-3">
+        <div class="chart-panel">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Top Functional Areas</div>
+              <div class="chart-subtitle">Roles placed by function</div>
+            </div>
+          </div>
+          <div class="bar-chart" style="height:180px">
+            <div class="bar-col"><div class="bar-val">18</div><div class="bar-fill" style="height:100%"></div><div class="bar-label">Eng</div></div>
+            <div class="bar-col"><div class="bar-val">14</div><div class="bar-fill" style="height:78%;background:var(--blue-dim);border-color:var(--blue);border-bottom-color:var(--blue)"></div><div class="bar-label">Product</div></div>
+            <div class="bar-col"><div class="bar-val">11</div><div class="bar-fill" style="height:61%"></div><div class="bar-label">Data/AI</div></div>
+            <div class="bar-col"><div class="bar-val">9</div><div class="bar-fill" style="height:50%;background:var(--green-dim);border-color:var(--green);border-bottom-color:var(--green)"></div><div class="bar-label">Security</div></div>
+            <div class="bar-col"><div class="bar-val">5</div><div class="bar-fill" style="height:28%"></div><div class="bar-label">GTM</div></div>
+            <div class="bar-col"><div class="bar-val">4</div><div class="bar-fill" style="height:22%;background:var(--purple-dim);border-color:var(--purple);border-bottom-color:var(--purple)"></div><div class="bar-label">Design</div></div>
+          </div>
+        </div>
+
+        <div class="chart-panel">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Comp Benchmarks</div>
+              <div class="chart-subtitle">Avg total comp by level (USD)</div>
+            </div>
+          </div>
+          <div class="bar-chart" style="height:180px">
+            <div class="bar-col"><div class="bar-val">$680K</div><div class="bar-fill" style="height:100%;background:var(--gold-dim);border-bottom-color:var(--gold)"></div><div class="bar-label">C-Suite</div></div>
+            <div class="bar-col"><div class="bar-val">$510K</div><div class="bar-fill" style="height:75%;background:var(--gold-dim);border-bottom-color:var(--gold)"></div><div class="bar-label">SVP</div></div>
+            <div class="bar-col"><div class="bar-val">$420K</div><div class="bar-fill" style="height:62%;background:var(--gold-dim);border-bottom-color:var(--gold)"></div><div class="bar-label">VP</div></div>
+            <div class="bar-col"><div class="bar-val">$310K</div><div class="bar-fill" style="height:46%;background:var(--gold-dim);border-bottom-color:var(--gold)"></div><div class="bar-label">Director</div></div>
+          </div>
+        </div>
+
+        <div class="chart-panel">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Recent Activity</div>
+              <div class="chart-subtitle">Latest tech placements & milestones</div>
+            </div>
+          </div>
+          <div class="timeline-list">
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-text"><strong>CTO</strong> placed at Series D AI startup</div>
+              <div class="timeline-time">1d ago</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-text"><strong>VP Engineering</strong> offer accepted — Fintech</div>
+              <div class="timeline-time">3d ago</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-text"><strong>CISO</strong> shortlist delivered — Enterprise SaaS</div>
+              <div class="timeline-time">5d ago</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-text"><strong>Chief Product Officer</strong> final round — Marketplace</div>
+              <div class="timeline-time">1w ago</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-text"><strong>Head of ML</strong> 6-month check-in — promoted</div>
+              <div class="timeline-time">1w ago</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTIVE TECH SEARCHES TABLE -->
+      <div class="chart-grid" style="grid-template-columns:1fr">
+        <div class="chart-panel">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Active Searches — Technology</div>
+              <div class="chart-subtitle">Current retained engagements across tech sub-sectors</div>
+            </div>
+            <div class="chart-badge">24 Active</div>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Status</th>
+                <th>Role</th>
+                <th>Client</th>
+                <th>Sub-Sector</th>
+                <th>Days Open</th>
+                <th>Pipeline</th>
+                <th>Stage</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="status-dot active"></span>Active</td><td class="highlight">Chief Technology Officer</td><td>Nexus AI</td><td>AI / ML</td><td class="val">9</td><td class="val">47</td><td>Client Interview</td></tr>
+              <tr><td><span class="status-dot active"></span>Active</td><td class="highlight">VP Engineering</td><td>CloudScale Systems</td><td>SaaS</td><td class="val">15</td><td class="val">38</td><td>Shortlist</td></tr>
+              <tr><td><span class="status-dot active"></span>Active</td><td class="highlight">CISO</td><td>VaultPoint</td><td>Cybersecurity</td><td class="val">21</td><td class="val">22</td><td>Final Round</td></tr>
+              <tr><td><span class="status-dot pending"></span>Pending</td><td class="highlight">Chief Product Officer</td><td>DataBridge</td><td>Data Platform</td><td class="val">4</td><td class="val">56</td><td>Sourcing</td></tr>
+              <tr><td><span class="status-dot active"></span>Active</td><td class="highlight">Head of Machine Learning</td><td>QuantumLeap Labs</td><td>AI / ML</td><td class="val">28</td><td class="val">19</td><td>Offer Stage</td></tr>
+              <tr><td><span class="status-dot active"></span>Active</td><td class="highlight">SVP Product</td><td>Orbital Commerce</td><td>SaaS</td><td class="val">11</td><td class="val">31</td><td>Client Interview</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TECH DIVERSITY + RETENTION -->
+      <div class="chart-grid-2">
+        <div class="chart-panel">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Diversity Breakdown</div>
+              <div class="chart-subtitle">Technology placements, Q1 2026</div>
+            </div>
+          </div>
+          <div class="donut-wrap">
+            <svg class="donut-svg" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="48" fill="none" stroke="var(--border)" stroke-width="14"/>
+              <circle cx="60" cy="60" r="48" fill="none" stroke="var(--blue)" stroke-width="14"
+                stroke-dasharray="108.6 192.9" stroke-dashoffset="0" transform="rotate(-90 60 60)"/>
+              <circle cx="60" cy="60" r="48" fill="none" stroke="var(--gold)" stroke-width="14"
+                stroke-dasharray="84.4 216.2" stroke-dashoffset="-108.6" transform="rotate(-90 60 60)"/>
+              <circle cx="60" cy="60" r="48" fill="none" stroke="var(--green)" stroke-width="14"
+                stroke-dasharray="54.3 246.3" stroke-dashoffset="-193" transform="rotate(-90 60 60)"/>
+              <circle cx="60" cy="60" r="48" fill="none" stroke="var(--purple)" stroke-width="14"
+                stroke-dasharray="53.7 246.9" stroke-dashoffset="-247.3" transform="rotate(-90 60 60)"/>
+              <text x="60" y="57" text-anchor="middle" fill="var(--text)" font-family="Cormorant Garamond" font-size="18">62%</text>
+              <text x="60" y="70" text-anchor="middle" fill="var(--text-dim)" font-family="Manrope" font-size="7">Diverse</text>
+            </svg>
+            <div class="donut-legend">
+              <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div> Women <span class="legend-val">36%</span></div>
+              <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div> BIPOC <span class="legend-val">28%</span></div>
+              <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div> LGBTQ+ <span class="legend-val">18%</span></div>
+              <div class="legend-item"><div class="legend-dot" style="background:var(--purple)"></div> Neurodiverse <span class="legend-val">18%</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="chart-panel">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Retention Milestones</div>
+              <div class="chart-subtitle">Technology candidate retention</div>
+            </div>
+          </div>
+          <div class="ring-row">
+            <div class="ring-item">
+              <svg class="ring-svg" viewBox="0 0 80 80">
+                <circle cx="40" cy="40" r="32" fill="none" stroke="var(--border)" stroke-width="6"/>
+                <circle cx="40" cy="40" r="32" fill="none" stroke="var(--green)" stroke-width="6"
+                  stroke-dasharray="195" stroke-dashoffset="6" transform="rotate(-90 40 40)" stroke-linecap="round"/>
+              </svg>
+              <div class="ring-val">98%</div>
+              <div class="ring-label">90-Day Retention</div>
+            </div>
+            <div class="ring-item">
+              <svg class="ring-svg" viewBox="0 0 80 80">
+                <circle cx="40" cy="40" r="32" fill="none" stroke="var(--border)" stroke-width="6"/>
+                <circle cx="40" cy="40" r="32" fill="none" stroke="var(--gold)" stroke-width="6"
+                  stroke-dasharray="183" stroke-dashoffset="18" transform="rotate(-90 40 40)" stroke-linecap="round"/>
+              </svg>
+              <div class="ring-val">91%</div>
+              <div class="ring-label">1-Year Retention</div>
+            </div>
+            <div class="ring-item">
+              <svg class="ring-svg" viewBox="0 0 80 80">
+                <circle cx="40" cy="40" r="32" fill="none" stroke="var(--border)" stroke-width="6"/>
+                <circle cx="40" cy="40" r="32" fill="none" stroke="var(--blue)" stroke-width="6"
+                  stroke-dasharray="168" stroke-dashoffset="33" transform="rotate(-90 40 40)" stroke-linecap="round"/>
+              </svg>
+              <div class="ring-val">83%</div>
+              <div class="ring-label">2-Year Retention</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- COMBINED PANEL -->
+    <!-- ═══════════════════════════════════════ -->
+    <div class="sector-panel" id="panel-combined">
+      <div class="kpi-row">
+        <div class="kpi-card animate-in delay-1">
+          <div class="kpi-label">Total Active Searches</div>
+          <div class="kpi-value">42</div>
+          <div class="kpi-change up">▲ 31% vs last quarter</div>
+        </div>
+        <div class="kpi-card animate-in delay-2">
+          <div class="kpi-label">Total Placements YTD</div>
+          <div class="kpi-value">108</div>
+          <div class="kpi-change up">▲ 19% vs prior year</div>
+        </div>
+        <div class="kpi-card animate-in delay-3">
+          <div class="kpi-label">Avg Days to Fill</div>
+          <div class="kpi-value">24</div>
+          <div class="kpi-change up">▼ 10 days improved</div>
+        </div>
+        <div class="kpi-card animate-in delay-4">
+          <div class="kpi-label">Overall Retention</div>
+          <div class="kpi-value">93%</div>
+          <div class="kpi-change up">▲ 4pts vs industry avg</div>
+        </div>
+        <div class="kpi-card animate-in delay-5">
+          <div class="kpi-label">Client Satisfaction</div>
+          <div class="kpi-value">4.9</div>
+          <div class="kpi-change up">▲ out of 5.0</div>
+        </div>
+      </div>
+
+      <div class="chart-grid-2">
+        <div class="chart-panel">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Sector Split — Placements</div>
+              <div class="chart-subtitle">All-time placements by sector</div>
+            </div>
+          </div>
+          <div class="donut-wrap">
+            <svg class="donut-svg" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="48" fill="none" stroke="var(--border)" stroke-width="14"/>
+              <circle cx="60" cy="60" r="48" fill="none" stroke="var(--gold)" stroke-width="14"
+                stroke-dasharray="133.5 167.1" stroke-dashoffset="0" transform="rotate(-90 60 60)"/>
+              <circle cx="60" cy="60" r="48" fill="none" stroke="var(--blue)" stroke-width="14"
+                stroke-dasharray="167.1 133.5" stroke-dashoffset="-133.5" transform="rotate(-90 60 60)"/>
+              <text x="60" y="63" text-anchor="middle" fill="var(--text)" font-family="Cormorant Garamond" font-size="14">108</text>
+              <text x="60" y="73" text-anchor="middle" fill="var(--text-dim)" font-family="Manrope" font-size="6">PLACEMENTS</text>
+            </svg>
+            <div class="donut-legend">
+              <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div> Life Sciences <span class="legend-val">44%</span></div>
+              <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div> Technology <span class="legend-val">56%</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="chart-panel">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Revenue by Quarter</div>
+              <div class="chart-subtitle">Trailing 6 quarters, combined sectors</div>
+            </div>
+          </div>
+          <div class="bar-chart" style="height:160px">
+            <div class="bar-col"><div class="bar-val">$1.1M</div><div class="bar-fill" style="height:55%"></div><div class="bar-label">Q4'24</div></div>
+            <div class="bar-col"><div class="bar-val">$1.4M</div><div class="bar-fill" style="height:68%"></div><div class="bar-label">Q1'25</div></div>
+            <div class="bar-col"><div class="bar-val">$1.3M</div><div class="bar-fill" style="height:63%"></div><div class="bar-label">Q2'25</div></div>
+            <div class="bar-col"><div class="bar-val">$1.7M</div><div class="bar-fill" style="height:82%"></div><div class="bar-label">Q3'25</div></div>
+            <div class="bar-col"><div class="bar-val">$1.9M</div><div class="bar-fill" style="height:92%"></div><div class="bar-label">Q4'25</div></div>
+            <div class="bar-col"><div class="bar-val">$2.1M</div><div class="bar-fill" style="height:100%;background:var(--gold-20);border-bottom-color:var(--gold-light)"></div><div class="bar-label">Q1'26</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-grid-2">
+        <div class="chart-panel">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Diversity — All Sectors</div>
+              <div class="chart-subtitle">Combined shortlist diversity rate over time</div>
+            </div>
+          </div>
+          <div class="chart-area">
+            <svg viewBox="0 0 500 140" fill="none">
+              <line x1="40" y1="120" x2="480" y2="120" stroke="var(--border)" stroke-width="0.5"/>
+              <line x1="40" y1="80" x2="480" y2="80" stroke="var(--border)" stroke-width="0.3" stroke-dasharray="3"/>
+              <line x1="40" y1="40" x2="480" y2="40" stroke="var(--border)" stroke-width="0.3" stroke-dasharray="3"/>
+              <text x="35" y="123" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="7" text-anchor="end">0%</text>
+              <text x="35" y="83" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="7" text-anchor="end">50%</text>
+              <text x="35" y="43" fill="var(--text-dim)" font-family="JetBrains Mono" font-size="7" text-anchor="end">100%</text>
+              <path d="M75,96 L148,88 L221,80 L294,72 L367,64 L440,52 L440,120 L75,120 Z" fill="var(--gold)" opacity="0.06"/>
+              <polyline points="75,96 148,88 221,80 294,72 367,64 440,52" stroke="var(--gold)" stroke-width="2" fill="none"/>
+              <circle cx="440" cy="52" r="4" fill="var(--gold)"/>
+              <text x="450" y="50" fill="var(--gold)" font-family="JetBrains Mono" font-size="8">65%</text>
+              <!-- Target line -->
+              <line x1="40" y1="56" x2="480" y2="56" stroke="var(--green)" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
+              <text x="480" y="52" fill="var(--green)" font-family="JetBrains Mono" font-size="7" text-anchor="end" opacity="0.6">Target: 70%</text>
+            </svg>
+          </div>
+        </div>
+        <div class="chart-panel">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Client Retention</div>
+              <div class="chart-subtitle">Repeat engagement rate</div>
+            </div>
+          </div>
+          <div class="ring-row">
+            <div class="ring-item">
+              <svg class="ring-svg" viewBox="0 0 80 80">
+                <circle cx="40" cy="40" r="32" fill="none" stroke="var(--border)" stroke-width="6"/>
+                <circle cx="40" cy="40" r="32" fill="none" stroke="var(--gold)" stroke-width="6"
+                  stroke-dasharray="176" stroke-dashoffset="24" transform="rotate(-90 40 40)" stroke-linecap="round"/>
+              </svg>
+              <div class="ring-val">88%</div>
+              <div class="ring-label">Repeat Clients</div>
+            </div>
+            <div class="ring-item">
+              <svg class="ring-svg" viewBox="0 0 80 80">
+                <circle cx="40" cy="40" r="32" fill="none" stroke="var(--border)" stroke-width="6"/>
+                <circle cx="40" cy="40" r="32" fill="none" stroke="var(--green)" stroke-width="6"
+                  stroke-dasharray="191" stroke-dashoffset="10" transform="rotate(-90 40 40)" stroke-linecap="round"/>
+              </svg>
+              <div class="ring-val">96%</div>
+              <div class="ring-label">Client NPS 8+</div>
+            </div>
+            <div class="ring-item">
+              <svg class="ring-svg" viewBox="0 0 80 80">
+                <circle cx="40" cy="40" r="32" fill="none" stroke="var(--border)" stroke-width="6"/>
+                <circle cx="40" cy="40" r="32" fill="none" stroke="var(--blue)" stroke-width="6"
+                  stroke-dasharray="151" stroke-dashoffset="50" transform="rotate(-90 40 40)" stroke-linecap="round"/>
+              </svg>
+              <div class="ring-val">2.4</div>
+              <div class="ring-label">Avg Searches / Client</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  // Tab switching
+  function switchTab(sector) {
+    document.querySelectorAll('.sector-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.sector-panel').forEach(p => {
+      p.classList.remove('active');
+      p.style.display = 'none';
+    });
+
+    const labels = { 'life-sciences': 'Life Sciences', 'technology': 'Technology', 'combined': 'Combined View' };
+    document.querySelectorAll('.sector-tab').forEach(t => {
+      if (t.textContent.trim() === labels[sector]) t.classList.add('active');
+    });
+
+    const panel = document.getElementById('panel-' + sector);
+    if (panel) {
+      panel.style.display = 'block';
+      // Re-trigger animations
+      setTimeout(() => panel.classList.add('active'), 10);
+      panel.querySelectorAll('.animate-in').forEach(el => {
+        el.style.animation = 'none';
+        el.offsetHeight;
+        el.style.animation = '';
+      });
+    }
+
+    // Update sidebar active states
+    document.querySelectorAll('.sidebar-link').forEach(l => {
+      if (l.getAttribute('onclick')?.includes(sector)) {
+        // Visual feedback only
+      }
+    });
+  }
+
+  // Period select toggle
+  document.querySelectorAll('.period-select').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.period-select').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  // Generate heatmap
+  function generateHeatmap(id, data) {
+    const container = document.getElementById(id);
+    if (!container) return;
+    data.forEach((rows, ri) => {
+      rows.forEach((val, ci) => {
+        const cell = document.createElement('div');
+        cell.className = 'heat-cell';
+        const opacity = Math.max(0.05, val / 10);
+        cell.style.background = `rgba(201,168,76,${opacity})`;
+        const months = ['Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar'];
+        cell.setAttribute('data-tooltip', `${months[ci]}: ${val} placements`);
+        container.appendChild(cell);
+      });
+    });
+  }
+
+  generateHeatmap('heatmap-ls', [
+    [2,3,3,4,3,5,4,6,5,7,6,8],
+    [1,2,2,2,3,3,4,3,4,4,5,5],
+    [1,1,2,1,2,2,2,3,2,3,3,4],
+    [0,1,1,1,1,2,1,2,2,2,3,3],
+  ]);
+
+  // Initialize panels
+  document.querySelectorAll('.sector-panel').forEach(p => {
+    if (!p.classList.contains('active')) p.style.display = 'none';
+  });
+</script>
+
+</body>
+</html>
