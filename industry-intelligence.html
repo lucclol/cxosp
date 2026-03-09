@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CXOSP — Industry Intelligence Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07080d;--sf:#0d0f16;--sf2:#13151e;--sf3:#191c26;
+  --bd:#1d2030;--bdl:#272b3c;
+  /* Life Sciences palette */
+  --ls:#3dd9a0;--ls-dim:rgba(61,217,160,.07);--ls-glow:rgba(61,217,160,.12);--ls-20:rgba(61,217,160,.18);
+  --ls2:#4a9ff5;--ls3:#e0a83d;--ls4:#9b7ae0;--ls5:#e0636f;--ls6:#4adfc9;
+  /* Emerging Tech palette */
+  --et:#3de0e0;--et-dim:rgba(61,224,224,.07);--et-glow:rgba(61,224,224,.12);--et-20:rgba(61,224,224,.18);
+  --et2:#5a7af5;--et3:#a0f04a;--et4:#e05aab;--et5:#f0b83d;--et6:#9b7ae0;
+  /* Active accent (swapped by JS) */
+  --ac:var(--ls);--ac-dim:var(--ls-dim);--ac-glow:var(--ls-glow);--ac-20:var(--ls-20);
+  --tx:#e8ecf0;--tx2:#8d95a2;--txd:#5c6370;
+  --se:'Cormorant Garamond',Georgia,serif;
+  --sa:'Manrope',sans-serif;
+  --mo:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--sa);background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::selection{background:var(--ac);color:var(--bg)}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.015;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* Layout */
+.app{min-height:100vh}
+
+/* Sidebar */
+
+
+
+
+.s-lt span{color:var(--ac);transition:color .3s}
+
+
+
+
+
+.s-lnk .ic{font-size:.8rem;width:16px;text-align:center}
+
+
+
+
+
+
+/* Main */
+.mn{padding-top:5.5rem;padding:1.5rem 2rem 3rem;min-width:0}
+
+/* Header */
+.hdr{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.75rem;padding-bottom:1.15rem;border-bottom:1px solid var(--bd)}
+.hdr h1{font-family:var(--se);font-size:1.5rem;font-weight:400}
+.hdr h1 em{font-style:italic;color:var(--ac);transition:color .3s}
+.hdr p{font-size:.68rem;color:var(--txd);font-weight:300;margin-top:.12rem}
+.hdr-r{display:flex;gap:.5rem;align-items:center}
+.hdr-b{font-family:var(--mo);font-size:.52rem;padding:.4rem .85rem;background:var(--sf);border:1px solid var(--bd);color:var(--tx2);cursor:pointer;letter-spacing:.07em;text-transform:uppercase;transition:all .25s;outline:none}
+.hdr-b:hover,.hdr-b.on{border-color:var(--ac);color:var(--ac);background:var(--ac-dim)}
+
+/* Sector Tabs */
+.tabs{display:flex;gap:0;margin-bottom:1.75rem;border-bottom:1px solid var(--bd)}
+.tab{font-family:var(--sa);font-size:.72rem;font-weight:500;letter-spacing:.05em;padding:.75rem 1.75rem;background:none;border:none;color:var(--txd);cursor:pointer;position:relative;transition:color .3s}
+.tab:hover{color:var(--tx2)}
+.tab.on{color:var(--ac)}
+.tab.on::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:2px;background:var(--ac)}
+.tab .t-badge{font-family:var(--mo);font-size:.45rem;margin-left:.5rem;padding:.15rem .4rem;border:1px solid var(--bd);color:var(--txd);letter-spacing:.05em;vertical-align:middle}
+
+/* Panels */
+.panel{display:none;animation:pIn .4s ease}
+.panel.on{display:block}
+@keyframes pIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* Section label */
+.sl{font-family:var(--mo);font-size:.5rem;letter-spacing:.28em;color:var(--ac);text-transform:uppercase;margin-bottom:1.1rem;display:flex;align-items:center;gap:.65rem;transition:color .3s}
+.sl::before{content:'';width:16px;height:1px;background:var(--ac);transition:background .3s}
+
+/* KPIs */
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--bd);margin-bottom:1.5rem}
+.kpi{background:var(--sf);padding:1.1rem .9rem;transition:background .3s}
+.kpi:hover{background:var(--sf2)}
+.kpi-l{font-size:.5rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--txd);margin-bottom:.5rem}
+.kpi-v{font-family:var(--se);font-size:1.55rem;line-height:1;margin-bottom:.3rem}
+.kpi-d{font-family:var(--mo);font-size:.5rem;display:flex;align-items:center;gap:.25rem}
+.kpi-d.up{color:var(--ls)}.kpi-d.dn{color:var(--ls5)}
+.kpi-s{font-size:.48rem;color:var(--txd);margin-top:.2rem;font-weight:300}
+
+/* Grid layouts */
+.g1{display:grid;grid-template-columns:1fr;gap:1px;background:var(--bd);margin-bottom:1.5rem}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--bd);margin-bottom:1.5rem}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--bd);margin-bottom:1.5rem}
+.g21{display:grid;grid-template-columns:2fr 1fr;gap:1px;background:var(--bd);margin-bottom:1.5rem}
+.g12{display:grid;grid-template-columns:1fr 2fr;gap:1px;background:var(--bd);margin-bottom:1.5rem}
+.g31{display:grid;grid-template-columns:3fr 1fr;gap:1px;background:var(--bd);margin-bottom:1.5rem}
+.g211{display:grid;grid-template-columns:2fr 1fr 1fr;gap:1px;background:var(--bd);margin-bottom:1.5rem}
+
+/* Panel */
+.pn{background:var(--sf);padding:1.35rem}
+.pn-h{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.1rem}
+.pn-t{font-family:var(--se);font-size:.98rem;margin-bottom:.15rem}
+.pn-s{font-size:.58rem;color:var(--txd);font-weight:300}
+.pn-b{font-family:var(--mo);font-size:.46rem;letter-spacing:.08em;padding:.2rem .45rem;border:1px solid var(--bd);color:var(--txd);text-transform:uppercase}
+
+/* SVG Charts */
+.cht{width:100%}.cht svg{width:100%;height:auto;display:block}
+
+/* Bars */
+.bars{display:flex;align-items:flex-end;gap:5px;padding-top:.6rem}
+.br-c{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end}
+.br-v{font-family:var(--mo);font-size:.5rem;color:var(--ac);margin-bottom:.25rem;transition:color .3s}
+.br-f{width:100%;max-width:28px;border:1px solid var(--ac-20);border-bottom:2px solid var(--ac);background:var(--ac-dim);transition:all .8s cubic-bezier(.22,1,.36,1)}
+.br-f:hover{background:var(--ac-20)}
+.br-l{font-family:var(--mo);font-size:.45rem;color:var(--txd);margin-top:.35rem;text-align:center;letter-spacing:.02em;line-height:1.3}
+
+/* H-bars */
+.hb{display:flex;flex-direction:column;gap:5px}
+.hb-r{display:flex;align-items:center;gap:.65rem}
+.hb-lb{font-size:.65rem;color:var(--tx2);width:110px;flex-shrink:0;font-weight:300}
+.hb-tk{flex:1;height:22px;position:relative}
+.hb-fl{height:100%;background:var(--ac-dim);border:1px solid var(--ac-20);border-right:none;position:relative;transition:width 1s cubic-bezier(.22,1,.36,1)}
+.hb-fl::after{content:'';position:absolute;right:0;top:0;bottom:0;width:2px;background:var(--ac);transition:background .3s}
+.hb-vl{font-family:var(--mo);font-size:.58rem;color:var(--ac);width:52px;text-align:right;flex-shrink:0;transition:color .3s}
+
+/* Donut */
+.dn-w{display:flex;align-items:center;gap:1.25rem}
+.dn-svg{width:120px;height:120px;flex-shrink:0}
+.leg{display:flex;flex-direction:column;gap:.45rem}
+.leg-i{display:flex;align-items:center;gap:.45rem;font-size:.65rem;color:var(--tx2)}
+.leg-d{width:6px;height:6px;flex-shrink:0}
+.leg-v{font-family:var(--mo);font-size:.56rem;color:var(--txd);margin-left:auto;padding-left:.65rem}
+
+/* Ring */
+.rings{display:flex;gap:1.5rem;justify-content:space-around;flex-wrap:wrap}
+.rg-i{display:flex;flex-direction:column;align-items:center;gap:.4rem}
+.rg-svg{width:66px;height:66px}
+.rg-v{font-family:var(--se);font-size:.85rem;color:var(--tx)}
+.rg-l{font-size:.55rem;color:var(--txd);text-align:center;max-width:75px}
+
+/* Timeline */
+.tl{display:flex;flex-direction:column}
+.tl-i{display:flex;gap:.65rem;padding:.55rem 0;border-bottom:1px solid var(--bd);align-items:flex-start}
+.tl-i:last-child{border-bottom:none}
+.tl-dt{width:6px;height:6px;border:1.5px solid var(--ac);margin-top:.28rem;flex-shrink:0;transition:border-color .3s}
+.tl-tx{font-size:.68rem;color:var(--tx2);line-height:1.4;font-weight:300;flex:1}
+.tl-tx strong{color:var(--tx);font-weight:500}
+.tl-tm{font-family:var(--mo);font-size:.48rem;color:var(--txd);flex-shrink:0}
+
+/* Table */
+.dt{width:100%;border-collapse:collapse}
+.dt th{font-family:var(--mo);font-size:.48rem;letter-spacing:.1em;text-transform:uppercase;color:var(--txd);text-align:left;padding:.5rem .35rem;border-bottom:1px solid var(--bd);font-weight:500}
+.dt td{font-size:.68rem;padding:.48rem .35rem;border-bottom:1px solid var(--bd);color:var(--tx2);font-weight:300}
+.dt tr:hover td{background:var(--sf2);color:var(--tx)}
+.dt .mn-f{font-family:var(--mo);font-size:.6rem}
+.dt .hi{color:var(--ac);font-weight:500;transition:color .3s}
+.sd{display:inline-block;width:5px;height:5px;border-radius:50%;margin-right:.35rem}
+.sd.on{background:var(--ls);box-shadow:0 0 5px var(--ls-dim)}
+.sd.ht{background:var(--et4);box-shadow:0 0 5px var(--et4)}
+.sd.pn{background:var(--ls3);box-shadow:0 0 5px var(--ls3)}
+.sd.cr{background:var(--ls5);box-shadow:0 0 5px var(--ls5)}
+
+/* Maturity gauge */
+.mat{display:flex;flex-direction:column;gap:5px}
+.mat-r{display:flex;align-items:center;gap:.65rem}
+.mat-lb{font-size:.65rem;color:var(--tx2);width:100px;flex-shrink:0;font-weight:300}
+.mat-tk{flex:1;height:9px;background:var(--sf3)}
+.mat-fl{height:100%;transition:width .8s ease}
+.mat-tg{font-family:var(--mo);font-size:.48rem;width:62px;text-align:right;flex-shrink:0;letter-spacing:.04em}
+
+/* Phase track */
+.ph-tk{display:flex;gap:2px;margin-bottom:.4rem}
+.ph-sg{height:28px;display:flex;align-items:center;justify-content:center;font-family:var(--mo);font-size:.48rem;color:var(--tx);letter-spacing:.04em}
+.ph-lb{display:flex;gap:2px}
+.ph-l{font-family:var(--mo);font-size:.44rem;color:var(--txd);text-align:center}
+
+/* Geo bars */
+.geo{display:flex;flex-direction:column;gap:3px}
+.geo-r{display:flex;align-items:center;gap:.65rem}
+.geo-nm{font-size:.65rem;color:var(--tx2);width:100px;flex-shrink:0;font-weight:300}
+.geo-bk{flex:1;height:16px;background:var(--sf2)}
+.geo-fl{height:100%;transition:width .8s ease}
+.geo-pc{font-family:var(--mo);font-size:.55rem;color:var(--txd);width:32px;text-align:right;flex-shrink:0}
+
+/* Responsive */
+@media(max-width:1200px){.kpis{grid-template-columns:repeat(3,1fr)}.g211{grid-template-columns:1fr}}
+@media(max-width:1000px){.g21,.g12,.g31,.g2{grid-template-columns:1fr}.g3{grid-template-columns:1fr}}
+@media(max-width:850px){.mn{padding:1.25rem}.kpis{grid-template-columns:1fr 1fr}}
+
+@keyframes fU{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+.an{animation:fU .5s ease forwards}
+.d1{animation-delay:.04s;opacity:0}.d2{animation-delay:.08s;opacity:0}.d3{animation-delay:.12s;opacity:0}.d4{animation-delay:.16s;opacity:0}.d5{animation-delay:.2s;opacity:0}.d6{animation-delay:.24s;opacity:0}
+</style>
+</head>
+<body>
+
+<nav style="position:fixed;top:0;left:0;right:0;z-index:1000;padding:1rem 2.5rem;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(22px);background:rgba(7,8,13,.8);border-bottom:1px solid var(--bd)">
+  <a href="index.html" style="display:flex;align-items:center;gap:.55rem;text-decoration:none"><img src="https://img1.wsimg.com/isteam/ip/c82aaadc-5b51-4ec2-8f71-c529b797f118/CXO%20Logo%20-%20Gold.png" alt="CXOSP" style="height:32px;width:auto"></a>
+  <div style="display:flex;gap:2rem;align-items:center">
+    <a href="index.html" style="font-size:.65rem;color:var(--tx2);text-decoration:none;letter-spacing:.07em;text-transform:uppercase">Home</a>
+    <a href="services.html" style="font-size:.65rem;color:var(--tx2);text-decoration:none;letter-spacing:.07em;text-transform:uppercase">Services</a>
+    <a href="insights.html" style="font-size:.65rem;color:var(--tx2);text-decoration:none;letter-spacing:.07em;text-transform:uppercase">Insights</a>
+    <a href="industry-intelligence.html" style="font-size:.65rem;color:var(--ac);text-decoration:none;letter-spacing:.07em;text-transform:uppercase">Industry Data</a>
+    <a href="contact.html" style="font-size:.65rem;color:var(--tx2);text-decoration:none;letter-spacing:.07em;text-transform:uppercase">Contact</a>
+  </div>
+</nav>
+<div class="app">
+
+<!-- ═══ SIDEBAR ═══ -->
+
+
+<main class="mn">
+
+<!-- Header -->
+<div class="hdr">
+  <div>
+    <h1>Industry <em>Intelligence</em> Dashboard</h1>
+    <p>Comprehensive market data across Life Sciences & Emerging Technologies — Q1 2026</p>
+  </div>
+  <div class="hdr-r">
+    <button class="hdr-b on">Q1 2026</button>
+    <button class="hdr-b">FY 2025</button>
+    <button class="hdr-b">3-Year</button>
+  </div>
+</div>
+
+<!-- Sector Tabs -->
+<div class="tabs">
+  <button class="tab on" onclick="switchTab('ls')">Life Sciences <span class="t-badge">BIO · PHARMA · MEDTECH</span></button>
+  <button class="tab" onclick="switchTab('et')">Emerging Technologies <span class="t-badge">AI · CYBER · QUANTUM · CLIMATE</span></button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- LIFE SCIENCES PANEL -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="panel on" id="p-ls">
+
+<div class="sl">Market Overview</div>
+<div class="kpis">
+  <div class="kpi an d1"><div class="kpi-l">Global Market Size</div><div class="kpi-v">$2.14T</div><div class="kpi-d up">▲ 7.2% CAGR</div><div class="kpi-s">2026 projected</div></div>
+  <div class="kpi an d2"><div class="kpi-l">VC Investment Q1</div><div class="kpi-v">$18.3B</div><div class="kpi-d up">▲ 34% vs Q4</div><div class="kpi-s">Biotech + Digital Health</div></div>
+  <div class="kpi an d3"><div class="kpi-l">M&A Deals Q1</div><div class="kpi-v">42</div><div class="kpi-d up">▲ 18% QoQ</div><div class="kpi-s">Deals >$100M valuation</div></div>
+  <div class="kpi an d4"><div class="kpi-l">FDA Approvals YTD</div><div class="kpi-v">14</div><div class="kpi-d up">▲ 22% vs Q1 '25</div><div class="kpi-s">Novel molecular entities</div></div>
+  <div class="kpi an d5"><div class="kpi-l">IPO Activity</div><div class="kpi-v">$4.7B</div><div class="kpi-d up">▲ 3 new listings</div><div class="kpi-s">Total capital raised</div></div>
+  <div class="kpi an d6"><div class="kpi-l">Patent Filings</div><div class="kpi-v">8,420</div><div class="kpi-d up">▲ 11% YoY</div><div class="kpi-s">US + EP filings</div></div>
+</div>
+
+<!-- Clinical Pipeline + Therapeutic Mix -->
+<div class="sl">Clinical Pipeline & Innovation</div>
+<div class="g21">
+  <div class="pn">
+    <div class="pn-h"><div><div class="pn-t">Industry Pipeline by Phase</div><div class="pn-s">Active clinical programs across tracked companies, Q1 2026</div></div><div class="pn-b">6,482 Active</div></div>
+    <div class="ph-tk">
+      <div class="ph-sg" style="flex:3.8;background:rgba(74,159,245,.12)">1,840</div>
+      <div class="ph-sg" style="flex:2.6;background:rgba(61,217,160,.12)">1,260</div>
+      <div class="ph-sg" style="flex:1.9;background:rgba(224,168,61,.12)">920</div>
+      <div class="ph-sg" style="flex:1.1;background:rgba(155,122,224,.12)">538</div>
+      <div class="ph-sg" style="flex:.6;background:rgba(224,99,111,.12)">312</div>
+      <div class="ph-sg" style="flex:1.2;background:rgba(74,223,201,.12)">612</div>
+    </div>
+    <div class="ph-lb">
+      <div class="ph-l" style="flex:3.8">Preclinical</div>
+      <div class="ph-l" style="flex:2.6">Phase I</div>
+      <div class="ph-l" style="flex:1.9">Phase II</div>
+      <div class="ph-l" style="flex:1.1">Phase III</div>
+      <div class="ph-l" style="flex:.6">NDA/BLA</div>
+      <div class="ph-l" style="flex:1.2">Approved</div>
+    </div>
+    <div style="margin-top:1.25rem">
+      <div class="pn-s" style="margin-bottom:.6rem">Phase III Pipeline Growth (12mo trailing)</div>
+      <div class="cht"><svg viewBox="0 0 580 130" fill="none">
+        <line x1="40" y1="10" x2="40" y2="115" stroke="var(--bd)" stroke-width=".5"/>
+        <line x1="40" y1="115" x2="560" y2="115" stroke="var(--bd)" stroke-width=".5"/>
+        <line x1="40" y1="80" x2="560" y2="80" stroke="var(--bd)" stroke-width=".3" stroke-dasharray="3"/>
+        <line x1="40" y1="45" x2="560" y2="45" stroke="var(--bd)" stroke-width=".3" stroke-dasharray="3"/>
+        <path d="M83,98 L130,94 L177,90 L224,85 L271,80 L318,72 L365,68 L412,60 L459,55 L506,48 L553,40 L553,115 L83,115Z" fill="var(--ls)" opacity=".05"/>
+        <polyline points="83,98 130,94 177,90 224,85 271,80 318,72 365,68 412,60 459,55 506,48 553,40" stroke="var(--ls)" stroke-width="2" fill="none"/>
+        <polyline points="83,105 130,102 177,100 224,95 271,90 318,85 365,82 412,78 459,72 506,68 553,60" stroke="var(--ls2)" stroke-width="1.5" fill="none" stroke-dasharray="5,3"/>
+        <polyline points="83,108 130,108 177,105 224,102 271,98 318,95 365,92 412,95 459,90 506,85 553,78" stroke="var(--ls3)" stroke-width="1.5" fill="none" opacity=".7"/>
+        <circle cx="553" cy="40" r="3" fill="var(--ls)"/><circle cx="553" cy="60" r="2.5" fill="var(--ls2)"/><circle cx="553" cy="78" r="2.5" fill="var(--ls3)"/>
+        <rect x="55" y="2" width="6" height="2" fill="var(--ls)"/><text x="65" y="5" fill="var(--txd)" font-family="Manrope" font-size="5.5">Phase III</text>
+        <rect x="110" y="2" width="6" height="2" fill="var(--ls2)"/><text x="120" y="5" fill="var(--txd)" font-family="Manrope" font-size="5.5">Phase I</text>
+        <rect x="155" y="2" width="6" height="2" fill="var(--ls3)"/><text x="165" y="5" fill="var(--txd)" font-family="Manrope" font-size="5.5">NDA/BLA</text>
+      </svg></div>
+    </div>
+  </div>
+  <div class="pn">
+    <div class="pn-h"><div><div class="pn-t">Therapeutic Area Mix</div><div class="pn-s">Pipeline distribution by indication</div></div></div>
+    <div class="hb">
+      <div class="hb-r"><div class="hb-lb">Oncology</div><div class="hb-tk"><div class="hb-fl" style="width:100%"></div></div><div class="hb-vl">28%</div></div>
+      <div class="hb-r"><div class="hb-lb">Immunology</div><div class="hb-tk"><div class="hb-fl" style="width:68%"></div></div><div class="hb-vl">19%</div></div>
+      <div class="hb-r"><div class="hb-lb">Neuroscience</div><div class="hb-tk"><div class="hb-fl" style="width:54%"></div></div><div class="hb-vl">15%</div></div>
+      <div class="hb-r"><div class="hb-lb">Rare Disease</div><div class="hb-tk"><div class="hb-fl" style="width:43%"></div></div><div class="hb-vl">12%</div></div>
+      <div class="hb-r"><div class="hb-lb">Cell & Gene</div><div class="hb-tk"><div class="hb-fl" style="width:29%"></div></div><div class="hb-vl">8%</div></div>
+      <div class="hb-r"><div class="hb-lb">Cardiovascular</div><div class="hb-tk"><div class="hb-fl" style="width:32%"></div></div><div class="hb-vl">9%</div></div>
+      <div class="hb-r"><div class="hb-lb">Metabolic/GLP-1</div><div class="hb-tk"><div class="hb-fl" style="width:18%"></div></div><div class="hb-vl">5%</div></div>
+      <div class="hb-r"><div class="hb-lb">Infectious Dis.</div><div class="hb-tk"><div class="hb-fl" style="width:14%"></div></div><div class="hb-vl">4%</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Funding & M&A + Regulatory -->
+<div class="sl">Funding, M&A & Regulatory Landscape</div>
+<div class="g3">
+  <div class="pn">
+    <div class="pn-h"><div><div class="pn-t">VC Funding by Stage</div><div class="pn-s">Q1 2026 investment breakdown</div></div></div>
+    <div class="bars" style="height:140px">
+      <div class="br-c"><div class="br-v">$3.1B</div><div class="br-f" style="height:42%"></div><div class="br-l">Seed /<br>A</div></div>
+      <div class="br-c"><div class="br-v">$5.4B</div><div class="br-f" style="height:72%"></div><div class="br-l">Series<br>B</div></div>
+      <div class="br-c"><div class="br-v">$7.2B</div><div class="br-f" style="height:96%"></div><div class="br-l">Series<br>C+</div></div>
+      <div class="br-c"><div class="br-v">$2.6B</div><div class="br-f" style="height:35%;background:var(--ls3);border-color:rgba(224,168,61,.2);border-bottom-color:var(--ls3)"></div><div class="br-l">Cross-<br>over</div></div>
+    </div>
+    <div style="margin-top:.75rem;font-size:.48rem;color:var(--txd)">Total: $18.3B across 214 deals</div>
+  </div>
+  <div class="pn">
+    <div class="pn-h"><div><div class="pn-t">M&A Activity</div><div class="pn-s">Notable deals Q1 2026</div></div></div>
+    <table class="dt">
+      <thead><tr><th>Acquirer</th><th>Target</th><th>Value</th><th>Focus</th></tr></thead>
+      <tbody>
+        <tr><td>Pfizer</td><td>Oncovax Bio</td><td class="mn-f hi">$8.4B</td><td>ADC pipeline</td></tr>
+        <tr><td>Roche</td><td>NeuroStar</td><td class="mn-f hi">$5.1B</td><td>Neuro AI</td></tr>
+        <tr><td>Amgen</td><td>CellForge</td><td class="mn-f hi">$3.8B</td><td>Cell therapy</td></tr>
+        <tr><td>Danaher</td><td>DiagX</td><td class="mn-f hi">$2.2B</td><td>Liquid biopsy</td></tr>
+        <tr><td>J&J</td><td>ImmuGen</td><td class="mn-f hi">$1.9B</td><td>Autoimmune</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="pn">
+    <div class="pn-h"><div><div class="pn-t">Regulatory Tracker</div><div class="pn-s">Key FDA / EMA actions Q1</div></div></div>
+    <div class="tl">
+      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>14 NME approvals</strong> — Oncology (5), Rare Disease (3), Neuro (2), Other (4)</div><div class="tl-tm">Q1</div></div>
+      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>Accelerated Approval overhaul</strong> — new confirmatory trial requirements</div><div class="tl-tm">Feb</div></div>
+      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>AI/ML guidance finalized</strong> — Software as Medical Device framework updated</div><div class="tl-tm">Feb</div></div>
+      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>Biosimilar pathway expanded</strong> — 8 new interchangeable designations</div><div class="tl-tm">Jan</div></div>
+      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>Cell therapy manufacturing</strong> — CGMP guidance for autologous therapies</div><div class="tl-tm">Jan</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Geographic + Revenue Segments + Innovation -->
+<div class="sl">Geography, Revenue & Innovation</div>
+<div class="g211">
+  <div class="pn">
+    <div class="pn-h"><div><div class="pn-t">Revenue by Segment — Top 20 Companies</div><div class="pn-s">Combined revenue by business unit, trailing 4 quarters</div></div></div>
+    <div class="cht"><svg viewBox="0 0 520 150" fill="none">
+      <!-- Stacked area showing pharma vs biotech vs medtech revenue -->
+      <line x1="40" y1="10" x2="40" y2="130" stroke="var(--bd)" stroke-width=".5"/>
+      <line x1="40" y1="130" x2="500" y2="130" stroke="var(--bd)" stroke-width=".5"/>
+      <line x1="40" y1="90" x2="500" y2="90" stroke="var(--bd)" stroke-width=".3" stroke-dasharray="3"/>
+      <line x1="40" y1="50" x2="500" y2="50" stroke="var(--bd)" stroke-width=".3" stroke-dasharray="3"/>
+      <text x="35" y="133" fill="var(--txd)" font-family="JetBrains Mono" font-size="6" text-anchor="end">$0</text>
+      <text x="35" y="93" fill="var(--txd)" font-family="JetBrains Mono" font-size="6" text-anchor="end">$200B</text>
+      <text x="35" y="53" fill="var(--txd)" font-family="JetBrains Mono" font-size="6" text-anchor="end">$400B</text>
+      <text x="35" y="13" fill="var(--txd)" font-family="JetBrains Mono" font-size="6" text-anchor="end">$600B</text>
+      <!-- Pharma revenue area -->
+      <path d="M85,68 L200,62 L315,55 L430,48 L430,130 L85,130Z" fill="var(--ls)" opacity=".06"/>
+      <polyline points="85,68 200,62 315,55 430,48" stroke="var(--ls)" stroke-width="2" fill="none"/>
+      <!-- Biotech -->
+      <polyline points="85,95 200,88 315,82 430,72" stroke="var(--ls2)" stroke-width="1.5" fill="none"/>
+      <!-- MedTech -->
+      <polyline points="85,108 200,105 315,100 430,95" stroke="var(--ls6)" stroke-width="1.5" fill="none" stroke-dasharray="5,3"/>
+      <circle cx="430" cy="48" r="3" fill="var(--ls)"/><circle cx="430" cy="72" r="2.5" fill="var(--ls2)"/><circle cx="430" cy="95" r="2.5" fill="var(--ls6)"/>
+      <text x="85" y="145" fill="var(--txd)" font-family="JetBrains Mono" font-size="5.5" text-anchor="middle">Q2'25</text>
+      <text x="200" y="145" fill="var(--txd)" font-family="JetBrains Mono" font-size="5.5" text-anchor="middle">Q3'25</text>
+      <text x="315" y="145" fill="var(--txd)" font-family="JetBrains Mono" font-size="5.5" text-anchor="middle">Q4'25</text>
+      <text x="430" y="145" fill="var(--txd)" font-family="JetBrains Mono" font-size="5.5" text-anchor="middle">Q1'26</text>
+      <rect x="55" y="2" width="6" height="2" fill="var(--ls)"/><text x="65" y="5" fill="var(--txd)" font-family="Manrope" font-size="5">Pharma $512B</text>
+      <rect x="145" y="2" width="6" height="2" fill="var(--ls2)"/><text x="155" y="5" fill="var(--txd)" font-family="Manrope" font-size="5">Biotech $298B</text>
+      <rect x="230" y="2" width="6" height="2" fill="var(--ls6)"/><text x="240" y="5" fill="var(--txd)" font-family="Manrope" font-size="5">MedTech $184B</text>
+    </svg></div>
+  </div>
+  <div class="pn">
+    <div class="pn-h"><div><div class="pn-t">R&D Hubs</div><div class="pn-s">By investment volume</div></div></div>
+    <div class="geo">
+      <div class="geo-r"><div class="geo-nm">Boston / Camb.</div><div class="geo-bk"><div class="geo-fl" style="width:100%;background:var(--ls)"></div></div><div class="geo-pc">28%</div></div>
+      <div class="geo-r"><div class="geo-nm">SF Bay Area</div><div class="geo-bk"><div class="geo-fl" style="width:71%;background:var(--ls);opacity:.85"></div></div><div class="geo-pc">20%</div></div>
+      <div class="geo-r"><div class="geo-nm">Basel / Zurich</div><div class="geo-bk"><div class="geo-fl" style="width:50%;background:var(--ls2)"></div></div><div class="geo-pc">14%</div></div>
+      <div class="geo-r"><div class="geo-nm">NJ / Philly</div><div class="geo-bk"><div class="geo-fl" style="width:39%;background:var(--ls2);opacity:.85"></div></div><div class="geo-pc">11%</div></div>
+      <div class="geo-r"><div class="geo-nm">London / Oxford</div><div class="geo-bk"><div class="geo-fl" style="width:29%;background:var(--ls3)"></div></div><div class="geo-pc">8%</div></div>
+      <div class="geo-r"><div class="geo-nm">Shanghai</div><div class="geo-bk"><div class="geo-fl" style="width:25%;background:var(--ls3);opacity:.85"></div></div><div class="geo-pc">7%</div></div>
+      <div class="geo-r"><div class="geo-nm">Other</div><div class="geo-bk"><div class="geo-fl" style="width:43%;background:var(--ls4)"></div></div><div class="geo-pc">12%</div></div>
+    </div>
+  </div>
+  <div class="pn">
+    <div class="pn-h"><div><div class="pn-t">Innovation Index</div><div class="pn-s">Breakthrough signals</div></div></div>
+    <div class="rings">
+      <div class="rg-i"><svg class="rg-svg" viewBox="0 0 80 80"><circle cx="40" cy="40" r="28" fill="none" stroke="var(--bd)" stroke-width="5"/><circle cx="40" cy="40" r="28" fill="none" stroke="var(--ls)" stroke-width="5" stroke-dasharray="158 18" stroke-dashoffset="-44" transform="rotate(-90 40 40)" stroke-linecap="round"/></svg><div class="rg-v">8,420</div><div class="rg-l">Patent Filings</div></div>
+      <div class="rg-i"><svg class="rg-svg" viewBox="0 0 80 80"><circle cx="40" cy="40" r="28" fill="none" stroke="var(--bd)" stroke-width="5"/><circle cx="40" cy="40" r="28" fill="none" stroke="var(--ls2)" stroke-width="5" stroke-dasharray="141 35" stroke-dashoffset="-44" transform="rotate(-90 40 40)" stroke-linecap="round"/></svg><div class="rg-v">342</div><div class="rg-l">IND Filings YTD</div></div>
+    </div>
+    <div style="margin-top:1rem">
+      <div class="pn-s" style="margin-bottom:.5rem">Hottest Modalities</div>
+      <div class="hb" style="gap:4px">
+        <div class="hb-r"><div class="hb-lb" style="width:85px;font-size:.6rem">ADCs</div><div class="hb-tk"><div class="hb-fl" style="width:95%"></div></div><div class="hb-vl" style="width:40px">+62%</div></div>
+        <div class="hb-r"><div class="hb-lb" style="width:85px;font-size:.6rem">mRNA</div><div class="hb-tk"><div class="hb-fl" style="width:78%"></div></div><div class="hb-vl" style="width:40px">+48%</div></div>
+        <div class="hb-r"><div class="hb-lb" style="width:85px;font-size:.6rem">Gene Edit</div><div class="hb-tk"><div class="hb-fl" style="width:65%"></div></div><div class="hb-vl" style="width:40px">+41%</div></div>
+        <div class="hb-r"><div class="hb-lb" style="width:85px;font-size:.6rem">Radiopharm</div><div class="hb-tk"><div class="hb-fl" style="width:52%"></div></div><div class="hb-vl" style="width:40px">+35%</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Market Signals -->
+<div class="sl">Market Signals & Competitive Intelligence</div>
+<div class="g21">
+  <div class="pn">
+    <div class="pn-h"><div><div class="pn-t">Key Market Signals</div><div class="pn-s">Industry events shaping the landscape</div></div></div>
+    <div class="tl">
+      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>GLP-1 race intensifies</strong> — 4 new Phase III entrants. Eli Lilly, Novo Nordisk, Amgen, and Viking Therapeutics battling for $100B+ market.</div><div class="tl-tm">Mar</div></div>
+      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>AI drug discovery hits inflection</strong> — 3 AI-designed drugs now in Phase II. Recursion, Insilico, Isomorphic Labs leading platform deals >$500M each.</div><div class="tl-tm">Feb</div></div>
+      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>Cell & Gene manufacturing scale-up</strong> — 6 CDMO expansions announced. Samsung Biologics, Lonza, Catalent adding combined 200K sq ft capacity.</div><div class="tl-tm">Feb</div></div>
+      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>Biosimilar wave accelerates</strong> — $48B in branded biologics losing exclusivity 2026-2028. Sandoz, Teva, Samsung Bioepis racing for market share.</div><div class="tl-tm">Jan</div></div>
+      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>Oncology ADC pipeline explosion</strong> — 12 new IND filings in Q1 alone. Daiichi Sankyo, AstraZeneca, Pfizer expanding ADC portfolios aggressively.</div><div class="tl-tm">Jan</div></div>
+    </div>
+  </div>
+  <div class="pn">
+    <div class="pn-h"><div><div class="pn-t">Sub-Sector Performance</div><div class="pn-s">Stock index returns, YTD 2026</div></div></div>
+    <div class="bars" style="height:135px">
+      <div class="br-c"><div class="br-v">+18%</div><div class="br-f" style="height:90%"></div><div class="br-l">Onco<br>Bio</div></div>
+      <div class="br-c"><div class="br-v">+14%</div><div class="br-f" style="height:70%"></div><div class="br-l">GLP-1<br>Metab</div></div>
+      <div class="br-c"><div class="br-v">+11%</div><div class="br-f" style="height:55%;background:rgba(74,159,245,.08);border-color:rgba(74,159,245,.18);border-bottom-color:var(--ls2)"></div><div class="br-l">Med<br>Tech</div></div>
+      <div class="br-c"><div class="br-v">+8%</div><div class="br-f" style="height:40%;background:rgba(74,223,201,.08);border-color:rgba(74,223,201,.18);border-bottom-color:var(--ls6)"></div><div class="br-l">Dx</div></div>
+      <div class="br-c"><div class="br-v">+5%</div><div class="br-f" style="height:25%;background:rgba(224,168,61,.08);border-color:rgba(224,168,61,.18);border-bottom-color:var(--ls3)"></div><div class="br-l">Large<br>Pharma</div></div>
+      <div class="br-c"><div class="br-v">-3%</div><div class="br-f" style="height:15%;background:rgba(224,99,111,.08);border-color:rgba(224,99,111,.18);border-bottom-color:var(--ls5)"></div><div class="br-l">Digi<br>Health</div></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /panel ls -->
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- EMERGING TECH PANEL -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-et">
+
+<div class="sl">Market Overview</div>
+<div class="kpis">
+  <div class="kpi an d1"><div class="kpi-l">Total VC Funding Q1</div><div class="kpi-v">$42.1B</div><div class="kpi-d up">▲ 28% vs Q4</div><div class="kpi-s">All emerging tech verticals</div></div>
+  <div class="kpi an d2"><div class="kpi-l">AI / ML Market</div><div class="kpi-v">$305B</div><div class="kpi-d up">▲ 38% YoY</div><div class="kpi-s">2026 projected market</div></div>
+  <div class="kpi an d3"><div class="kpi-l">Cyber Market</div><div class="kpi-v">$212B</div><div class="kpi-d up">▲ 14% YoY</div><div class="kpi-s">Global cybersecurity spend</div></div>
+  <div class="kpi an d4"><div class="kpi-l">IPO / Exits Q1</div><div class="kpi-v">18</div><div class="kpi-d up">▲ 50% vs Q1 '25</div><div class="kpi-s">Exits >$500M valuation</div></div>
+  <div class="kpi an d5"><div class="kpi-l">Unicorns Created</div><div class="kpi-v">23</div><div class="kpi-d up">▲ new $1B+ cos in Q1</div><div class="kpi-s">14 are AI-native</div></div>
+  <div class="kpi an d6"><div class="kpi-l">Patent Filings (AI)</div><div class="kpi-v">14,200</div><div class="kpi-d up">▲ 64% YoY</div><div class="kpi-s">US + CN + EP filings</div></div>
+</div>
+
+<!-- Funding + Sector Maturity -->
+<div class="sl">Funding Landscape & Sector Maturity</div>
+<div class="g21">
+  <div class="pn">
+    <div class="pn-h"><div><div class="pn-t">VC Funding by Sector — Quarterly Trend</div><div class="pn-s">Investment volume across emerging technology verticals</div></div><div class="pn-b">$142B TTM</div></div>
+    <div class="cht"><svg viewBox="0 0 580 150" fill="none">
+      <line x1="40" y1="10" x2="40" y2="130" stroke="var(--bd)" stroke-width=".5"/>
+      <line x1="40" y1="130" x2="560" y2="130" stroke="var(--bd)" stroke-width=".5"/>
+      <line x1="40" y1="97" x2="560" y2="97" stroke="var(--bd)" stroke-width=".3" stroke-dasharray="3"/>
+      <line x1="40" y1="64" x2="560" y2="64" stroke="var(--bd)" stroke-width=".3" stroke-dasharray="3"/>
+      <line x1="40" y1="31" x2="560" y2="31" stroke="var(--bd)" stroke-width=".3" stroke-dasharray="3"/>
+      <text x="35" y="133" fill="var(--txd)" font-family="JetBrains Mono" font-size="6" text-anchor="end">$0B</text>
+      <text x="35" y="100" fill="var(--txd)" font-family="JetBrains Mono" font-size="6" text-anchor="end">$7B</text>
+      <text x="35" y="67" fill="var(--txd)" font-family="JetBrains Mono" font-size="6" text-anchor="end">$14B</text>
+      <text x="35" y="34" fill="var(--txd)" font-family="JetBrains Mono" font-size="6" text-anchor="end">$21B</text>
+      <text x="110" y="143" fill="var(--txd)" font-family="JetBrains Mono" font-size="5.5" text-anchor="middle">Q2'25</text>
+      <text x="240" y="143" fill="var(--txd)" font-family="JetBrains Mono" font-size="5.5" text-anchor="middle">Q3'25</text>
+      <text x="370" y="143" fill="var(--txd)" font-family="JetBrains Mono" font-size="5.5" text-anchor="middle">Q4'25</text>
+      <text x="500" y="143" fill="var(--txd)" font-family="JetBrains Mono" font-size="5.5" text-anchor="middle">Q1'26</text>
+      <!-- AI/ML -->
+      <path d="M110,72 L240,60 L370,48 L500,22 L500,130 L110,130Z" fill="var(--et)" opacity=".04"/>
+      <polyline points="110,72 240,60 370,48 500,22" stroke="var(--et)" stroke-width="2.5" fill="none"/>
+      <!-- Cybersecurity -->
+      <polyline points="110,100 240,94 370,88 500,75" stroke="var(--et3)" stroke-width="1.5" fill="none"/>
+      <!-- Cloud/Infra -->
+      <polyline points="110,106 240,100 370,95 500,86" stroke="var(--et2)" stroke-width="1.5" fill="none" stroke-dasharray="5,3"/>
+      <!-- Climate Tech -->
+      <polyline points="110,112 240,108 370,100 500,90" stroke="var(--et5)" stroke-width="1.5" fill="none" opacity=".7"/>
+      <!-- Quantum -->
+      <polyline points="110,122 240,118 370,112 500,102" stroke="var(--et4)" stroke-width="1.5" fill="none" opacity=".7"/>
+      <circle cx="500" cy="22" r="3.5" fill="var(--et)"/><circle cx="500" cy="75" r="2.5" fill="var(--et3)"/><circle cx="500" cy="86" r="2.5" fill="var(--et2)"/>
+      <rect x="55" y="2" width="6" height="2" fill="var(--et)"/><text x="65" y="5" fill="var(--txd)" font-family="Manrope" font-size="5">AI/ML $19.1B</text>
+      <rect x="135" y="2" width="6" height="2" fill="var(--et3)"/><text x="145" y="5" fill="var(--txd)" font-family="Manrope" font-size="5">Cyber $7.2B</text>
+      <rect x="200" y="2" width="6" height="2" fill="var(--et2)"/><text x="210" y="5" fill="var(--txd)" font-family="Manrope" font-size="5">Cloud $5.8B</text>
+      <rect x="262" y="2" width="6" height="2" fill="var(--et5)"/><text x="272" y="5" fill="var(--txd)" font-family="Manrope" font-size="5">Climate $5.4B</text>
+      <rect x="330" y="2" width="6" height="2" fill="var(--et4)"/><text x="340" y="5" fill="var(--txd)" font-family="Manrope" font-size="5">Quantum $4.6B</text>
+    </svg></div>
+  </div>
+  <div class="pn">
+    <div class="pn-h"><div><div class="pn-t">Sector Maturity Map</div><div class="pn-s">Technology readiness & market phase</div></div></div>
+    <div class="mat">
+      <div class="mat-r"><div class="mat-lb">Generative AI</div><div class="mat-tk"><div class="mat-fl" style="width:92%;background:linear-gradient(90deg,var(--et-dim),var(--et))"></div></div><div class="mat-tg" style="color:var(--et)">Peak Growth</div></div>
+      <div class="mat-r"><div class="mat-lb">AI Infra / MLOps</div><div class="mat-tk"><div class="mat-fl" style="width:78%;background:linear-gradient(90deg,rgba(160,240,74,.05),var(--et3))"></div></div><div class="mat-tg" style="color:var(--et3)">Scale-Up</div></div>
+      <div class="mat-r"><div class="mat-lb">Cybersecurity</div><div class="mat-tk"><div class="mat-fl" style="width:85%;background:linear-gradient(90deg,rgba(160,240,74,.05),var(--et3))"></div></div><div class="mat-tg" style="color:var(--et3)">Mature</div></div>
+      <div class="mat-r"><div class="mat-lb">Climate Tech</div><div class="mat-tk"><div class="mat-fl" style="width:52%;background:linear-gradient(90deg,rgba(240,184,61,.05),var(--et5))"></div></div><div class="mat-tg" style="color:var(--et5)">Growth</div></div>
+      <div class="mat-r"><div class="mat-lb">Robotics / HW</div><div class="mat-tk"><div class="mat-fl" style="width:45%;background:linear-gradient(90deg,rgba(240,184,61,.05),var(--et5))"></div></div><div class="mat-tg" style="color:var(--et5)">Growth</div></div>
+      <div class="mat-r"><div class="mat-lb">Edge / IoT</div><div class="mat-tk"><div class="mat-fl" style="width:58%;background:linear-gradient(90deg,rgba(240,184,61,.05),var(--et5))"></div></div><div class="mat-tg" style="color:var(--et5)">Growth</div></div>
+      <div class="mat-r"><div class="mat-lb">Quantum</div><div class="mat-tk"><div class="mat-fl" style="width:28%;background:linear-gradient(90deg,rgba(224,90,171,.05),var(--et4))"></div></div><div class="mat-tg" style="color:var(--et4)">Early</div></div>
+      <div class="mat-r"><div class="mat-lb">Spatial / AR-VR</div><div class="mat-tk"><div class="mat-fl" style="width:32%;background:linear-gradient(90deg,rgba(224,90,171,.05),var(--et4))"></div></div><div class="mat-tg" style="color:var(--et4)">Emerging</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Product Adoption + M&A -->
+<div class="sl">Product Adoption & M&A Activity</div>
+<div class="g3">
+  <div class="pn">
+    <div class="pn-h"><div><div class="pn-t">Enterprise AI Adoption</div><div class="pn-s">% of Fortune 500 deploying</div></div></div>
+    <div class="hb">
+      <div class="hb-r"><div class="hb-lb">GenAI Tools</div><div class="hb-tk"><div class="hb-fl" style="width:92%;background:var(--et-dim);border-color:var(--et-20)"></div></div><div class="hb-vl">92%</div></div>
+      <div class="hb-r"><div class="hb-lb">ML in Prod</div><div class="hb-tk"><div class="hb-fl" style="width:74%;background:var(--et-dim);border-color:var(--et-20)"></div></div><div class="hb-vl">74%</div></div>
+      <div class="hb-r"><div class="hb-lb">Zero Trust</div><div class="hb-tk"><div class="hb-fl" style="width:68%;background:rgba(160,240,74,.06);border-color:rgba(160,240,74,.15)"></div></div><div class="hb-vl">68%</div></div>
+      <div class="hb-r"><div class="hb-lb">Cloud Native</div><div class="hb-tk"><div class="hb-fl" style="width:82%;background:rgba(90,122,245,.06);border-color:rgba(90,122,245,.15)"></div></div><div class="hb-vl">82%</div></div>
+      <div class="hb-r"><div class="hb-lb">Edge Deploy</div><div class="hb-tk"><div class="hb-fl" style="width:38%;background:rgba(240,184,61,.06);border-color:rgba(240,184,61,.15)"></div></div><div class="hb-vl">38%</div></div>
+      <div class="hb-r"><div class="hb-lb">Quantum POC</div><div class="hb-tk"><div class="hb-fl" style="width:12%;background:rgba(224,90,171,.06);border-color:rgba(224,90,171,.15)"></div></div><div class="hb-vl">12%</div></div>
+    </div>
+  </div>
+  <div class="pn">
+    <div class="pn-h"><div><div class="pn-t">Major M&A Deals</div><div class="pn-s">Notable acquisitions Q1 2026</div></div></div>
+    <table class="dt">
+      <thead><tr><th>Acquirer</th><th>Target</th><th>Value</th><th>Focus</th></tr></thead>
+      <tbody>
+        <tr><td>Google</td><td>Wiz</td><td class="mn-f hi">$32B</td><td>Cloud Security</td></tr>
+        <tr><td>Salesforce</td><td>AgentForce AI</td><td class="mn-f hi">$8.1B</td><td>AI Agents</td></tr>
+        <tr><td>Cisco</td><td>ShieldNet</td><td class="mn-f hi">$5.4B</td><td>Zero Trust</td></tr>
+        <tr><td>NVIDIA</td><td>RunPod</td><td class="mn-f hi">$3.2B</td><td>GPU Cloud</td></tr>
+        <tr><td>Microsoft</td><td>QuantumPath</td><td class="mn-f hi">$2.8B</td><td>Quantum SW</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="pn">
+    <div class="pn-h"><div><div class="pn-t">Regulation Tracker</div><div class="pn-s">Key policy actions, Q1 2026</div></div></div>
+    <div class="tl">
+      <div class="tl-i"><div class="tl-dt" style="border-color:var(--et)"></div><div class="tl-tx"><strong>EU AI Act enforcement</strong> — First compliance deadlines; high-risk AI classification in effect</div><div class="tl-tm">Feb</div></div>
+      <div class="tl-i"><div class="tl-dt" style="border-color:var(--et)"></div><div class="tl-tx"><strong>NIST post-quantum standards</strong> — Mandatory migration timeline for federal contractors</div><div class="tl-tm">Feb</div></div>
+      <div class="tl-i"><div class="tl-dt" style="border-color:var(--et)"></div><div class="tl-tx"><strong>US AI Executive Order update</strong> — Reporting requirements for frontier model developers</div><div class="tl-tm">Jan</div></div>
+      <div class="tl-i"><div class="tl-dt" style="border-color:var(--et)"></div><div class="tl-tx"><strong>SEC crypto framework</strong> — Clear custody rules for digital asset platforms</div><div class="tl-tm">Jan</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Geography + Revenue + Innovation -->
+<div class="sl">Geography, Revenue & Innovation Radar</div>
+<div class="g211">
+  <div class="pn">
+    <div class="pn-h"><div><div class="pn-t">Cloud & AI Infrastructure Revenue</div><div class="pn-s">Quarterly revenue by hyperscaler, trailing 4 quarters</div></div></div>
+    <div class="cht"><svg viewBox="0 0 520 150" fill="none">
+      <line x1="40" y1="10" x2="40" y2="130" stroke="var(--bd)" stroke-width=".5"/>
+      <line x1="40" y1="130" x2="500" y2="130" stroke="var(--bd)" stroke-width=".5"/>
+      <line x1="40" y1="90" x2="500" y2="90" stroke="var(--bd)" stroke-width=".3" stroke-dasharray="3"/>
+      <line x1="40" y1="50" x2="500" y2="50" stroke="var(--bd)" stroke-width=".3" stroke-dasharray="3"/>
+      <text x="35" y="133" fill="var(--txd)" font-family="JetBrains Mono" font-size="6" text-anchor="end">$0</text>
+      <text x="35" y="93" fill="var(--txd)" font-family="JetBrains Mono" font-size="6" text-anchor="end">$40B</text>
+      <text x="35" y="53" fill="var(--txd)" font-family="JetBrains Mono" font-size="6" text-anchor="end">$80B</text>
+      <text x="35" y="13" fill="var(--txd)" font-family="JetBrains Mono" font-size="6" text-anchor="end">$120B</text>
+      <!-- AWS -->
+      <polyline points="85,68 200,60 315,52 430,42" stroke="var(--et5)" stroke-width="2" fill="none"/>
+      <!-- Azure -->
+      <polyline points="85,78 200,68 315,58 430,46" stroke="var(--et2)" stroke-width="2" fill="none"/>
+      <!-- GCP -->
+      <polyline points="85,95 200,88 315,78 430,65" stroke="var(--et)" stroke-width="1.5" fill="none" stroke-dasharray="5,3"/>
+      <circle cx="430" cy="42" r="3" fill="var(--et5)"/><circle cx="430" cy="46" r="2.5" fill="var(--et2)"/><circle cx="430" cy="65" r="2.5" fill="var(--et)"/>
+      <text x="85" y="143" fill="var(--txd)" font-family="JetBrains Mono" font-size="5.5">Q2'25</text>
+      <text x="200" y="143" fill="var(--txd)" font-family="JetBrains Mono" font-size="5.5">Q3'25</text>
+      <text x="315" y="143" fill="var(--txd)" font-family="JetBrains Mono" font-size="5.5">Q4'25</text>
+      <text x="430" y="143" fill="var(--txd)" font-family="JetBrains Mono" font-size="5.5">Q1'26</text>
+      <rect x="55" y="2" width="6" height="2" fill="var(--et5)"/><text x="65" y="5" fill="var(--txd)" font-family="Manrope" font-size="5">AWS $105B</text>
+      <rect x="130" y="2" width="6" height="2" fill="var(--et2)"/><text x="140" y="5" fill="var(--txd)" font-family="Manrope" font-size="5">Azure $96B</text>
+      <rect x="200" y="2" width="6" height="2" fill="var(--et)"/><text x="210" y="5" fill="var(--txd)" font-family="Manrope" font-size="5">GCP $46B</text>
+    </svg></div>
+  </div>
+  <div class="pn">
+    <div class="pn-h"><div><div class="pn-t">Innovation Hubs</div><div class="pn-s">By startup density</div></div></div>
+    <div class="geo">
+      <div class="geo-r"><div class="geo-nm">SF Bay Area</div><div class="geo-bk"><div class="geo-fl" style="width:100%;background:var(--et)"></div></div><div class="geo-pc">32%</div></div>
+      <div class="geo-r"><div class="geo-nm">NYC / NJ</div><div class="geo-bk"><div class="geo-fl" style="width:56%;background:var(--et2)"></div></div><div class="geo-pc">18%</div></div>
+      <div class="geo-r"><div class="geo-nm">London</div><div class="geo-bk"><div class="geo-fl" style="width:40%;background:var(--et3)"></div></div><div class="geo-pc">13%</div></div>
+      <div class="geo-r"><div class="geo-nm">Tel Aviv</div><div class="geo-bk"><div class="geo-fl" style="width:34%;background:var(--et3);opacity:.8"></div></div><div class="geo-pc">11%</div></div>
+      <div class="geo-r"><div class="geo-nm">Seattle</div><div class="geo-bk"><div class="geo-fl" style="width:28%;background:var(--et5)"></div></div><div class="geo-pc">9%</div></div>
+      <div class="geo-r"><div class="geo-nm">Shenzhen</div><div class="geo-bk"><div class="geo-fl" style="width:22%;background:var(--et5);opacity:.8"></div></div><div class="geo-pc">7%</div></div>
+      <div class="geo-r"><div class="geo-nm">Other</div><div class="geo-bk"><div class="geo-fl" style="width:31%;background:var(--et6)"></div></div><div class="geo-pc">10%</div></div>
+    </div>
+  </div>
+  <div class="pn">
+    <div class="pn-h"><div><div class="pn-t">Innovation Radar</div><div class="pn-s">Breakout technology signals</div></div></div>
+    <div class="rings">
+      <div class="rg-i"><svg class="rg-svg" viewBox="0 0 80 80"><circle cx="40" cy="40" r="28" fill="none" stroke="var(--bd)" stroke-width="5"/><circle cx="40" cy="40" r="28" fill="none" stroke="var(--et)" stroke-width="5" stroke-dasharray="165 11" stroke-dashoffset="-44" transform="rotate(-90 40 40)" stroke-linecap="round"/></svg><div class="rg-v">14.2K</div><div class="rg-l">AI Patents Filed</div></div>
+      <div class="rg-i"><svg class="rg-svg" viewBox="0 0 80 80"><circle cx="40" cy="40" r="28" fill="none" stroke="var(--bd)" stroke-width="5"/><circle cx="40" cy="40" r="28" fill="none" stroke="var(--et4)" stroke-width="5" stroke-dasharray="88 88" stroke-dashoffset="-44" transform="rotate(-90 40 40)" stroke-linecap="round"/></svg><div class="rg-v">1,247</div><div class="rg-l">Quantum Patents</div></div>
+    </div>
+    <div style="margin-top:1rem">
+      <div class="pn-s" style="margin-bottom:.5rem">Hottest Categories</div>
+      <div class="hb" style="gap:4px">
+        <div class="hb-r"><div class="hb-lb" style="width:85px;font-size:.6rem">AI Agents</div><div class="hb-tk"><div class="hb-fl" style="width:98%;background:var(--et-dim);border-color:var(--et-20)"></div></div><div class="hb-vl" style="width:40px">+340%</div></div>
+        <div class="hb-r"><div class="hb-lb" style="width:85px;font-size:.6rem">AI Safety</div><div class="hb-tk"><div class="hb-fl" style="width:82%;background:var(--et-dim);border-color:var(--et-20)"></div></div><div class="hb-vl" style="width:40px">+280%</div></div>
+        <div class="hb-r"><div class="hb-lb" style="width:85px;font-size:.6rem">Edge AI</div><div class="hb-tk"><div class="hb-fl" style="width:48%;background:rgba(240,184,61,.06);border-color:rgba(240,184,61,.15)"></div></div><div class="hb-vl" style="width:40px">+120%</div></div>
+        <div class="hb-r"><div class="hb-lb" style="width:85px;font-size:.6rem">Humanoid</div><div class="hb-tk"><div class="hb-fl" style="width:38%;background:rgba(224,90,171,.06);border-color:rgba(224,90,171,.15)"></div></div><div class="hb-vl" style="width:40px">+95%</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Market Signals -->
+<div class="sl">Market Signals & Competitive Intelligence</div>
+<div class="g21">
+  <div class="pn">
+    <div class="pn-h"><div><div class="pn-t">Key Market Signals</div><div class="pn-s">Industry events reshaping the technology landscape</div></div></div>
+    <div class="tl">
+      <div class="tl-i"><div class="tl-dt" style="border-color:var(--et)"></div><div class="tl-tx"><strong>AI Agent infrastructure boom</strong> — Agentic frameworks driving $4.2B in new funding. Every Series B+ startup adding agent orchestration layers.</div><div class="tl-tm">Mar</div></div>
+      <div class="tl-i"><div class="tl-dt" style="border-color:var(--et)"></div><div class="tl-tx"><strong>NVIDIA Blackwell Ultra ships</strong> — Next-gen GPU architecture reaching hyperscalers. 4x inference throughput vs H100 reshaping economics of AI deployment.</div><div class="tl-tm">Mar</div></div>
+      <div class="tl-i"><div class="tl-dt" style="border-color:var(--et)"></div><div class="tl-tx"><strong>Post-quantum crypto mandate</strong> — NIST standards finalized. Federal contractors have 18-month migration window, driving $8B+ in security spend.</div><div class="tl-tm">Feb</div></div>
+      <div class="tl-i"><div class="tl-dt" style="border-color:var(--et)"></div><div class="tl-tx"><strong>Humanoid robotics Series B wave</strong> — Figure, 1X, Apptronik, Agility raising $100M+ rounds. Manufacturing and logistics deployments accelerating.</div><div class="tl-tm">Jan</div></div>
+      <div class="tl-i"><div class="tl-dt" style="border-color:var(--et)"></div><div class="tl-tx"><strong>Climate tech IPO window opens</strong> — 3 successful listings (carbon capture, battery tech, grid software). Combined market cap $18B on listing day.</div><div class="tl-tm">Jan</div></div>
+    </div>
+  </div>
+  <div class="pn">
+    <div class="pn-h"><div><div class="pn-t">Sub-Sector Performance</div><div class="pn-s">Public market returns, YTD 2026</div></div></div>
+    <div class="bars" style="height:135px">
+      <div class="br-c"><div class="br-v" style="color:var(--et)">+32%</div><div class="br-f" style="height:95%;background:var(--et-dim);border-color:var(--et-20);border-bottom-color:var(--et)"></div><div class="br-l">AI<br>Infra</div></div>
+      <div class="br-c"><div class="br-v" style="color:var(--et)">+24%</div><div class="br-f" style="height:71%;background:var(--et-dim);border-color:var(--et-20);border-bottom-color:var(--et)"></div><div class="br-l">Cyber</div></div>
+      <div class="br-c"><div class="br-v" style="color:var(--et)">+18%</div><div class="br-f" style="height:53%;background:rgba(90,122,245,.08);border-color:rgba(90,122,245,.18);border-bottom-color:var(--et2)"></div><div class="br-l">Cloud<br>SaaS</div></div>
+      <div class="br-c"><div class="br-v" style="color:var(--et)">+15%</div><div class="br-f" style="height:44%;background:rgba(160,240,74,.06);border-color:rgba(160,240,74,.15);border-bottom-color:var(--et3)"></div><div class="br-l">Semi</div></div>
+      <div class="br-c"><div class="br-v" style="color:var(--et)">+9%</div><div class="br-f" style="height:27%;background:rgba(240,184,61,.06);border-color:rgba(240,184,61,.15);border-bottom-color:var(--et5)"></div><div class="br-l">Climate</div></div>
+      <div class="br-c"><div class="br-v" style="color:var(--et)">+4%</div><div class="br-f" style="height:12%;background:rgba(224,90,171,.06);border-color:rgba(224,90,171,.15);border-bottom-color:var(--et4)"></div><div class="br-l">Web3</div></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /panel et -->
+
+</main>
+</div>
+
+<script>
+function switchTab(id){
+  // Update tabs
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.panel').forEach(p=>{p.classList.remove('on');p.style.display='none'});
+  const map={ls:'Life Sciences',et:'Emerging Technologies'};
+  document.querySelectorAll('.tab').forEach(t=>{if(t.textContent.includes(map[id]))t.classList.add('on')});
+  const pn=document.getElementById('p-'+id);
+  if(pn){pn.style.display='block';setTimeout(()=>pn.classList.add('on'),10);
+    pn.querySelectorAll('.an').forEach(el=>{el.style.animation='none';el.offsetHeight;el.style.animation=''})}
+
+  // Update sidebar
+  document.querySelectorAll('.s-lnk').forEach(l=>l.classList.remove('on'));
+  document.querySelectorAll('.s-lnk').forEach(l=>{
+    const oc=l.getAttribute('onclick');
+    if(oc&&oc.includes(id))l.classList.add('on');
+  });
+
+  // Swap accent color
+  const r=document.documentElement;
+  if(id==='et'){
+    r.style.setProperty('--ac','var(--et)');r.style.setProperty('--ac-dim','var(--et-dim)');
+    r.style.setProperty('--ac-glow','var(--et-glow)');r.style.setProperty('--ac-20','var(--et-20)');
+  } else {
+    r.style.setProperty('--ac','var(--ls)');r.style.setProperty('--ac-dim','var(--ls-dim)');
+    r.style.setProperty('--ac-glow','var(--ls-glow)');r.style.setProperty('--ac-20','var(--ls-20)');
+  }
+}
+
+// Period buttons
+document.querySelectorAll('.hdr-b').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.hdr-b').forEach(x=>x.classList.remove('on'));b.classList.add('on')}));
+
+// Init
+document.querySelectorAll('.panel').forEach(p=>{if(!p.classList.contains('on'))p.style.display='none'});
+</script>
+</body>
+</html>
