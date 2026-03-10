@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CXO Insights | CxO Search Partners</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C4A35A;
+    --gold-light: #D4B96A;
+    --dark: #1a1a1a;
+    --text: #3a3a3a;
+    --text-light: #6a6a6a;
+    --bg: #f5f5f0;
+    --white: #ffffff;
+    --border: #e0ddd5;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Source Sans 3',sans-serif; background:var(--bg); color:var(--text); }
+
+  /* NAV */
+  nav {
+    background:var(--dark);
+    padding:16px 40px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    position:sticky; top:0; z-index:100;
+  }
+  nav .logo img { height:50px; }
+  nav ul { list-style:none; display:flex; gap:32px; }
+  nav ul a {
+    color:#ccc; text-decoration:none; font-size:14px;
+    font-weight:500; letter-spacing:.5px; text-transform:uppercase;
+    transition:color .2s;
+  }
+  nav ul a:hover, nav ul a.active { color:var(--gold); }
+
+  /* HERO */
+  .hero {
+    background:var(--dark);
+    padding:80px 40px 60px;
+    text-align:center;
+  }
+  .hero h1 {
+    font-family:'Playfair Display',serif;
+    color:var(--gold);
+    font-size:clamp(32px,5vw,52px);
+    font-weight:600;
+    letter-spacing:2px;
+  }
+  .hero p {
+    color:#999; margin-top:12px; font-size:16px; font-weight:300;
+  }
+
+  /* GRID */
+  .posts {
+    max-width:1100px; margin:60px auto; padding:0 24px;
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));
+    gap:36px;
+  }
+  .card {
+    background:var(--white);
+    border-radius:6px;
+    overflow:hidden;
+    box-shadow:0 2px 20px rgba(0,0,0,.06);
+    transition:transform .25s, box-shadow .25s;
+    text-decoration:none; color:inherit;
+    display:flex; flex-direction:column;
+  }
+  .card:hover {
+    transform:translateY(-4px);
+    box-shadow:0 8px 30px rgba(0,0,0,.1);
+  }
+  .card .thumb {
+    width:100%; height:220px; object-fit:cover;
+    display:block;
+  }
+  .card .body { padding:24px 28px 28px; flex:1; display:flex; flex-direction:column; }
+  .card .date {
+    font-size:12px; color:var(--text-light); text-transform:uppercase;
+    letter-spacing:1px; margin-bottom:10px;
+  }
+  .card h2 {
+    font-family:'Playfair Display',serif;
+    font-size:20px; font-weight:600; line-height:1.35;
+    color:var(--dark); margin-bottom:12px;
+  }
+  .card .excerpt {
+    font-size:14px; color:var(--text-light); line-height:1.6;
+    flex:1;
+  }
+  .card .read-more {
+    margin-top:16px;
+    font-size:13px; font-weight:600; color:var(--gold);
+    text-transform:uppercase; letter-spacing:.8px;
+  }
+
+  /* FOOTER */
+  footer {
+    background:var(--dark); color:#888; text-align:center;
+    padding:40px 24px; font-size:13px; margin-top:80px;
+  }
+  footer a { color:var(--gold); text-decoration:none; }
+
+  @media(max-width:600px){
+    nav { padding:12px 16px; }
+    nav ul { gap:16px; }
+    nav ul a { font-size:12px; }
+    .posts { padding:0 16px; gap:24px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/cxosp" class="logo">
+    <img src="https://img1.wsimg.com/isteam/ip/c82aaadc-5b51-4ec2-8f71-c529b797f118/CXO%20Logo%20-%20Gold.png/:/rs=h:87,cg:true,m/qt=q:95" alt="CXO Search Partners">
+  </a>
+  <ul>
+    <li><a href="/cxosp">CXOSP</a></li>
+    <li><a href="/services">Services</a></li>
+    <li><a href="/cxo-insights" class="active">CXO Insights</a></li>
+    <li><a href="/contact-us">Contact Us</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <h1>CXO INSIGHTS</h1>
+  <p>Perspectives on leadership, talent, and innovation in Life Sciences &amp; Tech</p>
+</div>
+
+<div class="posts">
+
+  <a class="card" href="/cxo-insights/supporting-the-leaders-of-today-and-tomorrow">
+    <img class="thumb" src="https://img1.wsimg.com/isteam/ip/c82aaadc-5b51-4ec2-8f71-c529b797f118/blob-88da074.png/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:1280" alt="">
+    <div class="body">
+      <div class="date">July 11, 2025</div>
+      <h2>Supporting the Leaders of Today — and Tomorrow</h2>
+      <p class="excerpt">Why career coaching is your strategic advantage. At CXO Search Partners, our mission extends beyond filling roles — we help build careers and leadership legacies.</p>
+      <div class="read-more">Read More →</div>
+    </div>
+  </a>
+
+  <a class="card" href="/cxo-insights/will-biopharma-seek-out-tech-talent-to-drive-ai-innovation">
+    <img class="thumb" src="https://img1.wsimg.com/isteam/ip/c82aaadc-5b51-4ec2-8f71-c529b797f118/blob-0753ed6.png/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:1280" alt="">
+    <div class="body">
+      <div class="date">November 13, 2024</div>
+      <h2>Will BioPharma Seek Out Tech Talent to Drive AI Innovation?</h2>
+      <p class="excerpt">Biopharma has long been constrained by regulatory processes. As AI transforms sectors from drug discovery to patient engagement, new avenues are emerging.</p>
+      <div class="read-more">Read More →</div>
+    </div>
+  </a>
+
+  <a class="card" href="/cxo-insights/experience-matters-especially-in-this-challenging-market">
+    <img class="thumb" src="https://img1.wsimg.com/isteam/ip/c82aaadc-5b51-4ec2-8f71-c529b797f118/blob-376ab2c.png/:/rs=w:1280" alt="">
+    <div class="body">
+      <div class="date">August 29, 2024</div>
+      <h2>Experience Matters, Especially in this Challenging Market</h2>
+      <p class="excerpt">In today's competitive job market, standing out as a candidate can feel like an uphill battle. The entire hiring process is a partnership.</p>
+      <div class="read-more">Read More →</div>
+    </div>
+  </a>
+
+  <a class="card" href="/cxo-insights/breaking-barriers-and-building-bridges">
+    <img class="thumb" src="https://img1.wsimg.com/isteam/ip/c82aaadc-5b51-4ec2-8f71-c529b797f118/blob-6cfee0d.png/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:1280" alt="">
+    <div class="body">
+      <div class="date">July 1, 2024</div>
+      <h2>Breaking Barriers &amp; Building Bridges</h2>
+      <p class="excerpt">The Power of a Diverse Team: Breaking Barriers and Building Bridges. Diversity in hiring has moved from a moral imperative to a strategic business priority.</p>
+      <div class="read-more">Read More →</div>
+    </div>
+  </a>
+
+  <a class="card" href="/cxo-insights/navigating-the-talent-drought-in-a-flooded-market">
+    <img class="thumb" src="https://img1.wsimg.com/isteam/ip/c82aaadc-5b51-4ec2-8f71-c529b797f118/blob-709818c.png/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:1280" alt="">
+    <div class="body">
+      <div class="date">June 20, 2024</div>
+      <h2>Navigating the Talent Drought in a Flooded Market</h2>
+      <p class="excerpt">The Paradox of Hiring in Life Sciences — despite a significant number of professionals actively seeking employment, hiring managers find it increasingly difficult to fill critical roles.</p>
+      <div class="read-more">Read More →</div>
+    </div>
+  </a>
+
+  <a class="card" href="/cxo-insights/embracing-synergy-the-power-of-uniting-life-sciences-and-ai">
+    <img class="thumb" src="https://img1.wsimg.com/isteam/ip/c82aaadc-5b51-4ec2-8f71-c529b797f118/blob-22bea3a.png/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:1280" alt="">
+    <div class="body">
+      <div class="date">May 9, 2024</div>
+      <h2>Embracing Synergy: The Power of Uniting Life Sciences &amp; AI</h2>
+      <p class="excerpt">The convergence of biotechnology, pharmaceuticals, medical devices, diagnostics, and technology has ushered in a new era of innovation and collaboration.</p>
+      <div class="read-more">Read More →</div>
+    </div>
+  </a>
+
+  <a class="card" href="/cxo-insights/maximizing-momentum-leveraging-fractional-cbos">
+    <img class="thumb" src="https://img1.wsimg.com/isteam/ip/c82aaadc-5b51-4ec2-8f71-c529b797f118/blob-99b0a3f.png/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:1280" alt="">
+    <div class="body">
+      <div class="date">May 9, 2024</div>
+      <h2>Maximizing Momentum: Leveraging Fractional CBOs</h2>
+      <p class="excerpt">Leveraging Fractional/Interim CBOs in Life Science Startups at an Earlier Stage. Enter the fractional Chief Business Officer — a strategic ally.</p>
+      <div class="read-more">Read More →</div>
+    </div>
+  </a>
+
+  <a class="card" href="/cxo-insights/how-life-science-startups-are-revamping-launch-strategies">
+    <img class="thumb" src="https://img1.wsimg.com/isteam/stock/5ZWbqR0/:/rs=w:1280" alt="">
+    <div class="body">
+      <div class="date">May 9, 2024</div>
+      <h2>How Life Science Startups Are Revamping Launch Strategies</h2>
+      <p class="excerpt">Accelerating Success: Gone are the days of waiting until the eleventh hour to assemble a commercial team. Startups are taking a proactive approach.</p>
+      <div class="read-more">Read More →</div>
+    </div>
+  </a>
+
+</div>
+
+<footer>
+  <p>Copyright &copy; 2026 CxO Search Partners - All Rights Reserved.</p>
+  <p style="margin-top:8px"><a href="/services">Services</a></p>
+</footer>
+
+</body>
+</html>
