@@ -184,6 +184,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;o
 .geo-pc{font-family:var(--mo);font-size:.55rem;color:var(--txd);width:32px;text-align:right;flex-shrink:0}
 
 /* Nav, hamburger, mobile menu */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:1rem 3.5rem;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(22px);background:rgba(42,42,46,.85);border-bottom:1px solid var(--bd)}
 .logo{display:flex;align-items:center;gap:.55rem;text-decoration:none}.logo-img{height:36px;width:auto}
 .n-lnk{display:flex;gap:2.1rem;list-style:none}.n-lnk a{font-size:.67rem;font-weight:500;color:var(--tx2);text-decoration:none;letter-spacing:.07em;text-transform:uppercase;transition:color .3s}.n-lnk a:hover,.n-lnk a.active{color:var(--ac)}
 .n-cta{font-family:var(--sa);font-size:.63rem;font-weight:600;padding:.55rem 1.4rem;background:transparent;border:1px solid var(--ac);color:var(--ac);cursor:pointer;letter-spacing:.1em;text-transform:uppercase;transition:all .3s;text-decoration:none}.n-cta:hover{background:var(--ac);color:var(--bg)}
@@ -202,7 +203,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;o
 </head>
 <body>
 
-<nav style="position:fixed;top:0;left:0;right:0;z-index:1000;padding:1rem 3.5rem;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(22px);background:rgba(42,42,46,.85);border-bottom:1px solid var(--bd)">
+<nav>
   <a href="index.html" class="logo"><img src="https://img1.wsimg.com/isteam/ip/c82aaadc-5b51-4ec2-8f71-c529b797f118/CXO%20Logo%20-%20Gold.png" alt="CXO Search Partners" class="logo-img"></a>
   <ul class="n-lnk">
     <li><a href="index.html">Home</a></li>
