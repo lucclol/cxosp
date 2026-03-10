@@ -190,10 +190,54 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;o
 .ham{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}.ham span{display:block;width:22px;height:2px;background:var(--tx);transition:all .3s}.ham.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}.ham.open span:nth-child(2){opacity:0}.ham.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
 .mob-menu{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(42,42,46,.98);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:2rem}.mob-menu.open{display:flex}.mob-menu a{font-family:var(--sa);font-size:1.1rem;font-weight:500;color:var(--tx2);text-decoration:none;letter-spacing:.08em;text-transform:uppercase;transition:color .3s}.mob-menu a:hover{color:var(--ac)}
 
+/* Difficulty buttons */
+.diff-bar{display:flex;gap:0;border:1px solid var(--bd);overflow:hidden;margin-left:auto}
+.diff-btn{font-family:var(--mo);font-size:.52rem;padding:.45rem .9rem;background:var(--sf);border:none;border-right:1px solid var(--bd);color:var(--txd);cursor:pointer;letter-spacing:.07em;text-transform:uppercase;transition:all .25s;outline:none;white-space:nowrap;min-height:44px;display:flex;align-items:center}
+.diff-btn:last-child{border-right:none}
+.diff-btn:hover{color:var(--tx2);background:var(--sf2)}
+.diff-btn.on{border-color:var(--ac);color:var(--ac);background:var(--ac-dim)}
+.diff-btn .diff-icon{margin-right:.4rem;font-size:.6rem}
+
+/* Difficulty visibility */
+[data-diff="detailed"],[data-diff="expert"]{display:none}
+.diff-detailed [data-diff="detailed"]{display:block}
+.diff-detailed [data-diff="expert"]{display:none}
+.diff-expert [data-diff="detailed"],.diff-expert [data-diff="expert"]{display:block}
+/* Grid items need grid display, not block */
+.diff-detailed .g21[data-diff="detailed"],.diff-expert .g21[data-diff="detailed"],.diff-expert .g21[data-diff="expert"]{display:grid;grid-template-columns:2fr 1fr}
+.diff-detailed .g3[data-diff="detailed"],.diff-expert .g3[data-diff="detailed"],.diff-expert .g3[data-diff="expert"]{display:grid;grid-template-columns:1fr 1fr 1fr}
+.diff-detailed .g211[data-diff="detailed"],.diff-expert .g211[data-diff="detailed"],.diff-expert .g211[data-diff="expert"]{display:grid;grid-template-columns:2fr 1fr 1fr}
+
 /* Responsive */
-@media(max-width:1200px){.kpis{grid-template-columns:repeat(3,1fr)}.g211{grid-template-columns:1fr}}
-@media(max-width:1000px){.ham{display:flex}.n-lnk,.n-cta{display:none}nav{padding:.85rem 1.5rem!important}.g21,.g12,.g31,.g2{grid-template-columns:1fr}.g3{grid-template-columns:1fr}}
-@media(max-width:850px){.mn{padding:1.25rem}.kpis{grid-template-columns:1fr 1fr}}
+@media(max-width:1200px){.kpis{grid-template-columns:repeat(3,1fr)}.g211{grid-template-columns:1fr}
+  .diff-detailed .g211[data-diff="detailed"],.diff-expert .g211[data-diff="detailed"],.diff-expert .g211[data-diff="expert"]{grid-template-columns:1fr}}
+@media(max-width:1000px){.ham{display:flex}.n-lnk,.n-cta{display:none}nav{padding:.85rem 1.5rem!important}.g21,.g12,.g31,.g2{grid-template-columns:1fr}.g3{grid-template-columns:1fr}
+  .diff-detailed .g21[data-diff="detailed"],.diff-expert .g21[data-diff="detailed"],.diff-expert .g21[data-diff="expert"]{grid-template-columns:1fr}
+  .diff-detailed .g3[data-diff="detailed"],.diff-expert .g3[data-diff="detailed"],.diff-expert .g3[data-diff="expert"]{grid-template-columns:1fr}
+  .tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;justify-content:flex-start}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{white-space:nowrap;min-height:44px;font-size:.68rem;padding:.75rem 1.2rem}
+  .tab .t-badge{display:none}
+  .hdr{flex-direction:column;align-items:flex-start;gap:1rem}
+  .diff-bar{margin-left:0;width:100%}
+  .diff-btn{flex:1;justify-content:center;padding:.45rem .5rem}
+  .cht{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .cht svg{min-width:480px}
+  .dt{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .mob-menu a{min-height:44px;display:flex;align-items:center;justify-content:center;font-size:1.25rem}
+}
+@media(max-width:850px){.mn{padding:1rem .75rem}.kpis{grid-template-columns:1fr 1fr}
+  .pn{padding:1rem .75rem}
+  .hb-lb{width:80px;font-size:.58rem}
+  .geo-nm{width:80px;font-size:.58rem}
+  .ph-sg{font-size:.4rem}
+  .ph-l{font-size:.36rem}
+}
+@media(max-width:480px){.kpis{grid-template-columns:1fr}
+  .diff-btn{font-size:.46rem;padding:.4rem .35rem}
+  .diff-btn .diff-icon{display:none}
+  .tab{font-size:.62rem;padding:.75rem .8rem}
+}
 
 @keyframes fU{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
 .an{animation:fU .5s ease forwards}
@@ -233,7 +277,12 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;o
 <div class="hdr">
   <div>
     <h1>Industry <em>Intelligence</em> Dashboard</h1>
-
+    <p>Real-time market data across Life Sciences & Technology sectors</p>
+  </div>
+  <div class="diff-bar">
+    <button class="diff-btn on" onclick="setDifficulty('overview')"><span class="diff-icon">&#9679;</span> Overview</button>
+    <button class="diff-btn" onclick="setDifficulty('detailed')"><span class="diff-icon">&#9679;&#9679;</span> Detailed</button>
+    <button class="diff-btn" onclick="setDifficulty('expert')"><span class="diff-icon">&#9679;&#9679;&#9679;</span> Expert</button>
   </div>
 </div>
 
@@ -259,8 +308,8 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;o
 </div>
 
 <!-- Clinical Pipeline + Therapeutic Mix -->
-<div class="sl">Clinical Pipeline & Innovation</div>
-<div class="g21">
+<div class="sl" data-diff="detailed">Clinical Pipeline & Innovation</div>
+<div class="g21" data-diff="detailed">
   <div class="pn">
     <div class="pn-h"><div><div class="pn-t">Industry Pipeline by Phase</div><div class="pn-s">Active clinical programs across tracked companies, Q1 2026</div></div><div class="pn-b">6,482 Active</div></div>
     <div class="ph-tk">
@@ -313,8 +362,8 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;o
 </div>
 
 <!-- Funding & M&A + Regulatory -->
-<div class="sl">Funding, M&A & Regulatory Landscape</div>
-<div class="g3">
+<div class="sl" data-diff="detailed">Funding, M&A & Regulatory Landscape</div>
+<div class="g3" data-diff="detailed">
   <div class="pn">
     <div class="pn-h"><div><div class="pn-t">VC Funding by Stage</div><div class="pn-s">Q1 2026 investment breakdown</div></div></div>
     <div class="bars" style="height:140px">
@@ -351,8 +400,8 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;o
 </div>
 
 <!-- Geographic + Revenue Segments + Innovation -->
-<div class="sl">Geography, Revenue & Innovation</div>
-<div class="g211">
+<div class="sl" data-diff="expert">Geography, Revenue & Innovation</div>
+<div class="g211" data-diff="expert">
   <div class="pn">
     <div class="pn-h"><div><div class="pn-t">Revenue by Segment — Top 20 Companies</div><div class="pn-s">Combined revenue by business unit, trailing 4 quarters</div></div></div>
     <div class="cht"><svg viewBox="0 0 520 150" fill="none">
@@ -413,8 +462,8 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;o
 </div>
 
 <!-- Market Signals -->
-<div class="sl">Market Signals & Competitive Intelligence</div>
-<div class="g21">
+<div class="sl" data-diff="expert">Market Signals & Competitive Intelligence</div>
+<div class="g21" data-diff="expert">
   <div class="pn">
     <div class="pn-h"><div><div class="pn-t">Key Market Signals</div><div class="pn-s">Industry events shaping the landscape</div></div></div>
     <div class="tl">
@@ -457,8 +506,8 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;o
 </div>
 
 <!-- Funding + Sector Maturity -->
-<div class="sl">Funding Landscape & Sector Maturity</div>
-<div class="g21">
+<div class="sl" data-diff="detailed">Funding Landscape & Sector Maturity</div>
+<div class="g21" data-diff="detailed">
   <div class="pn">
     <div class="pn-h"><div><div class="pn-t">VC Funding by Sector — Quarterly Trend</div><div class="pn-s">Investment volume across emerging technology verticals</div></div><div class="pn-b">$142B TTM</div></div>
     <div class="cht"><svg viewBox="0 0 580 150" fill="none">
@@ -510,8 +559,8 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;o
 </div>
 
 <!-- Product Adoption + M&A -->
-<div class="sl">Product Adoption & M&A Activity</div>
-<div class="g3">
+<div class="sl" data-diff="detailed">Product Adoption & M&A Activity</div>
+<div class="g3" data-diff="detailed">
   <div class="pn">
     <div class="pn-h"><div><div class="pn-t">Enterprise AI Adoption</div><div class="pn-s">% of Fortune 500 deploying</div></div></div>
     <div class="hb">
@@ -548,8 +597,8 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;o
 </div>
 
 <!-- Geography + Revenue + Innovation -->
-<div class="sl">Geography, Revenue & Innovation Radar</div>
-<div class="g211">
+<div class="sl" data-diff="expert">Geography, Revenue & Innovation Radar</div>
+<div class="g211" data-diff="expert">
   <div class="pn">
     <div class="pn-h"><div><div class="pn-t">Cloud & AI Infrastructure Revenue</div><div class="pn-s">Quarterly revenue by hyperscaler, trailing 4 quarters</div></div></div>
     <div class="cht"><svg viewBox="0 0 520 150" fill="none">
@@ -608,8 +657,8 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;o
 </div>
 
 <!-- Market Signals -->
-<div class="sl">Market Signals & Competitive Intelligence</div>
-<div class="g21">
+<div class="sl" data-diff="expert">Market Signals & Competitive Intelligence</div>
+<div class="g21" data-diff="expert">
   <div class="pn">
     <div class="pn-h"><div><div class="pn-t">Key Market Signals</div><div class="pn-s">Industry events reshaping the technology landscape</div></div></div>
     <div class="tl">
@@ -667,7 +716,17 @@ function switchTab(id){
   }
 }
 
-// Period buttons
+// Difficulty buttons
+function setDifficulty(level){
+  const mn=document.querySelector('.mn');
+  mn.classList.remove('diff-detailed','diff-expert');
+  if(level==='detailed') mn.classList.add('diff-detailed');
+  if(level==='expert') mn.classList.add('diff-expert');
+  document.querySelectorAll('.diff-btn').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.diff-btn').forEach(b=>{
+    if(b.textContent.trim().toLowerCase().includes(level)) b.classList.add('on');
+  });
+}
 
 // Init
 document.querySelectorAll('.panel').forEach(p=>{if(!p.classList.contains('on'))p.style.display='none'});
