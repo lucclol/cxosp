@@ -13,7 +13,16 @@
     <li><a href="contact.html">Contact</a></li>
   </ul>
   <a href="contact.html" class="n-cta">Submit Inquiry</a>
+  <button class="ham" onclick="document.querySelector('.mob-menu').classList.toggle('open');this.classList.toggle('open')"><span></span><span></span><span></span></button>
 </nav>
+<div class="mob-menu">
+  <a href="index.html">Home</a>
+  <a href="services.html">Services</a>
+  <a href="insights.html">CXO Insights</a>
+  <a href="industry-intelligence.html">Industry Data</a>
+  <a href="contact.html">Contact</a>
+  <a href="contact.html" class="n-cta">Submit Inquiry</a>
+</div>
 
 <section class="hero" id="home" style="min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:8.5rem 3.5rem 4.5rem;overflow:hidden">
   <div class="hero-line" style="position:absolute;left:3.5rem;top:8.5rem;bottom:4.5rem;width:1px;background:linear-gradient(to bottom,transparent,var(--gold),transparent);opacity:.12"></div>
@@ -55,7 +64,7 @@
   <div class="sl rv" style="justify-content:center">The X Factor</div>
   <h2 class="st rv" style="margin:0 auto 1rem">The <em>X</em> Factor</h2>
   <p class="sd rv" style="margin:0 auto 3rem;text-align:center;max-width:500px">Four principles that define how we deliver results that traditional firms can't.</p>
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--bd);max-width:1020px;margin:0 auto" class="rv">
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--bd);max-width:1020px;margin:0 auto" class="rv x-grid">
     <div style="background:var(--bg);padding:2.5rem 1.6rem;text-align:center"><div style="font-family:var(--se);font-size:2.5rem;color:var(--gold);font-style:italic;margin-bottom:.7rem">X</div><div style="font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;font-weight:600;margin-bottom:.7rem">Execution</div><div style="font-size:.8rem;color:var(--tx2);line-height:1.58;font-weight:300">Personalized approach, detailed process, consistent results.</div></div>
     <div style="background:var(--bg);padding:2.5rem 1.6rem;text-align:center"><div style="font-family:var(--se);font-size:2.5rem;color:var(--gold);font-style:italic;margin-bottom:.7rem">X</div><div style="font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;font-weight:600;margin-bottom:.7rem">Expeditious</div><div style="font-size:.8rem;color:var(--tx2);line-height:1.58;font-weight:300">Transparent communication so you can focus on business goals.</div></div>
     <div style="background:var(--bg);padding:2.5rem 1.6rem;text-align:center"><div style="font-family:var(--se);font-size:2.5rem;color:var(--gold);font-style:italic;margin-bottom:.7rem">X</div><div style="font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;font-weight:600;margin-bottom:.7rem">Experience</div><div style="font-size:.8rem;color:var(--tx2);line-height:1.58;font-weight:300">True partnerships ensuring alignment at every stage.</div></div>
@@ -63,7 +72,7 @@
   </div>
 </section>
 <section style="border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);padding:4.2rem 3.5rem;background:var(--sf)">
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:2.25rem;max-width:1020px;margin:0 auto;text-align:center" class="rv">
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:2.25rem;max-width:1020px;margin:0 auto;text-align:center" class="rv met-grid">
     <div><div class="met-v" style="font-family:var(--se);font-size:clamp(2rem,3.2vw,2.8rem);color:var(--gold);line-height:1;margin-bottom:.5rem">200+</div><div style="font-size:.68rem;color:var(--txd);letter-spacing:.1em;text-transform:uppercase">Leaders Placed</div></div>
     <div><div class="met-v" style="font-family:var(--se);font-size:clamp(2rem,3.2vw,2.8rem);color:var(--gold);line-height:1;margin-bottom:.5rem">93%</div><div style="font-size:.68rem;color:var(--txd);letter-spacing:.1em;text-transform:uppercase">Retention Rate</div></div>
     <div><div class="met-v" style="font-family:var(--se);font-size:clamp(2rem,3.2vw,2.8rem);color:var(--gold);line-height:1;margin-bottom:.5rem">30</div><div style="font-size:.68rem;color:var(--txd);letter-spacing:.1em;text-transform:uppercase">Avg Days to Fill</div></div>
