@@ -52,9 +52,9 @@
   <a href="contact.html" class="n-cta">Submit Inquiry</a>
 </div>
 
-<div class="ins-hero"><h1>CXO INSIGHTS</h1></div>
+<div class="ins-hero"><h1 style="opacity:0;animation:fU 1s ease forwards .3s">CXO INSIGHTS</h1></div>
 
-<div class="carousel-section">
+<div class="carousel-section rv">
   <div class="carousel-wrap">
     <button class="carousel-btn prev" onclick="scrollCarousel(-1)">&#8249;</button>
     <div class="carousel-track" id="carouselTrack">
@@ -136,7 +136,7 @@
   </div>
 </div>
 
-<footer>
+<footer class="rv">
   <div class="ft-brand"><a href="index.html" class="logo"><img src="https://img1.wsimg.com/isteam/ip/c82aaadc-5b51-4ec2-8f71-c529b797f118/CXO%20Logo%20-%20Gold.png" alt="CXO Search Partners" class="logo-img"></a><p>Boutique executive search for Life Sciences and Technology. Championing diversity to propel organizations to success.</p></div>
   <div class="ft-col"><h4>Company</h4><a href="index.html">Home</a><a href="services.html">Services</a><a href="insights.html">CXO Insights</a></div>
   <div class="ft-col"><h4>Intelligence</h4><a href="industry-intelligence.html">Life Sciences</a><a href="industry-intelligence.html">Emerging Tech</a></div>
@@ -148,5 +148,7 @@ function scrollCarousel(dir){
   const track=document.getElementById('carouselTrack');
   track.scrollBy({left:dir*300,behavior:'smooth'});
 }
+const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('vis')})},{threshold:.08});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
 </script>
 </body></html>
