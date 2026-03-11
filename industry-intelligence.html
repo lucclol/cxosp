@@ -199,6 +199,17 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:1rem 3.5rem;display
 @keyframes fU{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
 .an{animation:fU .5s ease forwards}
 .d1{animation-delay:.04s;opacity:0}.d2{animation-delay:.08s;opacity:0}.d3{animation-delay:.12s;opacity:0}.d4{animation-delay:.16s;opacity:0}.d5{animation-delay:.2s;opacity:0}.d6{animation-delay:.24s;opacity:0}
+
+/* Footer */
+footer{border-top:1px solid var(--bd);padding:3.5rem 3.5rem 2.25rem;display:grid;grid-template-columns:2.5fr 1fr 1fr;gap:2.25rem}
+.ft-brand p{font-size:.78rem;color:var(--txd);line-height:1.58;font-weight:300;max-width:270px;margin-top:1rem}
+.ft-col h4{font-family:var(--mo);font-size:.52rem;letter-spacing:.26em;color:var(--txd);text-transform:uppercase;margin-bottom:1rem}
+.ft-col a{display:block;font-size:.75rem;color:var(--txd);text-decoration:none;margin-bottom:.55rem;font-weight:300;transition:color .3s}
+.ft-col a:hover{color:var(--ac)}
+.ft-bot{border-top:1px solid var(--bd);padding:1.6rem 3.5rem;display:flex;justify-content:space-between;font-size:.62rem;color:var(--txd);font-weight:300}
+.ft-bot a{color:var(--txd);text-decoration:none;transition:color .3s}.ft-bot a:hover{color:var(--ac)}
+@media(max-width:1000px){footer{grid-template-columns:1fr 1fr}}
+@media(max-width:650px){footer{grid-template-columns:1fr}.ft-bot{flex-direction:column;gap:.5rem;text-align:center;padding:1.2rem 1.5rem}}
 </style>
 </head>
 <body>
