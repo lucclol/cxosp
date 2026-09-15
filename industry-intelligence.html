@@ -104,10 +104,10 @@
 .cht{width:100%}.cht svg{width:100%;height:auto;display:block}
 
 /* Bars */
-.bars{display:flex;align-items:flex-end;gap:5px;padding-top:.6rem}
-.br-c{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end}
+.bars{display:flex;align-items:stretch;gap:5px;padding-top:.6rem}
+.br-c{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;min-height:0}
 .br-v{font-family:var(--mo);font-size:.62rem;color:var(--ac);margin-bottom:.25rem;transition:color .3s}
-.br-f{width:100%;max-width:28px;border:1px solid var(--ac-20);border-bottom:2px solid var(--ac);background:var(--ac-dim);transition:all .8s cubic-bezier(.22,1,.36,1)}
+.br-f{width:100%;max-width:28px;min-height:3px;flex-shrink:0;border:1px solid var(--ac-20);border-bottom:2px solid var(--ac);background:var(--ac-dim);transition:all .8s cubic-bezier(.22,1,.36,1)}
 .br-f:hover{background:var(--ac-20)}
 .br-l{font-family:var(--mo);font-size:.58rem;color:var(--txd);margin-top:.35rem;text-align:center;letter-spacing:.02em;line-height:1.3}
 
@@ -179,6 +179,25 @@
 .geo-fl{height:100%;transition:width .8s ease}
 .geo-pc{font-family:var(--mo);font-size:.68rem;color:var(--txd);width:32px;text-align:right;flex-shrink:0}
 
+/* Data note, sources, key-value list, stat tiles */
+.dnote{font-family:var(--mo);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--txd);border:1px solid var(--bd);padding:.5rem .8rem;margin-bottom:1.25rem;display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
+.dnote b{color:var(--ac);font-weight:500;transition:color .3s}
+.src{font-size:.66rem;color:var(--txd);font-weight:300;line-height:1.5;margin-top:.9rem;padding-top:.6rem;border-top:1px dashed var(--bd)}
+.src strong{font-family:var(--mo);font-size:.56rem;letter-spacing:.12em;text-transform:uppercase;color:var(--tx2);font-weight:500;margin-right:.3rem}
+.kv{display:flex;flex-direction:column}
+.kv-r{display:flex;justify-content:space-between;align-items:baseline;gap:.6rem;padding:.42rem 0;border-bottom:1px solid var(--bd)}
+.kv-r:last-child{border-bottom:none}
+.kv-k{font-size:.78rem;color:var(--tx2);font-weight:300}
+.kv-k small{display:block;font-size:.62rem;color:var(--txd)}
+.kv-v{font-family:var(--mo);font-size:.72rem;color:var(--ac);white-space:nowrap;transition:color .3s}
+.qstats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--bd);margin-bottom:1rem}
+.qst{background:var(--sf2);padding:.7rem .8rem}
+.qst-v{font-family:var(--se);font-size:1.3rem;line-height:1}
+.qst-l{font-size:.62rem;color:var(--txd);margin-top:.25rem;text-transform:uppercase;letter-spacing:.08em}
+.qst-d{font-family:var(--mo);font-size:.58rem;margin-top:.2rem;color:var(--tx2)}
+.hb-lb small{font-family:var(--mo);font-size:.58rem;margin-left:.3rem}
+@media(max-width:850px){.qstats{grid-template-columns:1fr}}
+
 /* Nav accent overrides */
 .n-lnk a:hover,.n-lnk a.active{color:var(--ac)}
 .n-cta{border-color:var(--ac);color:var(--ac)}.n-cta:hover{background:var(--ac);color:var(--bg)}
@@ -226,6 +245,9 @@
 
 <!-- Header -->
 
+<!-- Data currency -->
+<div class="dnote"><b>Data through Q2 2026</b><span>·</span><span>Quarter ended June 30, 2026</span><span>·</span><span>Compiled September 2026</span><span>·</span><span>Sources listed under each panel</span></div>
+
 <!-- Sector Tabs -->
 <div class="tabs">
   <button class="tab on" onclick="switchTab('ls')">Life Sciences <span class="t-badge">BIO · PHARMA · MEDTECH</span></button>
@@ -237,193 +259,165 @@
 <!-- ═══════════════════════════════════════════════════════ -->
 <div class="panel on" id="p-ls">
 
-<div class="sl">Market Overview</div>
+<div class="sl">Market Overview — Q2 2026</div>
 <div class="kpis">
-  <div class="kpi an d1"><div class="kpi-l">Global Market Size</div><div class="kpi-v">$2.14T</div><div class="kpi-d up">▲ 7.2% CAGR</div><div class="kpi-s">2026 projected</div></div>
-  <div class="kpi an d2"><div class="kpi-l">VC Investment Q1</div><div class="kpi-v">$18.3B</div><div class="kpi-d up">▲ 34% vs Q4</div><div class="kpi-s">Biotech + Digital Health</div></div>
-  <div class="kpi an d3"><div class="kpi-l">M&A Deals Q1</div><div class="kpi-v">42</div><div class="kpi-d up">▲ 18% QoQ</div><div class="kpi-s">Deals >$100M valuation</div></div>
-  <div class="kpi an d4"><div class="kpi-l">FDA Approvals YTD</div><div class="kpi-v">14</div><div class="kpi-d up">▲ 22% vs Q1 '25</div><div class="kpi-s">Novel molecular entities</div></div>
-  <div class="kpi an d5"><div class="kpi-l">IPO Activity</div><div class="kpi-v">$4.7B</div><div class="kpi-d up">▲ 3 new listings</div><div class="kpi-s">Total capital raised</div></div>
-  <div class="kpi an d6"><div class="kpi-l">Patent Filings</div><div class="kpi-v">8,420</div><div class="kpi-d up">▲ 11% YoY</div><div class="kpi-s">US + EP filings</div></div>
+  <div class="kpi an d1"><div class="kpi-l">Global Medicine Market</div><div class="kpi-v">$2.6T</div><div class="kpi-d up">▲ 5–8% CAGR to 2030</div><div class="kpi-s">IQVIA 2030 spending outlook</div></div>
+  <div class="kpi an d2"><div class="kpi-l">Biopharma VC Q2</div><div class="kpi-v">$10B+</div><div class="kpi-d up">▲ from $7.2B in Q1</div><div class="kpi-s">PitchBook · Isomorphic $2.1B ≈ 20%</div></div>
+  <div class="kpi an d3"><div class="kpi-l">M&amp;A Deals Q2</div><div class="kpi-v">45</div><div class="kpi-d up">▲ 80% QoQ (25 in Q1)</div><div class="kpi-s">$79.2B incl. contingent (DealForma)</div></div>
+  <div class="kpi an d4"><div class="kpi-l">FDA Novel Approvals H1</div><div class="kpi-v">23</div><div class="kpi-d up">▲ 44% vs H1 '25 (16)</div><div class="kpi-s">CDER, Jan–Jun 2026 · 13 in Q2</div></div>
+  <div class="kpi an d5"><div class="kpi-l">Biotech IPOs Q2</div><div class="kpi-v">$3.6B</div><div class="kpi-d up">▲ 57% vs Q1 ($2.3B)</div><div class="kpi-s">10 listings · avg $360M</div></div>
+  <div class="kpi an d6"><div class="kpi-l">Active R&amp;D Pipeline</div><div class="kpi-v">22,940</div><div class="kpi-d dn">▼ 3.9% YoY</div><div class="kpi-s">Drugs in development, Citeline 2026</div></div>
 </div>
 
-<!-- Clinical Pipeline + Therapeutic Mix -->
-<div class="sl">Clinical Pipeline & Innovation</div>
+<!-- Pipeline + Therapeutic Mix -->
+<div class="sl">Clinical Pipeline &amp; Innovation</div>
 <div class="g21">
   <div class="pn">
-    <div class="pn-h"><div><div class="pn-t">Industry Pipeline by Phase</div><div class="pn-s">Active clinical programs across tracked companies, Q1 2026</div></div><div class="pn-b">6,482 Active</div></div>
-    <div class="ph-tk">
-      <div class="ph-sg" style="flex:3.8;background:rgba(74,159,245,.12)">1,840</div>
-      <div class="ph-sg" style="flex:2.6;background:rgba(61,217,160,.12)">1,260</div>
-      <div class="ph-sg" style="flex:1.9;background:rgba(224,168,61,.12)">920</div>
-      <div class="ph-sg" style="flex:1.1;background:rgba(155,122,224,.12)">538</div>
-      <div class="ph-sg" style="flex:.6;background:rgba(224,99,111,.12)">312</div>
-      <div class="ph-sg" style="flex:1.2;background:rgba(74,223,201,.12)">612</div>
+    <div class="pn-h"><div><div class="pn-t">Global R&amp;D Pipeline</div><div class="pn-s">Active drugs at the start of 2026 — first year-on-year decline since the mid-1990s</div></div><div class="pn-b">22,940 Active</div></div>
+    <div class="qstats">
+      <div class="qst"><div class="qst-v">22,940</div><div class="qst-l">Drugs in development</div><div class="qst-d">▼ 3.9% vs 23,875 in 2025</div></div>
+      <div class="qst"><div class="qst-v">7,057</div><div class="qst-l">Companies with pipelines</div><div class="qst-d">▲ from 6,823 in 2025</div></div>
+      <div class="qst"><div class="qst-v">1,960</div><div class="qst-l">Original INDs to CDER</div><div class="qst-d">CY2025 · 1,210 commercial + 750 research</div></div>
     </div>
-    <div class="ph-lb">
-      <div class="ph-l" style="flex:3.8">Preclinical</div>
-      <div class="ph-l" style="flex:2.6">Phase I</div>
-      <div class="ph-l" style="flex:1.9">Phase II</div>
-      <div class="ph-l" style="flex:1.1">Phase III</div>
-      <div class="ph-l" style="flex:.6">NDA/BLA</div>
-      <div class="ph-l" style="flex:1.2">Approved</div>
+    <div class="pn-s" style="margin-bottom:.6rem">Largest company pipelines — active drugs, 2026</div>
+    <div class="hb">
+      <div class="hb-r"><div class="hb-lb">Pfizer</div><div class="hb-tk"><div class="hb-fl" style="width:100%"></div></div><div class="hb-vl">271</div></div>
+      <div class="hb-r"><div class="hb-lb">Roche</div><div class="hb-tk"><div class="hb-fl" style="width:96%"></div></div><div class="hb-vl">261</div></div>
+      <div class="hb-r"><div class="hb-lb">Novartis</div><div class="hb-tk"><div class="hb-fl" style="width:94%"></div></div><div class="hb-vl">254</div></div>
+      <div class="hb-r"><div class="hb-lb">AstraZeneca</div><div class="hb-tk"><div class="hb-fl" style="width:89%"></div></div><div class="hb-vl">241</div></div>
+      <div class="hb-r"><div class="hb-lb">Sanofi</div><div class="hb-tk"><div class="hb-fl" style="width:86%"></div></div><div class="hb-vl">233</div></div>
+      <div class="hb-r"><div class="hb-lb">Eli Lilly</div><div class="hb-tk"><div class="hb-fl" style="width:83%"></div></div><div class="hb-vl">224</div></div>
     </div>
-    <div style="margin-top:1.25rem">
-      <div class="pn-s" style="margin-bottom:.6rem">Phase III Pipeline Growth (12mo trailing)</div>
-      <div class="cht"><svg viewBox="0 0 580 130" fill="none">
-        <line x1="40" y1="10" x2="40" y2="115" stroke="var(--bd)" stroke-width=".5"/>
-        <line x1="40" y1="115" x2="560" y2="115" stroke="var(--bd)" stroke-width=".5"/>
-        <line x1="40" y1="80" x2="560" y2="80" stroke="var(--bd)" stroke-width=".3" stroke-dasharray="3"/>
-        <line x1="40" y1="45" x2="560" y2="45" stroke="var(--bd)" stroke-width=".3" stroke-dasharray="3"/>
-        <path d="M83,98 L130,94 L177,90 L224,85 L271,80 L318,72 L365,68 L412,60 L459,55 L506,48 L553,40 L553,115 L83,115Z" fill="var(--ls)" opacity=".05"/>
-        <polyline points="83,98 130,94 177,90 224,85 271,80 318,72 365,68 412,60 459,55 506,48 553,40" stroke="var(--ls)" stroke-width="2" fill="none"/>
-        <polyline points="83,105 130,102 177,100 224,95 271,90 318,85 365,82 412,78 459,72 506,68 553,60" stroke="var(--ls2)" stroke-width="1.5" fill="none" stroke-dasharray="5,3"/>
-        <polyline points="83,108 130,108 177,105 224,102 271,98 318,95 365,92 412,95 459,90 506,85 553,78" stroke="var(--ls3)" stroke-width="1.5" fill="none" opacity=".7"/>
-        <circle cx="553" cy="40" r="3" fill="var(--ls)"/><circle cx="553" cy="60" r="2.5" fill="var(--ls2)"/><circle cx="553" cy="78" r="2.5" fill="var(--ls3)"/>
-        <rect x="55" y="2" width="6" height="2" fill="var(--ls)"/><text x="65" y="5" fill="var(--txd)" font-family="Manrope" font-size="5.5">Phase III</text>
-        <rect x="110" y="2" width="6" height="2" fill="var(--ls2)"/><text x="120" y="5" fill="var(--txd)" font-family="Manrope" font-size="5.5">Phase I</text>
-        <rect x="155" y="2" width="6" height="2" fill="var(--ls3)"/><text x="165" y="5" fill="var(--txd)" font-family="Manrope" font-size="5.5">NDA/BLA</text>
-      </svg></div>
-    </div>
+    <div class="src"><strong>Sources</strong> Citeline, Pharma R&amp;D Annual Review 2026 (Citeline notes an internal tallying change contributed to the decline; preclinical assets fell while Phase I–III and launched counts rose); FDA CDER IND receipts, CY2025.</div>
   </div>
   <div class="pn">
-    <div class="pn-h"><div><div class="pn-t">Therapeutic Area Mix</div><div class="pn-s">Pipeline distribution by indication</div></div></div>
+    <div class="pn-h"><div><div class="pn-t">Therapeutic Area Mix</div><div class="pn-s">Active drugs by area, 2026 (a drug may span areas)</div></div></div>
     <div class="hb">
-      <div class="hb-r"><div class="hb-lb">Oncology</div><div class="hb-tk"><div class="hb-fl" style="width:100%"></div></div><div class="hb-vl">28%</div></div>
-      <div class="hb-r"><div class="hb-lb">Immunology</div><div class="hb-tk"><div class="hb-fl" style="width:68%"></div></div><div class="hb-vl">19%</div></div>
-      <div class="hb-r"><div class="hb-lb">Neuroscience</div><div class="hb-tk"><div class="hb-fl" style="width:54%"></div></div><div class="hb-vl">15%</div></div>
-      <div class="hb-r"><div class="hb-lb">Rare Disease</div><div class="hb-tk"><div class="hb-fl" style="width:43%"></div></div><div class="hb-vl">12%</div></div>
-      <div class="hb-r"><div class="hb-lb">Cell & Gene</div><div class="hb-tk"><div class="hb-fl" style="width:29%"></div></div><div class="hb-vl">8%</div></div>
-      <div class="hb-r"><div class="hb-lb">Cardiovascular</div><div class="hb-tk"><div class="hb-fl" style="width:32%"></div></div><div class="hb-vl">9%</div></div>
-      <div class="hb-r"><div class="hb-lb">Metabolic/GLP-1</div><div class="hb-tk"><div class="hb-fl" style="width:18%"></div></div><div class="hb-vl">5%</div></div>
-      <div class="hb-r"><div class="hb-lb">Infectious Dis.</div><div class="hb-tk"><div class="hb-fl" style="width:14%"></div></div><div class="hb-vl">4%</div></div>
+      <div class="hb-r"><div class="hb-lb">Oncology</div><div class="hb-tk"><div class="hb-fl" style="width:100%"></div></div><div class="hb-vl">9,036</div></div>
+      <div class="hb-r"><div class="hb-lb">Rare Disease</div><div class="hb-tk"><div class="hb-fl" style="width:84%"></div></div><div class="hb-vl">7,618</div></div>
     </div>
+    <div class="tl" style="margin-top:.9rem">
+      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>Oncology plateauing</strong> — 39% of the pipeline, down from 9,476 drugs in 2025</div></div>
+      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>Rare disease</strong> — 33% of the pipeline, down slightly from 7,721</div></div>
+      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>Immunology, cardiovascular, blood &amp; clotting</strong> — the areas that grew in 2026</div></div>
+      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>Cancer + immune companies</strong> drew roughly one-third of Q2 biotech venture dollars</div></div>
+    </div>
+    <div class="src"><strong>Sources</strong> Citeline Pharma R&amp;D Annual Review 2026; PitchBook Q2 2026 Biopharma Report.</div>
   </div>
 </div>
 
 <!-- Funding & M&A + Regulatory -->
-<div class="sl">Funding, M&A & Regulatory Landscape</div>
+<div class="sl">Funding, M&amp;A &amp; Regulatory Landscape</div>
 <div class="g3">
   <div class="pn">
-    <div class="pn-h"><div><div class="pn-t">VC Funding by Stage</div><div class="pn-s">Q1 2026 investment breakdown</div></div></div>
+    <div class="pn-h"><div><div class="pn-t">Biopharma VC Trend</div><div class="pn-s">Quarterly deal value, PitchBook</div></div></div>
     <div class="bars" style="height:140px">
-      <div class="br-c"><div class="br-v" style="color:var(--ls)">$3.1B</div><div class="br-f" style="height:42%"></div><div class="br-l">Seed /<br>A</div></div>
-      <div class="br-c"><div class="br-v" style="color:var(--ls2)">$5.4B</div><div class="br-f" style="height:72%;background:rgba(74,159,245,.08);border-color:rgba(74,159,245,.18);border-bottom-color:var(--ls2)"></div><div class="br-l">Series<br>B</div></div>
-      <div class="br-c"><div class="br-v" style="color:var(--ls4)">$7.2B</div><div class="br-f" style="height:96%;background:rgba(155,122,224,.08);border-color:rgba(155,122,224,.18);border-bottom-color:var(--ls4)"></div><div class="br-l">Series<br>C+</div></div>
-      <div class="br-c"><div class="br-v" style="color:var(--ls3)">$2.6B</div><div class="br-f" style="height:35%;background:rgba(224,168,61,.08);border-color:rgba(224,168,61,.18);border-bottom-color:var(--ls3)"></div><div class="br-l">Cross-<br>over</div></div>
+      <div class="br-c"><div class="br-v" style="color:var(--ls3)">$5.4B</div><div class="br-f" style="height:52%;background:rgba(224,168,61,.08);border-color:rgba(224,168,61,.18);border-bottom-color:var(--ls3)"></div><div class="br-l">Q2 '25<br>198 deals</div></div>
+      <div class="br-c"><div class="br-v" style="color:var(--ls2)">$7.2B</div><div class="br-f" style="height:70%;background:rgba(74,159,245,.08);border-color:rgba(74,159,245,.18);border-bottom-color:var(--ls2)"></div><div class="br-l">Q1 '26<br>265 deals</div></div>
+      <div class="br-c"><div class="br-v" style="color:var(--ls)">$10B+</div><div class="br-f" style="height:97%"></div><div class="br-l">Q2 '26<br>Isomorphic ≈ 20%</div></div>
     </div>
-    <div style="margin-top:.75rem;font-size:.62rem;color:var(--txd)">Total: $18.3B across 214 deals</div>
+    <div style="margin-top:.75rem;font-size:.7rem;color:var(--txd);line-height:1.5">Capital is concentrating in later-stage, de-risked rounds: early-stage share of dollars is tracking toward a record low. H1 first financings totalled $4.1B across 95 companies, with the top 10% of deals taking 63% of the money.</div>
+    <div class="src"><strong>Sources</strong> PitchBook Q2 2026 Biopharma Report; PitchBook Q1 2026 &amp; Q2 2025 Biopharma VC Trends; BioPharma Dive (PitchBook data), July 2026.</div>
   </div>
   <div class="pn">
-    <div class="pn-h"><div><div class="pn-t">M&A Activity</div><div class="pn-s">Notable deals Q1 2026</div></div></div>
+    <div class="pn-h"><div><div class="pn-t">M&amp;A Activity</div><div class="pn-s">Largest deals announced Q2 2026</div></div></div>
     <table class="dt">
       <thead><tr><th>Acquirer</th><th>Target</th><th>Value</th><th>Focus</th></tr></thead>
       <tbody>
-        <tr><td>Pfizer</td><td>Oncovax Bio</td><td class="mn-f hi">$8.4B</td><td>ADC pipeline</td></tr>
-        <tr><td>Roche</td><td>NeuroStar</td><td class="mn-f hi">$5.1B</td><td>Neuro AI</td></tr>
-        <tr><td>Amgen</td><td>CellForge</td><td class="mn-f hi">$3.8B</td><td>Cell therapy</td></tr>
-        <tr><td>Danaher</td><td>DiagX</td><td class="mn-f hi">$2.2B</td><td>Liquid biopsy</td></tr>
-        <tr><td>J&J</td><td>ImmuGen</td><td class="mn-f hi">$1.9B</td><td>Autoimmune</td></tr>
+        <tr><td>Sun Pharma</td><td>Organon</td><td class="mn-f hi">$11.75B</td><td>Women's health</td></tr>
+        <tr><td>AbbVie</td><td>Apogee</td><td class="mn-f hi">$10.9B</td><td>Immunology</td></tr>
+        <tr><td>GSK</td><td>Nuvalent</td><td class="mn-f hi">$10.6B</td><td>Oncology</td></tr>
+        <tr><td>Eli Lilly</td><td>Kelonia</td><td class="mn-f hi">$7.0B*</td><td>In vivo CAR-T</td></tr>
+        <tr><td>Gilead</td><td>Tubulis</td><td class="mn-f hi">$5.0B*</td><td>ADC</td></tr>
       </tbody>
     </table>
+    <div style="margin-top:.6rem;font-size:.66rem;color:var(--txd)">* Total including milestones (Kelonia $3.25B upfront; Tubulis $3.15B upfront). Announced Apr 26, Jun 22, Jun 9, Apr 20 and Apr 7 respectively.</div>
+    <div class="src"><strong>Sources</strong> Company announcements; CNBC; Fierce Pharma; IQVIA Biopharma M&amp;A mid-year 2026 update.</div>
   </div>
   <div class="pn">
-    <div class="pn-h"><div><div class="pn-t">Regulatory Tracker</div><div class="pn-s">Key FDA / EMA actions Q1</div></div></div>
+    <div class="pn-h"><div><div class="pn-t">Regulatory Tracker</div><div class="pn-s">Key FDA / EMA actions, Q2 2026</div></div></div>
     <div class="tl">
-      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>14 NME approvals</strong> — Oncology (5), Rare Disease (3), Neuro (2), Other (4)</div><div class="tl-tm">Q1</div></div>
-      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>Accelerated Approval overhaul</strong> — new confirmatory trial requirements</div><div class="tl-tm">Feb</div></div>
-      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>AI/ML guidance finalized</strong> — Software as Medical Device framework updated</div><div class="tl-tm">Feb</div></div>
-      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>Biosimilar pathway expanded</strong> — 8 new interchangeable designations</div><div class="tl-tm">Jan</div></div>
-      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>Cell therapy manufacturing</strong> — CGMP guidance for autologous therapies</div><div class="tl-tm">Jan</div></div>
+      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>CHMP recommends 6 new medicines</strong> — incl. Onswik (weekly insulin efsitora), Hopledo (Parkinson's), Aujemflu</div><div class="tl-tm">Jun</div></div>
+      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>FDA draft guidances</strong> — master protocols, substantial evidence of effectiveness, payor communications, genome-editing gene therapies</div><div class="tl-tm">Jun</div></div>
+      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>Cell &amp; gene therapy CMC flexibilities</strong> finalized; Baxfendy (baxdrostat) approved as first aldosterone synthase inhibitor</div><div class="tl-tm">May</div></div>
+      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>Otarmeni</strong> — first gene therapy for genetic hearing loss, accelerated approval 61 days after filing under the National Priority Voucher</div><div class="tl-tm">Apr</div></div>
+      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>Foundayo (orforglipron)</strong> approved Apr 1 — first oral small-molecule GLP-1 for obesity; Section 232 pharma tariff proclamation Apr 2 (0% with an MFN pricing agreement)</div><div class="tl-tm">Apr</div></div>
     </div>
+    <div class="src"><strong>Sources</strong> EMA CHMP highlights, 22–25 June 2026; FDA guidance documents &amp; press releases; RAPS; Lilly, AstraZeneca and Regeneron announcements; Holland &amp; Knight tariff analysis.</div>
   </div>
 </div>
 
-<!-- Geographic + Revenue Segments + Innovation -->
-<div class="sl">Geography, Revenue & Innovation</div>
+<!-- Revenue + Geography + Innovation -->
+<div class="sl">Revenue, Geography &amp; Innovation</div>
 <div class="g211">
   <div class="pn">
-    <div class="pn-h"><div><div class="pn-t">Revenue by Segment — Top 20 Companies</div><div class="pn-s">Combined revenue by business unit, trailing 4 quarters</div></div></div>
-    <div class="cht"><svg viewBox="0 0 520 150" fill="none">
-      <!-- Stacked area showing pharma vs biotech vs medtech revenue -->
-      <line x1="40" y1="10" x2="40" y2="130" stroke="var(--bd)" stroke-width=".5"/>
-      <line x1="40" y1="130" x2="500" y2="130" stroke="var(--bd)" stroke-width=".5"/>
-      <line x1="40" y1="90" x2="500" y2="90" stroke="var(--bd)" stroke-width=".3" stroke-dasharray="3"/>
-      <line x1="40" y1="50" x2="500" y2="50" stroke="var(--bd)" stroke-width=".3" stroke-dasharray="3"/>
-      <text x="35" y="133" fill="var(--txd)" font-family="JetBrains Mono" font-size="6" text-anchor="end">$0</text>
-      <text x="35" y="93" fill="var(--txd)" font-family="JetBrains Mono" font-size="6" text-anchor="end">$200B</text>
-      <text x="35" y="53" fill="var(--txd)" font-family="JetBrains Mono" font-size="6" text-anchor="end">$400B</text>
-      <text x="35" y="13" fill="var(--txd)" font-family="JetBrains Mono" font-size="6" text-anchor="end">$600B</text>
-      <!-- Pharma revenue area -->
-      <path d="M85,68 L200,62 L315,55 L430,48 L430,130 L85,130Z" fill="var(--ls)" opacity=".06"/>
-      <polyline points="85,68 200,62 315,55 430,48" stroke="var(--ls)" stroke-width="2" fill="none"/>
-      <!-- Biotech -->
-      <polyline points="85,95 200,88 315,82 430,72" stroke="var(--ls2)" stroke-width="1.5" fill="none"/>
-      <!-- MedTech -->
-      <polyline points="85,108 200,105 315,100 430,95" stroke="var(--ls6)" stroke-width="1.5" fill="none" stroke-dasharray="5,3"/>
-      <circle cx="430" cy="48" r="3" fill="var(--ls)"/><circle cx="430" cy="72" r="2.5" fill="var(--ls2)"/><circle cx="430" cy="95" r="2.5" fill="var(--ls6)"/>
-      <text x="85" y="145" fill="var(--txd)" font-family="JetBrains Mono" font-size="5.5" text-anchor="middle">Q2'25</text>
-      <text x="200" y="145" fill="var(--txd)" font-family="JetBrains Mono" font-size="5.5" text-anchor="middle">Q3'25</text>
-      <text x="315" y="145" fill="var(--txd)" font-family="JetBrains Mono" font-size="5.5" text-anchor="middle">Q4'25</text>
-      <text x="430" y="145" fill="var(--txd)" font-family="JetBrains Mono" font-size="5.5" text-anchor="middle">Q1'26</text>
-      <rect x="55" y="2" width="6" height="2" fill="var(--ls)"/><text x="65" y="5" fill="var(--txd)" font-family="Manrope" font-size="5">Pharma $512B</text>
-      <rect x="145" y="2" width="6" height="2" fill="var(--ls2)"/><text x="155" y="5" fill="var(--txd)" font-family="Manrope" font-size="5">Biotech $298B</text>
-      <rect x="230" y="2" width="6" height="2" fill="var(--ls6)"/><text x="240" y="5" fill="var(--txd)" font-family="Manrope" font-size="5">MedTech $184B</text>
-    </svg></div>
-  </div>
-  <div class="pn">
-    <div class="pn-h"><div><div class="pn-t">R&D Hubs</div><div class="pn-s">By investment volume</div></div></div>
-    <div class="geo">
-      <div class="geo-r"><div class="geo-nm">Boston / Camb.</div><div class="geo-bk"><div class="geo-fl" style="width:100%;background:var(--ls)"></div></div><div class="geo-pc">28%</div></div>
-      <div class="geo-r"><div class="geo-nm">SF Bay Area</div><div class="geo-bk"><div class="geo-fl" style="width:71%;background:var(--ls);opacity:.85"></div></div><div class="geo-pc">20%</div></div>
-      <div class="geo-r"><div class="geo-nm">Basel / Zurich</div><div class="geo-bk"><div class="geo-fl" style="width:50%;background:var(--ls2)"></div></div><div class="geo-pc">14%</div></div>
-      <div class="geo-r"><div class="geo-nm">NJ / Philly</div><div class="geo-bk"><div class="geo-fl" style="width:39%;background:var(--ls2);opacity:.85"></div></div><div class="geo-pc">11%</div></div>
-      <div class="geo-r"><div class="geo-nm">London / Oxford</div><div class="geo-bk"><div class="geo-fl" style="width:29%;background:var(--ls3)"></div></div><div class="geo-pc">8%</div></div>
-      <div class="geo-r"><div class="geo-nm">Shanghai</div><div class="geo-bk"><div class="geo-fl" style="width:25%;background:var(--ls3);opacity:.85"></div></div><div class="geo-pc">7%</div></div>
-      <div class="geo-r"><div class="geo-nm">Other</div><div class="geo-bk"><div class="geo-fl" style="width:43%;background:var(--ls4)"></div></div><div class="geo-pc">12%</div></div>
+    <div class="pn-h"><div><div class="pn-t">Q2 2026 Reported Revenue — Large Pharma</div><div class="pn-s">Quarter ended June 30, 2026, USD reporters, with year-on-year growth where disclosed</div></div></div>
+    <div class="hb">
+      <div class="hb-r"><div class="hb-lb" style="width:150px">Johnson &amp; Johnson <small style="color:var(--txd)">+6.6%</small></div><div class="hb-tk"><div class="hb-fl" style="width:100%"></div></div><div class="hb-vl">$25.3B</div></div>
+      <div class="hb-r"><div class="hb-lb" style="width:150px">Eli Lilly <small style="color:var(--txd)">+47.7%</small></div><div class="hb-tk"><div class="hb-fl" style="width:91%"></div></div><div class="hb-vl">$23.0B</div></div>
+      <div class="hb-r"><div class="hb-lb" style="width:150px">Pfizer</div><div class="hb-tk"><div class="hb-fl" style="width:59%"></div></div><div class="hb-vl">$15.0B</div></div>
+      <div class="hb-r"><div class="hb-lb" style="width:150px">Bristol Myers Squibb <small style="color:var(--txd)">+6%</small></div><div class="hb-tk"><div class="hb-fl" style="width:51%"></div></div><div class="hb-vl">$13.0B</div></div>
+      <div class="hb-r"><div class="hb-lb" style="width:150px">Amgen <small style="color:var(--txd)">+10%</small></div><div class="hb-tk"><div class="hb-fl" style="width:40%"></div></div><div class="hb-vl">$10.1B</div></div>
+      <div class="hb-r"><div class="hb-lb" style="width:150px">Gilead</div><div class="hb-tk"><div class="hb-fl" style="width:31%"></div></div><div class="hb-vl">$7.8B</div></div>
     </div>
+    <div style="margin-top:.75rem;font-size:.7rem;color:var(--txd);line-height:1.5">Also reported: Sanofi €11.6B (+17.8%); Novo Nordisk DKK 78.5B (+7% at constant rates). J&amp;J Innovative Medicine $16.4B, MedTech $8.9B. Lilly raised 2026 guidance to $85–87B.</div>
+    <div class="src"><strong>Sources</strong> Company Q2 2026 earnings releases (J&amp;J Jul 15; Sanofi Jul 30; Pfizer, Novo Nordisk, Amgen, Gilead Aug 4); CNBC; Yahoo Finance.</div>
   </div>
   <div class="pn">
-    <div class="pn-h"><div><div class="pn-t">Innovation Index</div><div class="pn-s">Breakthrough signals</div></div></div>
+    <div class="pn-h"><div><div class="pn-t">Regional Signals</div><div class="pn-s">Where capital moved</div></div></div>
+    <div class="kv">
+      <div class="kv-r"><div class="kv-k">US life sciences VC<small>H1 2026 vs H1 2025</small></div><div class="kv-v">▲ 33%</div></div>
+      <div class="kv-r"><div class="kv-k">UK biotech VC<small>Q2 2026 · five-year high</small></div><div class="kv-v">£2.05B</div></div>
+      <div class="kv-r"><div class="kv-k">Europe biotech VC<small>Q2 2026 · UK = 61%</small></div><div class="kv-v">£3.3B</div></div>
+      <div class="kv-r"><div class="kv-k">China out-licensing<small>H1 2026 · ~⅓ of global value</small></div><div class="kv-v">$106B</div></div>
+      <div class="kv-r"><div class="kv-k">SF Bay Area<small>Share of AI/ML biopharma VC since 2023</small></div><div class="kv-v">~50%</div></div>
+      <div class="kv-r"><div class="kv-k">Boston / Cambridge<small>Share of AI/ML biopharma VC since 2023</small></div><div class="kv-v">~20%</div></div>
+    </div>
+    <div class="src"><strong>Sources</strong> CBRE (Jul 2026); UK BioIndustry Association Q2 2026; PharmaSource / Reuters on China licensing; JLL lab-market report.</div>
+  </div>
+  <div class="pn">
+    <div class="pn-h"><div><div class="pn-t">Innovation Index</div><div class="pn-s">H1 2026 signals</div></div></div>
     <div class="rings">
-      <div class="rg-i"><svg class="rg-svg" viewBox="0 0 80 80"><circle cx="40" cy="40" r="28" fill="none" stroke="var(--bd)" stroke-width="5"/><circle cx="40" cy="40" r="28" fill="none" stroke="var(--ls)" stroke-width="5" stroke-dasharray="158 18" stroke-dashoffset="-44" transform="rotate(-90 40 40)" stroke-linecap="round"/></svg><div class="rg-v">8,420</div><div class="rg-l">Patent Filings</div></div>
-      <div class="rg-i"><svg class="rg-svg" viewBox="0 0 80 80"><circle cx="40" cy="40" r="28" fill="none" stroke="var(--bd)" stroke-width="5"/><circle cx="40" cy="40" r="28" fill="none" stroke="var(--ls2)" stroke-width="5" stroke-dasharray="141 35" stroke-dashoffset="-44" transform="rotate(-90 40 40)" stroke-linecap="round"/></svg><div class="rg-v">342</div><div class="rg-l">IND Filings YTD</div></div>
+      <div class="rg-i"><svg class="rg-svg" viewBox="0 0 80 80"><circle cx="40" cy="40" r="28" fill="none" stroke="var(--bd)" stroke-width="5"/><circle cx="40" cy="40" r="28" fill="none" stroke="var(--ls)" stroke-width="5" stroke-dasharray="88 88" stroke-dashoffset="-44" transform="rotate(-90 40 40)" stroke-linecap="round"/></svg><div class="rg-v">23</div><div class="rg-l">Novel approvals H1 (50% of 2025's 46)</div></div>
+      <div class="rg-i"><svg class="rg-svg" viewBox="0 0 80 80"><circle cx="40" cy="40" r="28" fill="none" stroke="var(--bd)" stroke-width="5"/><circle cx="40" cy="40" r="28" fill="none" stroke="var(--ls2)" stroke-width="5" stroke-dasharray="84 92" stroke-dashoffset="-44" transform="rotate(-90 40 40)" stroke-linecap="round"/></svg><div class="rg-v">10</div><div class="rg-l">Q2 IPOs (of 21 in H1)</div></div>
     </div>
     <div style="margin-top:1rem">
-      <div class="pn-s" style="margin-bottom:.5rem">Hottest Modalities</div>
+      <div class="pn-s" style="margin-bottom:.5rem">Modalities in focus — largest Q2 transaction</div>
       <div class="hb" style="gap:4px">
-        <div class="hb-r"><div class="hb-lb" style="width:85px;font-size:.6rem">ADCs</div><div class="hb-tk"><div class="hb-fl" style="width:95%"></div></div><div class="hb-vl" style="width:40px">+62%</div></div>
-        <div class="hb-r"><div class="hb-lb" style="width:85px;font-size:.6rem">mRNA</div><div class="hb-tk"><div class="hb-fl" style="width:78%"></div></div><div class="hb-vl" style="width:40px">+48%</div></div>
-        <div class="hb-r"><div class="hb-lb" style="width:85px;font-size:.6rem">Gene Edit</div><div class="hb-tk"><div class="hb-fl" style="width:65%"></div></div><div class="hb-vl" style="width:40px">+41%</div></div>
-        <div class="hb-r"><div class="hb-lb" style="width:85px;font-size:.6rem">Radiopharm</div><div class="hb-tk"><div class="hb-fl" style="width:52%"></div></div><div class="hb-vl" style="width:40px">+35%</div></div>
+        <div class="hb-r"><div class="hb-lb" style="width:85px;font-size:.6rem">In vivo CAR-T</div><div class="hb-tk"><div class="hb-fl" style="width:100%"></div></div><div class="hb-vl" style="width:44px">$7.0B</div></div>
+        <div class="hb-r"><div class="hb-lb" style="width:85px;font-size:.6rem">ADCs</div><div class="hb-tk"><div class="hb-fl" style="width:71%"></div></div><div class="hb-vl" style="width:44px">$5.0B</div></div>
+        <div class="hb-r"><div class="hb-lb" style="width:85px;font-size:.6rem">AI discovery</div><div class="hb-tk"><div class="hb-fl" style="width:30%"></div></div><div class="hb-vl" style="width:44px">$2.1B</div></div>
+        <div class="hb-r"><div class="hb-lb" style="width:85px;font-size:.6rem">Oral GLP-1</div><div class="hb-tk"><div class="hb-fl" style="width:10%"></div></div><div class="hb-vl" style="width:44px">$719M</div></div>
       </div>
     </div>
+    <div class="src"><strong>Sources</strong> FDA CDER / Nature Reviews Drug Discovery; DealForma; Lilly–Kelonia, Gilead–Tubulis, Isomorphic Labs Series B, Kailera IPO announcements.</div>
   </div>
 </div>
 
 <!-- Market Signals -->
-<div class="sl">Market Signals & Competitive Intelligence</div>
+<div class="sl">Market Signals &amp; Competitive Intelligence</div>
 <div class="g21">
   <div class="pn">
-    <div class="pn-h"><div><div class="pn-t">Key Market Signals</div><div class="pn-s">Industry events shaping the landscape</div></div></div>
+    <div class="pn-h"><div><div class="pn-t">Key Market Signals</div><div class="pn-s">Q2 2026 events shaping the landscape</div></div></div>
     <div class="tl">
-      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>GLP-1 race intensifies</strong> — 4 new Phase III entrants. Eli Lilly, Novo Nordisk, Amgen, and Viking Therapeutics battling for $100B+ market.</div><div class="tl-tm">Mar</div></div>
-      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>AI drug discovery hits inflection</strong> — 3 AI-designed drugs now in Phase II. Recursion, Insilico, Isomorphic Labs leading platform deals >$500M each.</div><div class="tl-tm">Feb</div></div>
-      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>Cell & Gene manufacturing scale-up</strong> — 6 CDMO expansions announced. Samsung Biologics, Lonza, Catalent adding combined 200K sq ft capacity.</div><div class="tl-tm">Feb</div></div>
-      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>Biosimilar wave accelerates</strong> — $48B in branded biologics losing exclusivity 2026-2028. Sandoz, Teva, Samsung Bioepis racing for market share.</div><div class="tl-tm">Jan</div></div>
-      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>Oncology ADC pipeline explosion</strong> — 12 new IND filings in Q1 alone. Daiichi Sankyo, AstraZeneca, Pfizer expanding ADC portfolios aggressively.</div><div class="tl-tm">Jan</div></div>
+      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>Biotech M&amp;A tops $106B year-to-date</strong> — on track for the best year since before COVID; GSK–Nuvalent ($10.6B, Jun 9) and AbbVie–Apogee ($10.9B, Jun 22) follow within weeks.</div><div class="tl-tm">Jun</div></div>
+      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>IPO window reopens</strong> — Parabilis raises a record $770.5M (Jun 9) and Kardigan $460M (Jun 18); Q2 closes with 10 biotech IPOs and $3.6B, versus zero US biopharma IPOs in Q2 2025.</div><div class="tl-tm">Jun</div></div>
+      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>Licensing hits a five-year record</strong> — $83B of licensing and R&amp;D alliances in Q2; China accounts for ~⅓ of global out-licensing value in H1 ($106B), with average China deal size up 42% QoQ.</div><div class="tl-tm">Jun</div></div>
+      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>AI drug discovery goes mainstream</strong> — Isomorphic Labs' $2.1B Series B is the largest biotech round of 2026; AI-native biotechs have raised over $6B year-to-date, about one in six biotech VC deals.</div><div class="tl-tm">Apr</div></div>
+      <div class="tl-i"><div class="tl-dt"></div><div class="tl-tx"><strong>Oral GLP-1 era begins</strong> — Foundayo approved Apr 1; Kailera's $718.8M IPO (Apr) briefly the largest biotech IPO ever. Next-generation modalities draw the quarter's biggest deals: Lilly–Kelonia (in vivo CAR-T, up to $7B) and Gilead–Tubulis (ADC, up to $5B).</div><div class="tl-tm">Apr</div></div>
     </div>
+    <div class="src"><strong>Sources</strong> CNBC (Jun 4, 2026); BioPharma Dive; DealForma via Endpoints; Locust Walk Q2 2026; Crunchbase News; UK BIA; company announcements.</div>
   </div>
   <div class="pn">
-    <div class="pn-h"><div><div class="pn-t">Sub-Sector Performance</div><div class="pn-s">Stock index returns, YTD 2026</div></div></div>
+    <div class="pn-h"><div><div class="pn-t">Capital Flows</div><div class="pn-s">Q2 2026 by channel</div></div></div>
     <div class="bars" style="height:135px">
-      <div class="br-c"><div class="br-v" style="color:var(--ls)">+18%</div><div class="br-f" style="height:90%"></div><div class="br-l">Onco<br>Bio</div></div>
-      <div class="br-c"><div class="br-v" style="color:var(--ls4)">+14%</div><div class="br-f" style="height:70%;background:rgba(155,122,224,.08);border-color:rgba(155,122,224,.18);border-bottom-color:var(--ls4)"></div><div class="br-l">GLP-1<br>Metab</div></div>
-      <div class="br-c"><div class="br-v" style="color:var(--ls2)">+11%</div><div class="br-f" style="height:55%;background:rgba(74,159,245,.08);border-color:rgba(74,159,245,.18);border-bottom-color:var(--ls2)"></div><div class="br-l">Med<br>Tech</div></div>
-      <div class="br-c"><div class="br-v" style="color:var(--ls6)">+8%</div><div class="br-f" style="height:40%;background:rgba(74,223,201,.08);border-color:rgba(74,223,201,.18);border-bottom-color:var(--ls6)"></div><div class="br-l">Dx</div></div>
-      <div class="br-c"><div class="br-v" style="color:var(--ls3)">+5%</div><div class="br-f" style="height:25%;background:rgba(224,168,61,.08);border-color:rgba(224,168,61,.18);border-bottom-color:var(--ls3)"></div><div class="br-l">Large<br>Pharma</div></div>
-      <div class="br-c"><div class="br-v" style="color:var(--ls5)">-3%</div><div class="br-f" style="height:15%;background:rgba(224,99,111,.08);border-color:rgba(224,99,111,.18);border-bottom-color:var(--ls5)"></div><div class="br-l">Digi<br>Health</div></div>
+      <div class="br-c"><div class="br-v" style="color:var(--ls)">$83B</div><div class="br-f" style="height:95%"></div><div class="br-l">Licens-<br>ing</div></div>
+      <div class="br-c"><div class="br-v" style="color:var(--ls4)">$79B</div><div class="br-f" style="height:90%;background:rgba(155,122,224,.08);border-color:rgba(155,122,224,.18);border-bottom-color:var(--ls4)"></div><div class="br-l">M&amp;A</div></div>
+      <div class="br-c"><div class="br-v" style="color:var(--ls2)">$34B</div><div class="br-f" style="height:39%;background:rgba(74,159,245,.08);border-color:rgba(74,159,245,.18);border-bottom-color:var(--ls2)"></div><div class="br-l">VC<br>Exits</div></div>
+      <div class="br-c"><div class="br-v" style="color:var(--ls6)">$10B+</div><div class="br-f" style="height:12%;background:rgba(74,223,201,.08);border-color:rgba(74,223,201,.18);border-bottom-color:var(--ls6)"></div><div class="br-l">Venture</div></div>
+      <div class="br-c"><div class="br-v" style="color:var(--ls3)">$3.6B</div><div class="br-f" style="height:4%;background:rgba(224,168,61,.08);border-color:rgba(224,168,61,.18);border-bottom-color:var(--ls3)"></div><div class="br-l">IPO</div></div>
     </div>
+    <div class="src"><strong>Sources</strong> DealForma Q2 2026 reviews (licensing, M&amp;A incl. contingent value, IPOs); PitchBook Q2 2026 Biopharma Report (VC deal value, VC-backed exit value).</div>
   </div>
 </div>
 
@@ -435,190 +429,177 @@
 <!-- ═══════════════════════════════════════════════════════ -->
 <div class="panel" id="p-et">
 
-<div class="sl">Market Overview</div>
+<div class="sl">Market Overview — Q2 2026</div>
 <div class="kpis">
-  <div class="kpi an d1"><div class="kpi-l">Total VC Funding Q1</div><div class="kpi-v">$42.1B</div><div class="kpi-d up">▲ 28% vs Q4</div><div class="kpi-s">All emerging tech verticals</div></div>
-  <div class="kpi an d2"><div class="kpi-l">AI / ML Market</div><div class="kpi-v">$305B</div><div class="kpi-d up">▲ 38% YoY</div><div class="kpi-s">2026 projected market</div></div>
-  <div class="kpi an d3"><div class="kpi-l">Cyber Market</div><div class="kpi-v">$212B</div><div class="kpi-d up">▲ 14% YoY</div><div class="kpi-s">Global cybersecurity spend</div></div>
-  <div class="kpi an d4"><div class="kpi-l">IPO / Exits Q1</div><div class="kpi-v">18</div><div class="kpi-d up">▲ 50% vs Q1 '25</div><div class="kpi-s">Exits >$500M valuation</div></div>
-  <div class="kpi an d5"><div class="kpi-l">Unicorns Created</div><div class="kpi-v">23</div><div class="kpi-d up">▲ new $1B+ cos in Q1</div><div class="kpi-s">14 are AI-native</div></div>
-  <div class="kpi an d6"><div class="kpi-l">Patent Filings (AI)</div><div class="kpi-v">14,200</div><div class="kpi-d up">▲ 64% YoY</div><div class="kpi-s">US + CN + EP filings</div></div>
+  <div class="kpi an d1"><div class="kpi-l">Global VC Funding Q2</div><div class="kpi-v">$205B</div><div class="kpi-d dn">▼ 33% vs Q1 · ▲ 125% YoY</div><div class="kpi-s">Crunchbase · >70% to AI companies</div></div>
+  <div class="kpi an d2"><div class="kpi-l">AI Spending 2026</div><div class="kpi-v">$2.59T</div><div class="kpi-d up">▲ 47% YoY</div><div class="kpi-s">Gartner worldwide forecast, May 2026</div></div>
+  <div class="kpi an d3"><div class="kpi-l">Cyber Market 2026</div><div class="kpi-v">$249B</div><div class="kpi-d up">▲ 12.7% YoY</div><div class="kpi-s">Gartner information security forecast</div></div>
+  <div class="kpi an d4"><div class="kpi-l">US IPO Proceeds Q2</div><div class="kpi-v">$105B</div><div class="kpi-d up">▲ Record quarter</div><div class="kpi-s">48 IPOs · SpaceX $75B</div></div>
+  <div class="kpi an d5"><div class="kpi-l">Unicorns Created Q2</div><div class="kpi-v">91</div><div class="kpi-d up">▲ 195 in H1 vs 193 in all 2025</div><div class="kpi-s">10 frontier labs in June, led by DeepSeek</div></div>
+  <div class="kpi an d6"><div class="kpi-l">GenAI Patent Families</div><div class="kpi-v">37,808</div><div class="kpi-d up">▲ 2× vs 2024</div><div class="kpi-s">Published 2025, WIPO</div></div>
 </div>
 
 <!-- Funding + Sector Maturity -->
-<div class="sl">Funding Landscape & Sector Maturity</div>
+<div class="sl">Funding Landscape &amp; Sector Maturity</div>
 <div class="g21">
   <div class="pn">
-    <div class="pn-h"><div><div class="pn-t">VC Funding by Sector — Quarterly Trend</div><div class="pn-s">Investment volume across emerging technology verticals</div></div><div class="pn-b">$142B TTM</div></div>
-    <div class="cht"><svg viewBox="0 0 580 150" fill="none">
-      <line x1="40" y1="10" x2="40" y2="130" stroke="var(--bd)" stroke-width=".5"/>
-      <line x1="40" y1="130" x2="560" y2="130" stroke="var(--bd)" stroke-width=".5"/>
-      <line x1="40" y1="97" x2="560" y2="97" stroke="var(--bd)" stroke-width=".3" stroke-dasharray="3"/>
-      <line x1="40" y1="64" x2="560" y2="64" stroke="var(--bd)" stroke-width=".3" stroke-dasharray="3"/>
-      <line x1="40" y1="31" x2="560" y2="31" stroke="var(--bd)" stroke-width=".3" stroke-dasharray="3"/>
-      <text x="35" y="133" fill="var(--txd)" font-family="JetBrains Mono" font-size="6" text-anchor="end">$0B</text>
-      <text x="35" y="100" fill="var(--txd)" font-family="JetBrains Mono" font-size="6" text-anchor="end">$7B</text>
-      <text x="35" y="67" fill="var(--txd)" font-family="JetBrains Mono" font-size="6" text-anchor="end">$14B</text>
-      <text x="35" y="34" fill="var(--txd)" font-family="JetBrains Mono" font-size="6" text-anchor="end">$21B</text>
-      <text x="110" y="143" fill="var(--txd)" font-family="JetBrains Mono" font-size="5.5" text-anchor="middle">Q2'25</text>
-      <text x="240" y="143" fill="var(--txd)" font-family="JetBrains Mono" font-size="5.5" text-anchor="middle">Q3'25</text>
-      <text x="370" y="143" fill="var(--txd)" font-family="JetBrains Mono" font-size="5.5" text-anchor="middle">Q4'25</text>
-      <text x="500" y="143" fill="var(--txd)" font-family="JetBrains Mono" font-size="5.5" text-anchor="middle">Q1'26</text>
-      <!-- AI/ML -->
-      <path d="M110,72 L240,60 L370,48 L500,22 L500,130 L110,130Z" fill="var(--et)" opacity=".04"/>
-      <polyline points="110,72 240,60 370,48 500,22" stroke="var(--et)" stroke-width="2.5" fill="none"/>
-      <!-- Cybersecurity -->
-      <polyline points="110,100 240,94 370,88 500,75" stroke="var(--et3)" stroke-width="1.5" fill="none"/>
-      <!-- Cloud/Infra -->
-      <polyline points="110,106 240,100 370,95 500,86" stroke="var(--et2)" stroke-width="1.5" fill="none" stroke-dasharray="5,3"/>
-      <!-- Climate Tech -->
-      <polyline points="110,112 240,108 370,100 500,90" stroke="var(--et5)" stroke-width="1.5" fill="none" opacity=".7"/>
-      <!-- Quantum -->
-      <polyline points="110,122 240,118 370,112 500,102" stroke="var(--et4)" stroke-width="1.5" fill="none" opacity=".7"/>
-      <circle cx="500" cy="22" r="3.5" fill="var(--et)"/><circle cx="500" cy="75" r="2.5" fill="var(--et3)"/><circle cx="500" cy="86" r="2.5" fill="var(--et2)"/>
-      <rect x="55" y="2" width="6" height="2" fill="var(--et)"/><text x="65" y="5" fill="var(--txd)" font-family="Manrope" font-size="5">AI/ML $19.1B</text>
-      <rect x="135" y="2" width="6" height="2" fill="var(--et3)"/><text x="145" y="5" fill="var(--txd)" font-family="Manrope" font-size="5">Cyber $7.2B</text>
-      <rect x="200" y="2" width="6" height="2" fill="var(--et2)"/><text x="210" y="5" fill="var(--txd)" font-family="Manrope" font-size="5">Cloud $5.8B</text>
-      <rect x="262" y="2" width="6" height="2" fill="var(--et5)"/><text x="272" y="5" fill="var(--txd)" font-family="Manrope" font-size="5">Climate $5.4B</text>
-      <rect x="330" y="2" width="6" height="2" fill="var(--et4)"/><text x="340" y="5" fill="var(--txd)" font-family="Manrope" font-size="5">Quantum $4.6B</text>
-    </svg></div>
+    <div class="pn-h"><div><div class="pn-t">Global Venture Funding — Quarterly Trend</div><div class="pn-s">Total startup investment and AI share of dollars, Crunchbase</div></div><div class="pn-b">$510B H1 2026</div></div>
+    <div class="bars" style="height:170px">
+      <div class="br-c"><div class="br-v" style="color:var(--et5)">$97B</div><div class="br-f" style="height:32%;background:rgba(240,184,61,.06);border-color:rgba(240,184,61,.15);border-bottom-color:var(--et5)"></div><div class="br-l">Q3 '25<br>AI 46%</div></div>
+      <div class="br-c"><div class="br-v" style="color:var(--et2)">$113B+</div><div class="br-f" style="height:37%;background:rgba(90,122,245,.08);border-color:rgba(90,122,245,.18);border-bottom-color:var(--et2)"></div><div class="br-l">Q4 '25<br>AI >50%</div></div>
+      <div class="br-c"><div class="br-v" style="color:var(--et)">$305B</div><div class="br-f" style="height:100%;background:var(--et-dim);border-color:var(--et-20);border-bottom-color:var(--et)"></div><div class="br-l">Q1 '26<br>AI ~80%</div></div>
+      <div class="br-c"><div class="br-v" style="color:var(--et3)">$205B</div><div class="br-f" style="height:67%;background:rgba(160,240,74,.06);border-color:rgba(160,240,74,.15);border-bottom-color:var(--et3)"></div><div class="br-l">Q2 '26<br>AI >70%</div></div>
+    </div>
+    <div style="margin-top:.75rem;font-size:.7rem;color:var(--txd);line-height:1.5">H1 2026's $510B already exceeds all of 2025 ($440B). Sixteen billion-dollar rounds took $108.6B (53%) of Q2; OpenAI and Anthropic alone drew $217B, or 43% of every venture dollar in H1. Late-stage funding reached $134B in Q2 (+141% YoY).</div>
+    <div class="src"><strong>Sources</strong> Crunchbase News, global funding reports for Q3 2025, Q4 2025, Q1 2026 and Q2/H1 2026 (Jul 2026).</div>
   </div>
   <div class="pn">
-    <div class="pn-h"><div><div class="pn-t">Sector Maturity Map</div><div class="pn-s">Technology readiness & market phase</div></div></div>
+    <div class="pn-h"><div><div class="pn-t">Sector Maturity Map</div><div class="pn-s">Editorial read of Q2 2026 signals</div></div></div>
     <div class="mat">
-      <div class="mat-r"><div class="mat-lb">Generative AI</div><div class="mat-tk"><div class="mat-fl" style="width:92%;background:linear-gradient(90deg,var(--et-dim),var(--et))"></div></div><div class="mat-tg" style="color:var(--et)">Peak Growth</div></div>
-      <div class="mat-r"><div class="mat-lb">AI Infra / MLOps</div><div class="mat-tk"><div class="mat-fl" style="width:78%;background:linear-gradient(90deg,rgba(160,240,74,.05),var(--et3))"></div></div><div class="mat-tg" style="color:var(--et3)">Scale-Up</div></div>
-      <div class="mat-r"><div class="mat-lb">Cybersecurity</div><div class="mat-tk"><div class="mat-fl" style="width:85%;background:linear-gradient(90deg,rgba(160,240,74,.05),var(--et3))"></div></div><div class="mat-tg" style="color:var(--et3)">Mature</div></div>
-      <div class="mat-r"><div class="mat-lb">Climate Tech</div><div class="mat-tk"><div class="mat-fl" style="width:52%;background:linear-gradient(90deg,rgba(240,184,61,.05),var(--et5))"></div></div><div class="mat-tg" style="color:var(--et5)">Growth</div></div>
-      <div class="mat-r"><div class="mat-lb">Robotics / HW</div><div class="mat-tk"><div class="mat-fl" style="width:45%;background:linear-gradient(90deg,rgba(240,184,61,.05),var(--et5))"></div></div><div class="mat-tg" style="color:var(--et5)">Growth</div></div>
-      <div class="mat-r"><div class="mat-lb">Edge / IoT</div><div class="mat-tk"><div class="mat-fl" style="width:58%;background:linear-gradient(90deg,rgba(240,184,61,.05),var(--et5))"></div></div><div class="mat-tg" style="color:var(--et5)">Growth</div></div>
-      <div class="mat-r"><div class="mat-lb">Quantum</div><div class="mat-tk"><div class="mat-fl" style="width:28%;background:linear-gradient(90deg,rgba(224,90,171,.05),var(--et4))"></div></div><div class="mat-tg" style="color:var(--et4)">Early</div></div>
-      <div class="mat-r"><div class="mat-lb">Spatial / AR-VR</div><div class="mat-tk"><div class="mat-fl" style="width:32%;background:linear-gradient(90deg,rgba(224,90,171,.05),var(--et4))"></div></div><div class="mat-tg" style="color:var(--et4)">Emerging</div></div>
+      <div class="mat-r"><div class="mat-lb">Frontier AI Labs</div><div class="mat-tk"><div class="mat-fl" style="width:92%;background:linear-gradient(90deg,var(--et-dim),var(--et))"></div></div><div class="mat-tg" style="color:var(--et)">Peak Growth</div></div>
+      <div class="mat-r"><div class="mat-lb">AI Infrastructure</div><div class="mat-tk"><div class="mat-fl" style="width:85%;background:linear-gradient(90deg,rgba(160,240,74,.05),var(--et3))"></div></div><div class="mat-tg" style="color:var(--et3)">Scale-Up</div></div>
+      <div class="mat-r"><div class="mat-lb">Cybersecurity</div><div class="mat-tk"><div class="mat-fl" style="width:88%;background:linear-gradient(90deg,rgba(160,240,74,.05),var(--et3))"></div></div><div class="mat-tg" style="color:var(--et3)">Mature</div></div>
+      <div class="mat-r"><div class="mat-lb">Agentic AI</div><div class="mat-tk"><div class="mat-fl" style="width:62%;background:linear-gradient(90deg,rgba(240,184,61,.05),var(--et5))"></div></div><div class="mat-tg" style="color:var(--et5)">Growth</div></div>
+      <div class="mat-r"><div class="mat-lb">Physical AI</div><div class="mat-tk"><div class="mat-fl" style="width:55%;background:linear-gradient(90deg,rgba(240,184,61,.05),var(--et5))"></div></div><div class="mat-tg" style="color:var(--et5)">Breakout</div></div>
+      <div class="mat-r"><div class="mat-lb">Climate / Power</div><div class="mat-tk"><div class="mat-fl" style="width:50%;background:linear-gradient(90deg,rgba(240,184,61,.05),var(--et5))"></div></div><div class="mat-tg" style="color:var(--et5)">Growth</div></div>
+      <div class="mat-r"><div class="mat-lb">Quantum</div><div class="mat-tk"><div class="mat-fl" style="width:32%;background:linear-gradient(90deg,rgba(224,90,171,.05),var(--et4))"></div></div><div class="mat-tg" style="color:var(--et4)">Early</div></div>
+      <div class="mat-r"><div class="mat-lb">Web3 / Crypto</div><div class="mat-tk"><div class="mat-fl" style="width:38%;background:linear-gradient(90deg,rgba(224,90,171,.05),var(--et4))"></div></div><div class="mat-tg" style="color:var(--et4)">Reset</div></div>
     </div>
+    <div class="src"><strong>Basis</strong> Frontier labs: 7 of Q2's 16 billion-dollar rounds. Agentic AI: 17% of organizations have deployed agents (Gartner). Physical AI: $47.4B raised in H1. Quantum: Quantinuum IPO Jun 4. Crypto: bitcoin ~$59.7K at Jun 30 vs ~$88.7K at Jan 1.</div>
   </div>
 </div>
 
 <!-- Product Adoption + M&A -->
-<div class="sl">Product Adoption & M&A Activity</div>
+<div class="sl">Enterprise Adoption &amp; M&amp;A Activity</div>
 <div class="g3">
   <div class="pn">
-    <div class="pn-h"><div><div class="pn-t">Enterprise AI Adoption</div><div class="pn-s">% of Fortune 500 deploying</div></div></div>
+    <div class="pn-h"><div><div class="pn-t">Enterprise AI Adoption</div><div class="pn-s">% of organizations surveyed</div></div></div>
     <div class="hb">
-      <div class="hb-r"><div class="hb-lb">GenAI Tools</div><div class="hb-tk"><div class="hb-fl" style="width:92%;background:var(--et-dim);border-color:var(--et-20)"></div></div><div class="hb-vl">92%</div></div>
-      <div class="hb-r"><div class="hb-lb">ML in Prod</div><div class="hb-tk"><div class="hb-fl" style="width:74%;background:var(--et-dim);border-color:var(--et-20)"></div></div><div class="hb-vl">74%</div></div>
-      <div class="hb-r"><div class="hb-lb">Zero Trust</div><div class="hb-tk"><div class="hb-fl" style="width:68%;background:rgba(160,240,74,.06);border-color:rgba(160,240,74,.15)"></div></div><div class="hb-vl">68%</div></div>
-      <div class="hb-r"><div class="hb-lb">Cloud Native</div><div class="hb-tk"><div class="hb-fl" style="width:82%;background:rgba(90,122,245,.06);border-color:rgba(90,122,245,.15)"></div></div><div class="hb-vl">82%</div></div>
-      <div class="hb-r"><div class="hb-lb">Edge Deploy</div><div class="hb-tk"><div class="hb-fl" style="width:38%;background:rgba(240,184,61,.06);border-color:rgba(240,184,61,.15)"></div></div><div class="hb-vl">38%</div></div>
-      <div class="hb-r"><div class="hb-lb">Quantum POC</div><div class="hb-tk"><div class="hb-fl" style="width:12%;background:rgba(224,90,171,.06);border-color:rgba(224,90,171,.15)"></div></div><div class="hb-vl">12%</div></div>
+      <div class="hb-r"><div class="hb-lb">AI in ≥1 function</div><div class="hb-tk"><div class="hb-fl" style="width:88%;background:var(--et-dim);border-color:var(--et-20)"></div></div><div class="hb-vl">88%</div></div>
+      <div class="hb-r"><div class="hb-lb">Testing agents</div><div class="hb-tk"><div class="hb-fl" style="width:62%;background:var(--et-dim);border-color:var(--et-20)"></div></div><div class="hb-vl">62%</div></div>
+      <div class="hb-r"><div class="hb-lb">Scaling agents ($1B+ cos)</div><div class="hb-tk"><div class="hb-fl" style="width:40%;background:rgba(160,240,74,.06);border-color:rgba(160,240,74,.15)"></div></div><div class="hb-vl">40%</div></div>
+      <div class="hb-r"><div class="hb-lb">Scaling agents (all)</div><div class="hb-tk"><div class="hb-fl" style="width:23%;background:rgba(90,122,245,.06);border-color:rgba(90,122,245,.15)"></div></div><div class="hb-vl">23%</div></div>
+      <div class="hb-r"><div class="hb-lb">Agents deployed</div><div class="hb-tk"><div class="hb-fl" style="width:17%;background:rgba(240,184,61,.06);border-color:rgba(240,184,61,.15)"></div></div><div class="hb-vl">17%</div></div>
+      <div class="hb-r"><div class="hb-lb">Quantum in prod.</div><div class="hb-tk"><div class="hb-fl" style="width:13%;background:rgba(224,90,171,.06);border-color:rgba(224,90,171,.15)"></div></div><div class="hb-vl">13%</div></div>
     </div>
+    <div class="src"><strong>Sources</strong> McKinsey, The State of AI: Global Survey 2026 (first four rows; large companies = revenue over $1B); Gartner 2026 Hype Cycle for Agentic AI; IQM State of Quantum 2026 (Jun 2026).</div>
   </div>
   <div class="pn">
-    <div class="pn-h"><div><div class="pn-t">Major M&A Deals</div><div class="pn-s">Notable acquisitions Q1 2026</div></div></div>
+    <div class="pn-h"><div><div class="pn-t">Major M&amp;A Deals</div><div class="pn-s">Announced Q2 2026</div></div></div>
     <table class="dt">
       <thead><tr><th>Acquirer</th><th>Target</th><th>Value</th><th>Focus</th></tr></thead>
       <tbody>
-        <tr><td>Google</td><td>Wiz</td><td class="mn-f hi">$32B</td><td>Cloud Security</td></tr>
-        <tr><td>Salesforce</td><td>AgentForce AI</td><td class="mn-f hi">$8.1B</td><td>AI Agents</td></tr>
-        <tr><td>Cisco</td><td>ShieldNet</td><td class="mn-f hi">$5.4B</td><td>Zero Trust</td></tr>
-        <tr><td>NVIDIA</td><td>RunPod</td><td class="mn-f hi">$3.2B</td><td>GPU Cloud</td></tr>
-        <tr><td>Microsoft</td><td>QuantumPath</td><td class="mn-f hi">$2.8B</td><td>Quantum SW</td></tr>
+        <tr><td>SpaceX</td><td>Cursor (Anysphere)</td><td class="mn-f hi">$60B</td><td>AI coding</td></tr>
+        <tr><td>Rocket Lab</td><td>Iridium</td><td class="mn-f hi">$8.0B</td><td>Satcom</td></tr>
+        <tr><td>Accenture</td><td>Dragos, runZero, NetRise</td><td class="mn-f hi">$4.2B</td><td>OT security</td></tr>
+        <tr><td>Cisco</td><td>Astrix Security</td><td class="mn-f hi">~$400M</td><td>Identity</td></tr>
+        <tr><td>Meta</td><td>Assured Robot Intel.</td><td class="mn-f hi">Undiscl.</td><td>Humanoid AI</td></tr>
       </tbody>
     </table>
+    <div style="margin-top:.6rem;font-size:.66rem;color:var(--txd)">SpaceX–Cursor (Jun 16) is the largest purchase of a VC-backed startup ever; 24 VC-backed companies were acquired for $1B+ in Q2, a record $113B. Closed in Q2: ServiceNow–Armis, $7.75B (Apr 20).</div>
+    <div class="src"><strong>Sources</strong> CNBC; Bloomberg; Rocket Lab investor release (Jun 29); SecurityWeek M&amp;A roundups (May, June 2026); TechCrunch; Crunchbase News.</div>
   </div>
   <div class="pn">
-    <div class="pn-h"><div><div class="pn-t">Regulation Tracker</div><div class="pn-s">Key policy actions, Q1 2026</div></div></div>
+    <div class="pn-h"><div><div class="pn-t">Regulation Tracker</div><div class="pn-s">Key policy actions, Q2 2026</div></div></div>
     <div class="tl">
-      <div class="tl-i"><div class="tl-dt" style="border-color:var(--et)"></div><div class="tl-tx"><strong>EU AI Act enforcement</strong> — First compliance deadlines; high-risk AI classification in effect</div><div class="tl-tm">Feb</div></div>
-      <div class="tl-i"><div class="tl-dt" style="border-color:var(--et)"></div><div class="tl-tx"><strong>NIST post-quantum standards</strong> — Mandatory migration timeline for federal contractors</div><div class="tl-tm">Feb</div></div>
-      <div class="tl-i"><div class="tl-dt" style="border-color:var(--et)"></div><div class="tl-tx"><strong>US AI Executive Order update</strong> — Reporting requirements for frontier model developers</div><div class="tl-tm">Jan</div></div>
-      <div class="tl-i"><div class="tl-dt" style="border-color:var(--et)"></div><div class="tl-tx"><strong>SEC crypto framework</strong> — Clear custody rules for digital asset platforms</div><div class="tl-tm">Jan</div></div>
+      <div class="tl-i"><div class="tl-dt" style="border-color:var(--et)"></div><div class="tl-tx"><strong>EU AI Act Digital Omnibus adopted</strong> — Council final approval Jun 29; Annex III high-risk duties deferred to Dec 2, 2027; Art. 50 transparency still applies Aug 2, 2026</div><div class="tl-tm">Jun</div></div>
+      <div class="tl-i"><div class="tl-dt" style="border-color:var(--et)"></div><div class="tl-tx"><strong>US chip export controls tightened</strong> — BIS confirms advanced AI chip licensing applies to China-headquartered firms' overseas subsidiaries</div><div class="tl-tm">Jun</div></div>
+      <div class="tl-i"><div class="tl-dt" style="border-color:var(--et)"></div><div class="tl-tx"><strong>Colorado AI Act rewritten</strong> — SB 189 signed May 14, effective date moved to Jan 1, 2027; 109 state AI laws on the books by Jul 1</div><div class="tl-tm">May</div></div>
+      <div class="tl-i"><div class="tl-dt" style="border-color:var(--et)"></div><div class="tl-tx"><strong>CLARITY Act advances</strong> — Senate Banking Committee clears crypto market-structure bill 15–9 (May 14); floor vote pending</div><div class="tl-tm">May</div></div>
+      <div class="tl-i"><div class="tl-dt" style="border-color:var(--et)"></div><div class="tl-tx"><strong>FTC v. Meta appeal</strong> — 28 states and DC file amicus brief backing the FTC's antitrust appeal (May 29)</div><div class="tl-tm">May</div></div>
     </div>
+    <div class="src"><strong>Sources</strong> Gibson Dunn; Pinsent Masons; US Bureau of Industry and Security; Al Jazeera (Jun 1); Hunton; TechPolicy.Press; CoinDesk; Latham &amp; Watkins crypto tracker; FTC.</div>
   </div>
 </div>
 
-<!-- Geography + Revenue + Innovation -->
-<div class="sl">Geography, Revenue & Innovation Radar</div>
+<!-- Revenue + Geography + Innovation -->
+<div class="sl">Revenue, Geography &amp; Innovation Radar</div>
 <div class="g211">
   <div class="pn">
-    <div class="pn-h"><div><div class="pn-t">Cloud & AI Infrastructure Revenue</div><div class="pn-s">Quarterly revenue by hyperscaler, trailing 4 quarters</div></div></div>
+    <div class="pn-h"><div><div class="pn-t">Cloud &amp; AI Infrastructure Revenue</div><div class="pn-s">Quarterly segment revenue, calendar quarters Q3 2025 – Q2 2026; Microsoft = Intelligent Cloud segment</div></div></div>
     <div class="cht"><svg viewBox="0 0 520 150" fill="none">
       <line x1="40" y1="10" x2="40" y2="130" stroke="var(--bd)" stroke-width=".5"/>
       <line x1="40" y1="130" x2="500" y2="130" stroke="var(--bd)" stroke-width=".5"/>
-      <line x1="40" y1="90" x2="500" y2="90" stroke="var(--bd)" stroke-width=".3" stroke-dasharray="3"/>
-      <line x1="40" y1="50" x2="500" y2="50" stroke="var(--bd)" stroke-width=".3" stroke-dasharray="3"/>
+      <line x1="40" y1="82" x2="500" y2="82" stroke="var(--bd)" stroke-width=".3" stroke-dasharray="3"/>
+      <line x1="40" y1="34" x2="500" y2="34" stroke="var(--bd)" stroke-width=".3" stroke-dasharray="3"/>
       <text x="35" y="133" fill="var(--txd)" font-family="JetBrains Mono" font-size="6" text-anchor="end">$0</text>
-      <text x="35" y="93" fill="var(--txd)" font-family="JetBrains Mono" font-size="6" text-anchor="end">$40B</text>
-      <text x="35" y="53" fill="var(--txd)" font-family="JetBrains Mono" font-size="6" text-anchor="end">$80B</text>
-      <text x="35" y="13" fill="var(--txd)" font-family="JetBrains Mono" font-size="6" text-anchor="end">$120B</text>
-      <!-- AWS -->
-      <polyline points="85,68 200,60 315,52 430,42" stroke="var(--et5)" stroke-width="2" fill="none"/>
-      <!-- Azure -->
-      <polyline points="85,78 200,68 315,58 430,46" stroke="var(--et2)" stroke-width="2" fill="none"/>
-      <!-- GCP -->
-      <polyline points="85,95 200,88 315,78 430,65" stroke="var(--et)" stroke-width="1.5" fill="none" stroke-dasharray="5,3"/>
-      <circle cx="430" cy="42" r="3" fill="var(--et5)"/><circle cx="430" cy="46" r="2.5" fill="var(--et2)"/><circle cx="430" cy="65" r="2.5" fill="var(--et)"/>
-      <text x="85" y="143" fill="var(--txd)" font-family="JetBrains Mono" font-size="5.5">Q2'25</text>
-      <text x="200" y="143" fill="var(--txd)" font-family="JetBrains Mono" font-size="5.5">Q3'25</text>
-      <text x="315" y="143" fill="var(--txd)" font-family="JetBrains Mono" font-size="5.5">Q4'25</text>
-      <text x="430" y="143" fill="var(--txd)" font-family="JetBrains Mono" font-size="5.5">Q1'26</text>
-      <rect x="55" y="2" width="6" height="2" fill="var(--et5)"/><text x="65" y="5" fill="var(--txd)" font-family="Manrope" font-size="5">AWS $105B</text>
-      <rect x="130" y="2" width="6" height="2" fill="var(--et2)"/><text x="140" y="5" fill="var(--txd)" font-family="Manrope" font-size="5">Azure $96B</text>
-      <rect x="200" y="2" width="6" height="2" fill="var(--et)"/><text x="210" y="5" fill="var(--txd)" font-family="Manrope" font-size="5">GCP $46B</text>
+      <text x="35" y="85" fill="var(--txd)" font-family="JetBrains Mono" font-size="6" text-anchor="end">$20B</text>
+      <text x="35" y="37" fill="var(--txd)" font-family="JetBrains Mono" font-size="6" text-anchor="end">$40B</text>
+      <!-- AWS: 33.0, 35.6, 37.6, 42.2 -->
+      <polyline points="85,50.8 200,44.6 315,39.8 430,28.7" stroke="var(--et5)" stroke-width="2" fill="none"/>
+      <!-- Microsoft Intelligent Cloud: 30.9, 32.9, 34.7, 39.3 -->
+      <polyline points="85,55.8 200,51.0 315,46.7 430,35.7" stroke="var(--et2)" stroke-width="2" fill="none"/>
+      <!-- Google Cloud: 15.2, 17.7, 20.0, 24.8 -->
+      <polyline points="85,93.5 200,87.5 315,82.0 430,70.5" stroke="var(--et)" stroke-width="1.5" fill="none" stroke-dasharray="5,3"/>
+      <circle cx="430" cy="28.7" r="3" fill="var(--et5)"/><circle cx="430" cy="35.7" r="2.5" fill="var(--et2)"/><circle cx="430" cy="70.5" r="2.5" fill="var(--et)"/>
+      <text x="85" y="143" fill="var(--txd)" font-family="JetBrains Mono" font-size="5.5" text-anchor="middle">Q3'25</text>
+      <text x="200" y="143" fill="var(--txd)" font-family="JetBrains Mono" font-size="5.5" text-anchor="middle">Q4'25</text>
+      <text x="315" y="143" fill="var(--txd)" font-family="JetBrains Mono" font-size="5.5" text-anchor="middle">Q1'26</text>
+      <text x="430" y="143" fill="var(--txd)" font-family="JetBrains Mono" font-size="5.5" text-anchor="middle">Q2'26</text>
+      <rect x="55" y="2" width="6" height="2" fill="var(--et5)"/><text x="65" y="5" fill="var(--txd)" font-family="Manrope" font-size="5">AWS $42.2B (+37%)</text>
+      <rect x="150" y="2" width="6" height="2" fill="var(--et2)"/><text x="160" y="5" fill="var(--txd)" font-family="Manrope" font-size="5">Microsoft Intelligent Cloud $39.3B (+32%, Azure +43%)</text>
+      <rect x="320" y="2" width="6" height="2" fill="var(--et)"/><text x="330" y="5" fill="var(--txd)" font-family="Manrope" font-size="5">Google Cloud $24.8B (+82%)</text>
     </svg></div>
+    <div style="margin-top:.5rem;font-size:.7rem;color:var(--txd);line-height:1.5">Prior quarters — AWS: $33.0B, $35.6B, $37.6B. Microsoft Intelligent Cloud: $30.9B, $32.9B, $34.7B. Google Cloud: $15.2B, $17.7B, $20.0B. NVIDIA data-center revenue reached $75.2B (+92% YoY) in its April 2026 quarter.</div>
+    <div class="src"><strong>Sources</strong> Amazon, Microsoft and Alphabet quarterly earnings releases (Jul 2026 and prior); NVIDIA Q1 FY2027 results (May 20, 2026).</div>
   </div>
   <div class="pn">
-    <div class="pn-h"><div><div class="pn-t">Innovation Hubs</div><div class="pn-s">By startup density</div></div></div>
+    <div class="pn-h"><div><div class="pn-t">Regional Funding</div><div class="pn-s">Q2 2026 venture dollars</div></div></div>
     <div class="geo">
-      <div class="geo-r"><div class="geo-nm">SF Bay Area</div><div class="geo-bk"><div class="geo-fl" style="width:100%;background:var(--et)"></div></div><div class="geo-pc">32%</div></div>
-      <div class="geo-r"><div class="geo-nm">NYC / NJ</div><div class="geo-bk"><div class="geo-fl" style="width:56%;background:var(--et2)"></div></div><div class="geo-pc">18%</div></div>
-      <div class="geo-r"><div class="geo-nm">London</div><div class="geo-bk"><div class="geo-fl" style="width:40%;background:var(--et3)"></div></div><div class="geo-pc">13%</div></div>
-      <div class="geo-r"><div class="geo-nm">Tel Aviv</div><div class="geo-bk"><div class="geo-fl" style="width:34%;background:var(--et3);opacity:.8"></div></div><div class="geo-pc">11%</div></div>
-      <div class="geo-r"><div class="geo-nm">Seattle</div><div class="geo-bk"><div class="geo-fl" style="width:28%;background:var(--et5)"></div></div><div class="geo-pc">9%</div></div>
-      <div class="geo-r"><div class="geo-nm">Shenzhen</div><div class="geo-bk"><div class="geo-fl" style="width:22%;background:var(--et5);opacity:.8"></div></div><div class="geo-pc">7%</div></div>
-      <div class="geo-r"><div class="geo-nm">Other</div><div class="geo-bk"><div class="geo-fl" style="width:31%;background:var(--et6)"></div></div><div class="geo-pc">10%</div></div>
+      <div class="geo-r"><div class="geo-nm">North America</div><div class="geo-bk"><div class="geo-fl" style="width:100%;background:var(--et)"></div></div><div class="geo-pc" style="width:44px">$137B</div></div>
+      <div class="geo-r"><div class="geo-nm">Asia</div><div class="geo-bk"><div class="geo-fl" style="width:31%;background:var(--et2)"></div></div><div class="geo-pc" style="width:44px">$43B</div></div>
+      <div class="geo-r"><div class="geo-nm">Europe</div><div class="geo-bk"><div class="geo-fl" style="width:17%;background:var(--et3)"></div></div><div class="geo-pc" style="width:44px">$24B</div></div>
+      <div class="geo-r"><div class="geo-nm">— UK</div><div class="geo-bk"><div class="geo-fl" style="width:7%;background:var(--et3);opacity:.8"></div></div><div class="geo-pc" style="width:44px">$10B+</div></div>
+      <div class="geo-r"><div class="geo-nm">— India</div><div class="geo-bk"><div class="geo-fl" style="width:2.4%;background:var(--et5)"></div></div><div class="geo-pc" style="width:44px">$3.3B</div></div>
+      <div class="geo-r"><div class="geo-nm">— Germany</div><div class="geo-bk"><div class="geo-fl" style="width:2.3%;background:var(--et5);opacity:.8"></div></div><div class="geo-pc" style="width:44px">$3.2B</div></div>
+      <div class="geo-r"><div class="geo-nm">— France</div><div class="geo-bk"><div class="geo-fl" style="width:1.7%;background:var(--et6)"></div></div><div class="geo-pc" style="width:44px">$2.4B</div></div>
     </div>
+    <div style="margin-top:.6rem;font-size:.66rem;color:var(--txd);line-height:1.5">Anthropic's raise was roughly half of North America's total. Europe posted its strongest quarter in four years (+67% YoY); Asia its highest in more than three years, led by DeepSeek's $7.4B.</div>
+    <div class="src"><strong>Sources</strong> Crunchbase News regional reports for Q2 2026 (North America, Europe, Asia), July 2026.</div>
   </div>
   <div class="pn">
     <div class="pn-h"><div><div class="pn-t">Innovation Radar</div><div class="pn-s">Breakout technology signals</div></div></div>
     <div class="rings">
-      <div class="rg-i"><svg class="rg-svg" viewBox="0 0 80 80"><circle cx="40" cy="40" r="28" fill="none" stroke="var(--bd)" stroke-width="5"/><circle cx="40" cy="40" r="28" fill="none" stroke="var(--et)" stroke-width="5" stroke-dasharray="165 11" stroke-dashoffset="-44" transform="rotate(-90 40 40)" stroke-linecap="round"/></svg><div class="rg-v">14.2K</div><div class="rg-l">AI Patents Filed</div></div>
-      <div class="rg-i"><svg class="rg-svg" viewBox="0 0 80 80"><circle cx="40" cy="40" r="28" fill="none" stroke="var(--bd)" stroke-width="5"/><circle cx="40" cy="40" r="28" fill="none" stroke="var(--et4)" stroke-width="5" stroke-dasharray="88 88" stroke-dashoffset="-44" transform="rotate(-90 40 40)" stroke-linecap="round"/></svg><div class="rg-v">1,247</div><div class="rg-l">Quantum Patents</div></div>
+      <div class="rg-i"><svg class="rg-svg" viewBox="0 0 80 80"><circle cx="40" cy="40" r="28" fill="none" stroke="var(--bd)" stroke-width="5"/><circle cx="40" cy="40" r="28" fill="none" stroke="var(--et)" stroke-width="5" stroke-dasharray="176 0" stroke-dashoffset="-44" transform="rotate(-90 40 40)" stroke-linecap="round"/></svg><div class="rg-v">37.8K</div><div class="rg-l">GenAI patent families, 2025 (2× 2024)</div></div>
+      <div class="rg-i"><svg class="rg-svg" viewBox="0 0 80 80"><circle cx="40" cy="40" r="28" fill="none" stroke="var(--bd)" stroke-width="5"/><circle cx="40" cy="40" r="28" fill="none" stroke="var(--et4)" stroke-width="5" stroke-dasharray="55 121" stroke-dashoffset="-44" transform="rotate(-90 40 40)" stroke-linecap="round"/></svg><div class="rg-v">+31%</div><div class="rg-l">Quantum patent filings, 2025 vs 2024</div></div>
     </div>
     <div style="margin-top:1rem">
-      <div class="pn-s" style="margin-bottom:.5rem">Hottest Categories</div>
+      <div class="pn-s" style="margin-bottom:.5rem">Hottest categories — 2026 funding</div>
       <div class="hb" style="gap:4px">
-        <div class="hb-r"><div class="hb-lb" style="width:85px;font-size:.6rem">AI Agents</div><div class="hb-tk"><div class="hb-fl" style="width:98%;background:var(--et-dim);border-color:var(--et-20)"></div></div><div class="hb-vl" style="width:40px">+340%</div></div>
-        <div class="hb-r"><div class="hb-lb" style="width:85px;font-size:.6rem">AI Safety</div><div class="hb-tk"><div class="hb-fl" style="width:82%;background:var(--et-dim);border-color:var(--et-20)"></div></div><div class="hb-vl" style="width:40px">+280%</div></div>
-        <div class="hb-r"><div class="hb-lb" style="width:85px;font-size:.6rem">Edge AI</div><div class="hb-tk"><div class="hb-fl" style="width:48%;background:rgba(240,184,61,.06);border-color:rgba(240,184,61,.15)"></div></div><div class="hb-vl" style="width:40px">+120%</div></div>
-        <div class="hb-r"><div class="hb-lb" style="width:85px;font-size:.6rem">Humanoid</div><div class="hb-tk"><div class="hb-fl" style="width:38%;background:rgba(224,90,171,.06);border-color:rgba(224,90,171,.15)"></div></div><div class="hb-vl" style="width:40px">+95%</div></div>
+        <div class="hb-r"><div class="hb-lb" style="width:85px;font-size:.6rem">Physical AI · H1</div><div class="hb-tk"><div class="hb-fl" style="width:100%;background:var(--et-dim);border-color:var(--et-20)"></div></div><div class="hb-vl" style="width:48px">$47.4B</div></div>
+        <div class="hb-r"><div class="hb-lb" style="width:85px;font-size:.6rem">Robotics · YTD</div><div class="hb-tk"><div class="hb-fl" style="width:40%;background:var(--et-dim);border-color:var(--et-20)"></div></div><div class="hb-vl" style="width:48px">$18.8B</div></div>
+        <div class="hb-r"><div class="hb-lb" style="width:85px;font-size:.6rem">Humanoids · YTD</div><div class="hb-tk"><div class="hb-fl" style="width:18%;background:rgba(224,90,171,.06);border-color:rgba(224,90,171,.15)"></div></div><div class="hb-vl" style="width:48px">$8.6B</div></div>
+        <div class="hb-r"><div class="hb-lb" style="width:85px;font-size:.6rem">Cleantech · Q2</div><div class="hb-tk"><div class="hb-fl" style="width:17%;background:rgba(240,184,61,.06);border-color:rgba(240,184,61,.15)"></div></div><div class="hb-vl" style="width:48px">$8.0B</div></div>
       </div>
     </div>
+    <div class="src"><strong>Sources</strong> WIPO GenAI patent trends update (Jul 2026); Patsnap Quantum Computing Patent Landscape 2026; Crunchbase News (physical AI H1 2026; robotics sector snapshot; cleantech Q2 2026). Physical AI is ~4× the $12B raised in H2 2025; humanoid funding is 1.8× all of 2025.</div>
   </div>
 </div>
 
 <!-- Market Signals -->
-<div class="sl">Market Signals & Competitive Intelligence</div>
+<div class="sl">Market Signals &amp; Competitive Intelligence</div>
 <div class="g21">
   <div class="pn">
-    <div class="pn-h"><div><div class="pn-t">Key Market Signals</div><div class="pn-s">Industry events reshaping the technology landscape</div></div></div>
+    <div class="pn-h"><div><div class="pn-t">Key Market Signals</div><div class="pn-s">Q2 2026 events reshaping the technology landscape</div></div></div>
     <div class="tl">
-      <div class="tl-i"><div class="tl-dt" style="border-color:var(--et)"></div><div class="tl-tx"><strong>AI Agent infrastructure boom</strong> — Agentic frameworks driving $4.2B in new funding. Every Series B+ startup adding agent orchestration layers.</div><div class="tl-tm">Mar</div></div>
-      <div class="tl-i"><div class="tl-dt" style="border-color:var(--et)"></div><div class="tl-tx"><strong>NVIDIA Blackwell Ultra ships</strong> — Next-gen GPU architecture reaching hyperscalers. 4x inference throughput vs H100 reshaping economics of AI deployment.</div><div class="tl-tm">Mar</div></div>
-      <div class="tl-i"><div class="tl-dt" style="border-color:var(--et)"></div><div class="tl-tx"><strong>Post-quantum crypto mandate</strong> — NIST standards finalized. Federal contractors have 18-month migration window, driving $8B+ in security spend.</div><div class="tl-tm">Feb</div></div>
-      <div class="tl-i"><div class="tl-dt" style="border-color:var(--et)"></div><div class="tl-tx"><strong>Humanoid robotics Series B wave</strong> — Figure, 1X, Apptronik, Agility raising $100M+ rounds. Manufacturing and logistics deployments accelerating.</div><div class="tl-tm">Jan</div></div>
-      <div class="tl-i"><div class="tl-dt" style="border-color:var(--et)"></div><div class="tl-tx"><strong>Climate tech IPO window opens</strong> — 3 successful listings (carbon capture, battery tech, grid software). Combined market cap $18B on listing day.</div><div class="tl-tm">Jan</div></div>
+      <div class="tl-i"><div class="tl-dt" style="border-color:var(--et)"></div><div class="tl-tx"><strong>SpaceX's record $75B IPO</strong> — priced Jun 11 at a $1.77T valuation, closing +19% on debut; Anthropic (~Jun 1) and OpenAI (Jun 8) file confidentially to follow. US IPO proceeds hit a record $104.9B for the quarter.</div><div class="tl-tm">Jun</div></div>
+      <div class="tl-i"><div class="tl-dt" style="border-color:var(--et)"></div><div class="tl-tx"><strong>Largest startup acquisition ever</strong> — SpaceX agrees to buy AI coding company Cursor for $60B in stock (Jun 16). Quantinuum's $1.68B IPO (Jun 4) brings quantum to public markets; DeepSeek raises $7.4B at a $50B valuation.</div><div class="tl-tm">Jun</div></div>
+      <div class="tl-i"><div class="tl-dt" style="border-color:var(--et)"></div><div class="tl-tx"><strong>Anthropic $65B Series H at $965B</strong> — the most valuable private company; Cerebras raises $5.55B in a May 14 IPO and doubles on day one. Frontier labs account for 7 of Q2's 16 billion-dollar rounds.</div><div class="tl-tm">May</div></div>
+      <div class="tl-i"><div class="tl-dt" style="border-color:var(--et)"></div><div class="tl-tx"><strong>AI compute demand accelerates</strong> — NVIDIA's data-center revenue reaches $75.2B (+92% YoY) for the April quarter; hyperscaler cloud growth re-accelerates (AWS +37%, Azure +43%, Google Cloud +82%) with Vera Rubin declared in full production at Computex.</div><div class="tl-tm">May–Jun</div></div>
+      <div class="tl-i"><div class="tl-dt" style="border-color:var(--et)"></div><div class="tl-tx"><strong>Physical AI becomes the second wave</strong> — $47.4B across 521 deals in H1, nearly 4× H2 2025; Meta buys humanoid-AI startup Assured Robot Intelligence (May 1); Project Prometheus raises $12B (Apr).</div><div class="tl-tm">Apr–Jun</div></div>
     </div>
+    <div class="src"><strong>Sources</strong> CNBC; NPR; Renaissance Capital 2Q26 US IPO review; Crunchbase News; Forge Global; NVIDIA and Computex coverage (ServeTheHome); Bloomberg; TechCrunch.</div>
   </div>
   <div class="pn">
-    <div class="pn-h"><div><div class="pn-t">Sub-Sector Performance</div><div class="pn-s">Public market returns, YTD 2026</div></div></div>
+    <div class="pn-h"><div><div class="pn-t">Q2 Funding by Sector</div><div class="pn-s">Venture dollars, Q2 2026</div></div></div>
     <div class="bars" style="height:135px">
-      <div class="br-c"><div class="br-v" style="color:var(--et)">+32%</div><div class="br-f" style="height:95%;background:var(--et-dim);border-color:var(--et-20);border-bottom-color:var(--et)"></div><div class="br-l">AI<br>Infra</div></div>
-      <div class="br-c"><div class="br-v" style="color:var(--et6)">+24%</div><div class="br-f" style="height:71%;background:rgba(155,122,224,.08);border-color:rgba(155,122,224,.18);border-bottom-color:var(--et6)"></div><div class="br-l">Cyber</div></div>
-      <div class="br-c"><div class="br-v" style="color:var(--et2)">+18%</div><div class="br-f" style="height:53%;background:rgba(90,122,245,.08);border-color:rgba(90,122,245,.18);border-bottom-color:var(--et2)"></div><div class="br-l">Cloud<br>SaaS</div></div>
-      <div class="br-c"><div class="br-v" style="color:var(--et3)">+15%</div><div class="br-f" style="height:44%;background:rgba(160,240,74,.06);border-color:rgba(160,240,74,.15);border-bottom-color:var(--et3)"></div><div class="br-l">Semi</div></div>
-      <div class="br-c"><div class="br-v" style="color:var(--et5)">+9%</div><div class="br-f" style="height:27%;background:rgba(240,184,61,.06);border-color:rgba(240,184,61,.15);border-bottom-color:var(--et5)"></div><div class="br-l">Climate</div></div>
-      <div class="br-c"><div class="br-v" style="color:var(--et4)">+4%</div><div class="br-f" style="height:12%;background:rgba(224,90,171,.06);border-color:rgba(224,90,171,.15);border-bottom-color:var(--et4)"></div><div class="br-l">Web3</div></div>
+      <div class="br-c"><div class="br-v" style="color:var(--et)">$149.5B</div><div class="br-f" style="height:97%;background:var(--et-dim);border-color:var(--et-20);border-bottom-color:var(--et)"></div><div class="br-l">AI</div></div>
+      <div class="br-c"><div class="br-v" style="color:var(--et2)">$11.7B</div><div class="br-f" style="height:8%;background:rgba(90,122,245,.08);border-color:rgba(90,122,245,.18);border-bottom-color:var(--et2)"></div><div class="br-l">Fintech</div></div>
+      <div class="br-c"><div class="br-v" style="color:var(--et5)">$8.0B</div><div class="br-f" style="height:5%;background:rgba(240,184,61,.06);border-color:rgba(240,184,61,.15);border-bottom-color:var(--et5)"></div><div class="br-l">Clean-<br>tech</div></div>
+      <div class="br-c"><div class="br-v" style="color:var(--et3)">$4.4B</div><div class="br-f" style="height:3%;background:rgba(160,240,74,.06);border-color:rgba(160,240,74,.15);border-bottom-color:var(--et3)"></div><div class="br-l">Cyber</div></div>
     </div>
+    <div style="margin-top:.6rem;font-size:.66rem;color:var(--txd);line-height:1.5">AI equity funding fell from a record $237.6B in Q1 but mega-rounds still took 89% of AI dollars. Cyber funding was ~30% below Q1 and year-ago levels, though cyber exits reached $9.1B, the best since 2021. Fintech deal count hit a four-year low.</div>
+    <div class="src"><strong>Sources</strong> CB Insights State of AI Q2'26 and State of Fintech Q2'26; Crunchbase News (cleantech Q2 2026; cybersecurity H1 2026); PitchBook Q2 2026 Cybersecurity Report.</div>
   </div>
 </div>
 
